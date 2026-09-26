@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>발표 대본 · 1~3파트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --base: #1b1622; --raise: #221b28; --card: #241c22; --field: #282132;
+    --ink: #f0eae4; --ink-2: #d3c8cb; --ink-3: #b1a6ac; --ink-4: #968b91;
+    --line: rgba(240,234,228,.12); --line-soft: rgba(240,234,228,.07);
+    --ember: #d08155; --ember-soft: rgba(208,129,85,.12);
+    --ok: #86c08f; --ok-soft: rgba(134,192,143,.12);
+    --info: #a9bbe0; --info-soft: rgba(169,187,224,.12);
+    --err: #d9756a; --err-soft: rgba(217,117,106,.12);
+    --sans: 'IBM Plex Sans KR','Pretendard',-apple-system,'Malgun Gothic',sans-serif;
+    --mono: 'IBM Plex Mono',ui-monospace,Consolas,monospace;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --base: #f6f1ec; --raise: #efe8e1; --card: #fffcf9; --field: #ebe3db;
+      --ink: #221b26; --ink-2: #3e3541; --ink-3: #5d535a; --ink-4: #7b7075;
+      --line: rgba(34,27,38,.13); --line-soft: rgba(34,27,38,.07);
+      --ember: #b25a2b; --ember-soft: rgba(178,90,43,.1);
+      --ok: #2f7b47; --ok-soft: rgba(47,123,71,.1);
+      --info: #3c5b9f; --info-soft: rgba(60,91,159,.09);
+      --err: #b3443a; --err-soft: rgba(179,68,58,.09);
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --base: #f6f1ec; --raise: #efe8e1; --card: #fffcf9; --field: #ebe3db;
+    --ink: #221b26; --ink-2: #3e3541; --ink-3: #5d535a; --ink-4: #7b7075;
+    --line: rgba(34,27,38,.13); --line-soft: rgba(34,27,38,.07);
+    --ember: #b25a2b; --ember-soft: rgba(178,90,43,.1);
+    --ok: #2f7b47; --ok-soft: rgba(47,123,71,.1);
+    --info: #3c5b9f; --info-soft: rgba(60,91,159,.09);
+    --err: #b3443a; --err-soft: rgba(179,68,58,.09);
+    color-scheme: light;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-padding-top: calc(70px + env(safe-area-inset-top, 0px)); }
+  body { background: var(--base); color: var(--ink); font-family: var(--sans); line-height: 1.75; }
+  a { color: var(--ember); }
+
+  .bar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding-inline: clamp(16px, 4vw, 32px); padding-block: 10px;
+    background: color-mix(in srgb, var(--base) 90%, transparent);
+    backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-soft);
+  }
+  .bar b { font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ember); font-weight: 600; }
+  .bar nav { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+  .bar nav a { font-size: .8rem; text-decoration: none; color: var(--ink-3); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  .bar nav a:hover { border-color: var(--ember); color: var(--ember); }
+
+  main { max-width: 860px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 32px); padding-block: 0 100px; }
+
+  .hero { padding-block: clamp(32px, 6vw, 60px) 24px; border-bottom: 1px solid var(--line-soft); }
+  .eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ember); margin: 0 0 12px; }
+  h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.15; letter-spacing: -.03em; margin: 0 0 16px; text-wrap: balance; }
+  .hero p { color: var(--ink-3); margin: 0 0 8px; max-width: 62ch; }
+  .plan { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .plan span { font-family: var(--mono); font-size: .76rem; color: var(--ink-2); background: var(--raise); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; }
+
+  .part { margin-top: 56px; padding-top: 18px; border-top: 2px solid var(--ember); }
+  .part > h2 { font-size: clamp(1.4rem, 3.4vw, 2rem); margin: 0 0 6px; letter-spacing: -.02em; }
+  .part > .sub { color: var(--ink-4); margin: 0; font-size: .92rem; }
+
+  .ch { margin-top: 34px; }
+  .ch-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 16px; }
+  .ch-head h3 { font-size: 1.15rem; margin: 0; }
+  .num { font-family: var(--mono); font-size: .82rem; color: var(--ember); }
+  .time { margin-left: auto; font-family: var(--mono); font-size: .76rem; color: var(--ink-4); }
+
+  .cue { display: flex; gap: 10px; align-items: baseline; font-size: .84rem; color: var(--ink-4); font-family: var(--mono); margin: 22px 0 8px; }
+  .cue span { color: var(--info); }
+
+  .say { margin: 0 0 14px; color: var(--ink); }
+  .say + .say { margin-top: 12px; }
+  .say strong { color: var(--ember); font-weight: 600; }
+  .ask { border-left: 3px solid var(--info); background: linear-gradient(90deg, var(--info-soft), transparent); padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 14px 0; color: var(--ink-2); }
+  .ask b { color: var(--ink); }
+  .note { border-left: 3px solid var(--ok); background: linear-gradient(90deg, var(--ok-soft), transparent); padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 14px 0; font-size: .92rem; color: var(--ink-3); }
+  .skip { border-left: 3px solid var(--err); background: linear-gradient(90deg, var(--err-soft), transparent); padding: 12px 16px; border-radius: 0 10px 10px 0; margin: 14px 0; font-size: .92rem; color: var(--ink-3); }
+  .note b, .skip b { color: var(--ink); }
+  code { font-family: var(--mono); font-size: .88em; background: var(--field); border: 1px solid var(--line-soft); border-radius: 5px; padding: 1px 6px; }
+  ul { margin: 10px 0 14px; padding-left: 1.2em; color: var(--ink-2); }
+  li { margin-bottom: 6px; }
+  .end { margin-top: 56px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+  .end h3 { margin: 0 0 10px; font-size: 1.05rem; }
+</style>
+</head>
+<body>
+
+
+<header class="bar">
+  <b>GDGoC INHA · 발표 대본</b>
+  <nav>
+    <a href="#p1">1부 기초 35분</a>
+    <a href="#p2">2부 깃허브 30분</a>
+    <a href="#p3">3부 협업 20분</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <p class="eyebrow">팀 프로젝트 핸드북 · 1~3파트</p>
+  <h1>발표 대본</h1>
+  <p>실습 없이 말로만 진행하는 기준이에요. 통으로 <strong>85분</strong>, 인프라 파트 앞까지입니다.</p>
+  <p>굵은 글씨는 <strong>꼭 하고 넘어갈 말</strong>이에요. 그대로 읽어도 되고, 편한 말투로 바꾸셔도 됩니다.</p>
+  <div class="plan">
+    <span>1부 개발 기초 35분</span>
+    <span>2부 깃허브 30분</span>
+    <span>3부 협업 20분</span>
+    <span>쉬는 시간 2부 앞에서 5분</span>
+  </div>
+</section>
+
+<!-- ================= 1부 ================= -->
+<section class="part" id="p1">
+  <h2>1부 · 개발 기초 지식</h2>
+  <p class="sub">35분 — 무엇을 만들지 정하고, 서비스가 어떤 부품으로 되어 있는지</p>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">여는 말</span><h3>오늘 뭘 할지</h3><span class="time">2분</span></div>
+    <div class="cue"><span>[화면]</span> 핸드북 홈</div>
+    <p class="say">오늘은 코딩을 가르치는 시간이 아니에요. 곧 팀에 배정돼서 한두 달 안에 <strong>돌아가는 서비스를 하나</strong> 만들게 되는데, 그때 필요한 <strong>공통 언어</strong>를 맞추는 시간입니다.</p>
+    <p class="say">여기 보이는 게 오늘 쓸 핸드북이에요. 여섯 갈래로 되어 있고, 오늘은 <strong>1번부터 3번까지</strong> — 기초, 깃허브, 협업 — 여기까지 합니다. 인프라랑 로그인, AI 도구는 다음 시간에 할게요.</p>
+    <p class="say">링크는 끝나고 공유할 거예요. <strong>받아 적지 않으셔도 됩니다.</strong> 오늘 목표는 딱 하나, <strong>팀 활동에서 멘토가 하는 말을 알아듣는 것</strong>입니다.</p>
+    <div class="ask"><b>가볍게 손 들어 보게 하기:</b> “깃허브 계정 있으신 분?” / “코딩 처음이신 분?” — 분위기도 풀리고, 뒤에서 설명 깊이를 조절할 수 있어요.</div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">1.1</span><h3>시작하기 전에</h3><span class="time">3분</span></div>
+    <div class="cue"><span>[화면]</span> 1.1 설치할 것 세 가지</div>
+    <p class="say">먼저 준비물부터. 세 개예요. <strong>Antigravity, Git, GitHub 계정.</strong> 전부 무료입니다.</p>
+    <p class="say">Antigravity는 코드를 쓰는 프로그램이에요. 구글이 만든 건데, <strong>AI 에이전트가 처음부터 들어 있어서</strong> 따로 결제할 게 없습니다. VS Code 쓰시던 분은 그거 쓰셔도 돼요. 사실 Antigravity가 VS Code를 바탕으로 만든 거라 화면이 거의 똑같습니다.</p>
+    <p class="say"><strong>유료 구독은 안 하셔도 됩니다.</strong> 이거 꼭 말씀드리고 싶었어요. Claude나 ChatGPT 결제 안 해도 프로젝트 끝까지 만들 수 있어요. 더 깊게 파고 싶은 사람만 나중에 고민하세요.</p>
+    <div class="cue"><span>[화면]</span> 1.1 처음 한 번 해 둘 설정</div>
+    <p class="say">그리고 설치하고 나서 5분이면 끝나는 설정이 네 개 있는데, 여기 적어 뒀어요. <strong>안 해 두면 첫 주에 한 번씩 막히는 것들</strong>입니다. Git에 이름·이메일 등록됐는지 확인하기, 작업 폴더는 영문 경로에 두기 — OneDrive 안에 두지 마세요, 윈도우는 파일 확장자 보이게 켜기, 한국어 언어 팩 깔기.</p>
+    <div class="note"><b>넘어가는 말:</b> “설치는 각자 해 오시고, 안 되면 팀 채널에 물어보세요. 자, 그럼 본론입니다.”</div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">1.2</span><h3>개발자는 무슨 일을 하는 사람인가</h3><span class="time">10분</span></div>
+    <div class="cue"><span>[화면]</span> 1.2 가장 중요한 한 문장</div>
+    <p class="say">오늘 제일 중요한 문장부터 보여 드릴게요. <strong>“개발자는 주어진 시간과 예산 안에서 문제를 소프트웨어로 해결하는 사람이다.”</strong></p>
+    <p class="say">여기서 눈여겨볼 게 있어요. <strong>이 문장에 ‘코딩’이라는 말이 없습니다.</strong> 개발자는 코딩을 잘하는 사람이 아니라, <strong>제약 안에서 문제를 푸는 사람</strong>이에요. 이 차이가 오늘 내내, 그리고 여러분 팀 프로젝트 내내 따라다닐 겁니다.</p>
+    <div class="cue"><span>[화면]</span> 1.2 세 덩어리가 들어 있습니다</div>
+    <p class="say">문장을 뜯어보면 세 덩어리예요. <strong>문제</strong>, <strong>시간과 예산</strong>, <strong>소프트웨어로 해결</strong>.</p>
+    <p class="say">첫째, 누군가 불편한 게 있어야 시작해요. “무슨 기술 써볼까”로 시작한 프로젝트는 대부분 중간에 멈춥니다. 풀 문제가 없으니까 어디까지 만들어야 하는지도 모르거든요.</p>
+    <p class="say">둘째, 제약은 항상 있어요. 시간도 사람도 정해져 있고, 돈은 거의 없죠. 셋째, 소프트웨어는 <strong>수단이지 목적이 아니에요.</strong> 엑셀로 5분이면 되는 일에 두 달짜리 시스템을 만들면 그건 잘못 푼 겁니다.</p>
+    <div class="cue"><span>[화면]</span> 1.2 “제일 좋은 기술”은 없습니다 (표)</div>
+    <p class="say">그래서 <strong>제일 좋은 기술 같은 건 없어요.</strong> 여기 같은 중고 거래 서비스를 만드는 두 팀이 있어요. 왼쪽은 1년에 개발자 10명, 오른쪽은 두 달에 4명, 예산 0원.</p>
+    <p class="say">왼쪽은 로그인을 직접 만들고, 결제도 직접 연동하고, 검색 엔진도 붙여요. 오른쪽은 구글 로그인 갖다 붙이고, <strong>결제는 아예 안 만들고 채팅으로 직거래</strong>하게 하고, 검색은 제목 일치만 합니다.</p>
+    <p class="say"><strong>오른쪽이 실력이 부족해서 저렇게 하는 게 아니에요.</strong> 제약에 맞는 판단을 한 겁니다. 두 달짜리 팀이 왼쪽을 따라 하면 아무것도 완성 못 해요.</p>
+    <div class="cue"><span>[화면]</span> 1.2 이것이 여러분이 가진 전부입니다</div>
+    <p class="say">그럼 여러분의 제약은 뭘까요. 시간은 한두 달, 사람은 몇 명, 대부분 개발이 처음이고 수업이랑 병행하죠. 돈은 거의 0원.</p>
+    <p class="say">그래서 여러분의 <strong>성공 기준은 “완벽한 서비스”가 아닙니다.</strong> 기간이 끝났을 때 <strong>실제로 돌아가는 게 있느냐</strong>예요. 작아도 돌아가는 게, 크지만 안 돌아가는 것보다 낫습니다. 언제나요.</p>
+    <div class="ask"><b>질문 던지기:</b> “여러분이 지금 당장 불편한 거 하나만 말해 볼래요?” — 나온 대답 하나를 잡아서 뒤의 설계 설명에 계속 써먹으면 훨씬 잘 붙어요.</div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">1.3</span><h3>설계 — 코드보다 먼저 하는 일</h3><span class="time">12분</span></div>
+    <div class="cue"><span>[화면]</span> 1.3 언어를 아는 것과 만들 수 있는 것은 다릅니다</div>
+    <p class="say">두 번째로 중요한 문장이에요. <strong>“개발자는 언어를 아는 사람이 아니라 시스템을 설계할 수 있는 사람이다.”</strong></p>
+    <p class="say">문법은 며칠이면 훑어요. 그런데 문법 다 외운 사람한테 “서비스 하나 만들어 보세요” 하면 첫 줄을 못 씁니다. 왜일까요. <strong>무엇을 만들지</strong>, <strong>어떤 부품으로 나눌지</strong>, <strong>데이터를 어떻게 담을지</strong>가 안 정해졌기 때문이에요. 이 셋을 정하는 게 설계고, <strong>코드를 한 줄도 안 쓴 상태에서 합니다.</strong></p>
+    <div class="cue"><span>[화면]</span> 1.3 무엇을 안 만들지 정하는 일</div>
+    <p class="say">그런데 설계의 절반은 <strong>안 만들 것을 정하는 일</strong>이에요. 예를 들어 학식 리뷰 서비스를 두 달 안에 만든다고 해 봅시다. 아이디어 회의하면 기능이 스무 개쯤 나와요. 여기서 <strong>네 개만 남깁니다.</strong></p>
+    <p class="say">식당 목록이랑 오늘 메뉴 보기, 별점이랑 한 줄 평 남기기, 남이 쓴 평 보기, 로그인. 끝이에요.</p>
+    <p class="say">오른쪽은 다 지웁니다. 사진 업로드, 댓글, 알림, 검색, 관리자 페이지, 랭킹. <strong>이걸 지우는 게 초보 팀이 가장 못 하는 일이자 가장 중요한 일이에요.</strong> 전부 만들려다 아무것도 못 끝내는 팀이 매년 나옵니다.</p>
+    <p class="say">버리는 게 아니라 <strong>미루는 거예요.</strong> 왼쪽이 돌아간 다음에 하면 됩니다.</p>
+    <div class="cue"><span>[화면]</span> 1.3 문제 하나를 만들 수 있는 조각으로 (그림)</div>
+    <p class="say">설계가 실제로 하는 일을 그림으로 보면 이래요. 맨 위에 문제 하나 — “오늘 학식 뭐 나오는지, 맛있는지 모르겠다”. 이게 만들 기능 네 개로 쪼개지고, 그게 다시 <strong>사람이 보는 화면</strong>이랑 <strong>기억해야 할 데이터</strong>로 갈라집니다.</p>
+    <p class="say">여기까지 하면 <strong>“내일부터 누가 뭘 할지”가 정해져요.</strong> 코드는 그다음입니다.</p>
+    <div class="cue"><span>[화면]</span> 1.3 데이터를 어떻게 담을지 (표)</div>
+    <p class="say">그중에서도 <strong>데이터 구조가 제일 나중에 고치기 어려워요.</strong> 화면은 나중에 바꾸면 되는데, 데이터는 한번 쌓이기 시작하면 바꾸기가 힘듭니다. 그래서 여기에 시간을 더 씁니다.</p>
+    <p class="say">요령 하나 드릴게요. <strong>“한 줄이 무엇 하나를 뜻하는지” 말할 수 있으면 잘 나눈 거예요.</strong> 식당 표는 한 줄이 식당 하나, 메뉴 표는 한 줄이 “9월 16일 학생식당 제육덮밥”. 만약 “식당이면서 메뉴이기도 한 표”가 나오면 다시 나눠야 한다는 신호입니다.</p>
+    <div class="note"><b>시간 없으면:</b> 데이터 표는 “이런 게 있다” 정도로 20초만 보여주고 넘어가도 됩니다. 대신 <b>안 만들 것 정하기</b>는 절대 빼지 마세요 — 오늘 1부에서 제일 실전적인 내용이에요.</div>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">1.4</span><h3>서비스는 어떤 부품으로 되어 있나</h3><span class="time">10분</span></div>
+    <div class="cue"><span>[화면]</span> 1.4 화면 · 판단 · 기억 (그림)</div>
+    <p class="say">설계한 걸 실제로 만들려면 부품 이름을 알아야 해요. 거의 모든 서비스가 이 세 덩어리입니다. <strong>화면을 그리는 곳, 판단하는 곳, 기억하는 곳.</strong></p>
+    <p class="say">각각 <strong>프론트엔드, 백엔드, 데이터베이스</strong>라고 부릅니다. 프론트엔드는 브라우저나 앱에서 돌고, 백엔드는 서버에서 돌고, 데이터베이스는 껐다 켜도 남아 있어요. 사이에 요청과 응답이 오갑니다.</p>
+    <p class="say">중요한 건 <strong>사용자는 프론트엔드까지만 볼 수 있다</strong>는 거예요. 웹이든 앱이든 이 구조는 같습니다. 바뀌는 건 맨 왼쪽이 브라우저냐 스마트폰이냐뿐이에요.</p>
+    <div class="cue"><span>[화면]</span> 1.4 부품마다 할 수 있는 일이 다릅니다</div>
+    <p class="say">부품마다 할 수 있는 일이 달라요. 여기서 <strong>제일 자주 나는 실수</strong>를 하나 짚고 갈게요.</p>
+    <p class="say"><strong>프론트엔드에서 막은 건 막은 게 아닙니다.</strong> 삭제 버튼을 안 보이게 숨겨도, 요청 주소만 알면 그냥 보낼 수 있어요. 브라우저 코드는 사용자 겁니다. 그래서 중요한 검사는 <strong>반드시 백엔드에서 한 번 더</strong> 해야 해요. 이건 다음 시간 인가 파트에서 다시 나옵니다.</p>
+    <div class="cue"><span>[화면]</span> 1.4 API — 화면과 서버 사이의 약속</div>
+    <p class="say">이 부품들을 잇는 게 <strong>API</strong>예요. 어려운 말 같지만 <strong>“이렇게 물어보면 이렇게 답한다”는 약속</strong>일 뿐입니다. 화면 쪽이랑 서버 쪽이 서로 속을 몰라도 돼요.</p>
+    <p class="say">여기 예시 보시면, 화면에서 “3번 식당의 9월 16일 메뉴 줘” 하고 물어보면 서버가 메뉴 목록을 이런 모양으로 돌려줍니다.</p>
+    <p class="say">이 약속을 <strong>먼저</strong> 정해두면 좋은 점이 있어요. 서버를 아직 안 만들었어도 <strong>화면부터 시작할 수 있습니다.</strong> 저 모양의 가짜 데이터로요. 두 달짜리 팀한테 이건 <strong>시간을 버는 기술</strong>이에요.</p>
+    <div class="cue"><span>[화면]</span> 1.4 여러분은 양쪽을 다 만듭니다</div>
+    <p class="say">마지막으로 이 프로그램의 방침 하나. <strong>“나는 화면 할게, 너는 서버 해” — 이렇게 안 나눕니다.</strong> 팀원 모두가 화면부터 데이터까지 한 바퀴를 돕니다.</p>
+    <p class="say">이유가 몇 개 있는데 제일 중요한 건 이거예요. <strong>전체를 못 보면 설계를 못 합니다.</strong> 화면만 아는 사람은 데이터를 어떻게 담을지 정할 수 없어요. 그리고 두 달짜리 팀에서 한 명이 바빠지면 그 층이 통째로 멈춥니다.</p>
+    <p class="say">깊게 파는 건 나중에 언제든 할 수 있어요. <strong>한 바퀴를 직접 도는 경험은 지금이 아니면 잘 안 옵니다.</strong></p>
+    <div class="note"><b>1부 마무리 한 줄:</b> “정리하면 — 제약 안에서 판단하고, 만들 것과 안 만들 것을 정하고, 화면·판단·기억으로 쪼갠다. 여기까지가 코딩 전에 하는 일입니다. 잠깐 쉬고 2부에서는 실제로 같이 만드는 도구를 볼게요.”</div>
+  </div>
+</section>
+
+<!-- ================= 2부 ================= -->
+<section class="part" id="p2">
+  <h2>2부 · 깃허브</h2>
+  <p class="sub">30분 — 레포 → 브랜치 → 커밋 → PR → 머지, 실제 화면으로 한 바퀴</p>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">2.1</span><h3>Git과 GitHub</h3><span class="time">8분</span></div>
+    <div class="cue"><span>[화면]</span> 2.1 보고서_최종_진짜최종_v2_수정.hwp</div>
+    <p class="say">이 파일 이름 보고 웃으셨다면, 이미 이 문제를 겪어 보신 거예요. <strong>이게 정확히 개발자들이 겪던 문제입니다.</strong> 코드에서는 훨씬 심각해져요.</p>
+    <p class="say">어제는 됐는데 오늘 안 되고, 뭘 바꿨는지 기억이 안 나고, 되돌리고 싶은데 어디까지 되돌려야 할지 모르고. 팀이면 더해요. 누가 언제 뭘 고쳤는지 아무도 모릅니다. <strong>파일을 카톡으로 주고받으면 반드시 누가 덮어씁니다.</strong></p>
+    <p class="say">Git이 이걸 한꺼번에 해결해요. <strong>언제, 누가, 무엇을, 왜 바꿨는지를 전부 기록</strong>하고, 아무 시점으로나 되돌아갈 수 있게 합니다.</p>
+    <div class="cue"><span>[화면]</span> 2.1 커밋 = 저장점 + 메모</div>
+    <p class="say">그 기록 하나하나를 <strong>커밋</strong>이라고 불러요. 게임 세이브 포인트를 떠올리시면 되는데, 다른 게 하나 있어요. <strong>“여기서 무엇을 왜 했는지” 메모가 반드시 붙습니다.</strong></p>
+    <p class="say">감 잡는 기준 하나. <strong>한 커밋은 한 가지 일.</strong> “로그인 버그 수정”이랑 “버튼 색 변경”은 따로 커밋해야 해요. 섞으면 되돌릴 때 같이 딸려옵니다.</p>
+    <div class="cue"><span>[화면]</span> 2.1 2주 뒤의 나에게 쓰는 편지</div>
+    <p class="say">커밋 메시지는 <strong>2주 뒤의 나한테 쓰는 편지</strong>라고 생각하세요. 왼쪽처럼 “수정”, “ㅇㅇ”, “asdf” 이렇게 쓰면 아무 도움이 안 됩니다.</p>
+    <p class="say">오른쪽처럼 “리뷰 작성 시 별점 없이 제출되던 문제 수정” — 이렇게요. 판단 기준은 하나예요. <strong>2주 뒤의 내가 이 메시지만 보고 “아 그거” 하고 떠올릴 수 있으면 합격.</strong> 한국어로 쓸지 영어로 쓸지는 팀이 정하면 됩니다. 섞어 쓰지만 않으면 돼요.</p>
+    <div class="cue"><span>[화면]</span> 2.1 Git과 GitHub은 다릅니다</div>
+    <p class="say">그리고 자주 헷갈리는 거 하나. <strong>Git이랑 GitHub은 다릅니다.</strong> Git은 내 컴퓨터에 까는 <strong>도구</strong>고, GitHub은 그 기록을 올려두고 공유하는 <strong>웹사이트</strong>예요.</p>
+    <p class="say">비유하자면 <strong>Git은 카메라, GitHub은 사진 올리는 곳.</strong> 팀 프로젝트에서는 둘 다 씁니다. 각자 카메라로 찍고, 한 곳에 모으는 거죠.</p>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">2.2</span><h3>레포지토리</h3><span class="time">4분</span></div>
+    <div class="cue"><span>[화면]</span> 2.2 레포지토리가 뭔가요</div>
+    <p class="say">이제 실제 화면으로 갈게요. 먼저 단어 하나. <strong>레포지토리</strong>, 줄여서 <strong>레포</strong>. <strong>프로젝트 폴더 + 모든 변경 기록</strong>입니다. 팀 프로젝트 하나에 레포 하나 만들고, 팀원 모두가 여기에 올려요.</p>
+    <div class="cue"><span>[화면]</span> 2.2 새 레포 만들기 (스크린샷 3장)</div>
+    <p class="say">만드는 건 간단해요. 오른쪽 위 플러스 → New repository. 이름은 <strong>영문 소문자랑 하이픈</strong>으로 짓는 게 관례입니다. 초록색으로 사용 가능하다고 뜨면 되는 거예요.</p>
+    <p class="say">아래로 내려서 <strong>Add README를 켜는 걸 권합니다.</strong> 레포 첫 화면에 보이는 설명 파일인데, 켜 두면 빈 레포가 아니라서 바로 브랜치를 만들 수 있어요.</p>
+    <p class="say">만들면 이런 화면이 나와요. 왼쪽 위 <code>main</code>이 지금 보고 있는 <strong>브랜치</strong>, 오른쪽 <code>1 Commit</code>이 지금까지 쌓인 기록입니다.</p>
+    <p class="say">팀에서는 <strong>한 명이 레포를 만들고</strong> Settings → Collaborators에서 팀원을 초대하면 돼요.</p>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">2.3</span><h3>브랜치</h3><span class="time">7분</span></div>
+    <div class="cue"><span>[화면]</span> 2.3 브랜치는 “내 복사본에서 작업하기” (그림)</div>
+    <p class="say">여기서부터가 <strong>여럿이 일하는 이야기</strong>예요. 브랜치는 한마디로 <strong>내 복사본에서 작업하기</strong>입니다.</p>
+    <p class="say">그림 보시면, 가운데 <code>main</code>이 있고 A는 위로, B는 아래로 갈라져 나가서 각자 작업해요. A가 리뷰 기능 만드는 동안 B는 로그인을 만드는데 <strong>서로 영향이 없습니다.</strong> 다 되면 리뷰를 거쳐서 다시 main으로 합쳐지고요.</p>
+    <p class="say">핵심은 이거예요. <strong>내 브랜치에서 아무리 망가뜨려도 남의 작업이랑 돌아가는 버전은 멀쩡합니다.</strong></p>
+    <div class="cue"><span>[화면]</span> 2.3 두 달짜리 팀은 단순하게 가세요</div>
+    <p class="say">브랜치 전략은 종류가 많은데, 회사에서 쓰는 복잡한 걸 그대로 가져오면 <strong>배우는 데만 한 주를 씁니다.</strong> 여러분은 맨 윗줄, <code>main</code> 하나에 각자 <code>feature/○○</code>면 충분해요.</p>
+    <p class="say">규칙은 두 줄이면 됩니다. <strong>하나, main에 직접 push 하지 않는다. 둘, 작업은 항상 새 브랜치에서 한다.</strong> 그리고 <strong>main은 언제든 돌아가는 상태</strong>로 유지하세요. 발표 전날 여기가 깨져 있으면 답이 없습니다.</p>
+    <div class="cue"><span>[화면]</span> 2.3 내 브랜치 만들기 (스크린샷 2장)</div>
+    <p class="say">만드는 건 화면 그대로예요. main 버튼 누르고, 검색 칸에 새 이름을 입력하면 <strong>Create branch … from main</strong>이 뜹니다. 그거 누르면 끝이에요.</p>
+    <p class="say">이름은 보면 무슨 작업인지 알게 지으세요. <code>feature/add-intro</code>, <code>fix/login-redirect</code> 이런 식으로요.</p>
+    <p class="say">만들고 나면 왼쪽 위가 바뀌고 <strong>2 Branches</strong>가 됩니다. “This branch is up to date with main” — 아직은 main이랑 똑같은 복사본이라는 뜻이에요.</p>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">2.4</span><h3>내 브랜치에서 작업하기</h3><span class="time">4분</span></div>
+    <div class="cue"><span>[화면]</span> 2.4 파일 고치고 커밋하기</div>
+    <p class="say">실제로는 내 컴퓨터 에디터에서 코드를 고치지만, 흐름을 보여드리려고 여기서는 GitHub 웹에서 바로 고쳐 볼게요. <strong>순서는 똑같습니다.</strong> 고치고, 커밋하고.</p>
+    <p class="say">연필 아이콘 누르면 편집 화면이 열려요. 위에 <code>in feature/add-intro</code> 보이시죠. <strong>지금 내 브랜치를 고치고 있다는 표시</strong>입니다.</p>
+    <p class="say">다 고치면 Commit changes 누르고, 메시지 적고, 아래 선택지는 <strong>“내 브랜치에 커밋”</strong> 그대로 두고 확인. 참고로 Copilot이 메시지를 영어로 자동으로 채워 주기도 하는데, <strong>팀이 정한 형식이 있으면 그걸 따르세요.</strong></p>
+    <div class="cue"><span>[화면]</span> 2.4 main은 아직 그대로입니다</div>
+    <p class="say">자, 여기가 오늘 2부에서 제일 보여드리고 싶은 화면이에요. 레포 첫 화면으로 돌아오면 위에 <strong>“방금 브랜치에 뭔가 올라갔다”</strong>는 알림이 뜨는데, 아래 <strong>main에는 여전히 커밋이 하나뿐</strong>입니다.</p>
+    <p class="say"><strong>이게 브랜치를 쓰는 이유예요.</strong> 내 작업은 내 브랜치에만 있고, 모두가 쓰는 main은 멀쩡합니다.</p>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">2.5</span><h3>PR 올리기</h3><span class="time">5분</span></div>
+    <div class="cue"><span>[화면]</span> 2.5 “이거 합쳐도 될까요?”라고 묻는 자리</div>
+    <p class="say">그럼 main에는 어떻게 넣느냐. <strong>Pull Request</strong>, 줄여서 PR을 올립니다. 이름이 어려운데 하는 일은 단순해요. <strong>“내 브랜치를 main에 합쳐도 될까요?”라고 팀에 묻는 글</strong>입니다.</p>
+    <p class="say">왜 한 단계를 더 거치냐면, 바뀐 줄이 전부 보이고, 다른 사람이 읽고, 기록이 남기 때문이에요. <strong>나만 아는 코드가 줄어듭니다.</strong> 팀원 한 명이 아프면 프로젝트가 멈추는 상황을 막아 줘요.</p>
+    <p class="say">그리고 이거 꼭 말씀드릴게요. <strong>PR은 검사받는 자리가 아니라 공유하는 자리예요.</strong> 실력을 평가하는 게 아니라, 팀이 코드를 같이 아는 게 목적입니다.</p>
+    <div class="cue"><span>[화면]</span> 2.5 PR 만들기 · PR 화면 읽기</div>
+    <p class="say">아까 그 초록 버튼 누르면 이 화면이 나와요. 맨 위 줄부터 보세요. <strong>base: main ← compare: feature/add-intro.</strong> “이 브랜치를 main으로”라는 뜻입니다. <strong>Able to merge</strong>는 충돌 없이 합칠 수 있다는 뜻이고요.</p>
+    <p class="say">제목이랑 설명을 쓰는데, 설명에는 <strong>무엇을 바꿨는지</strong>랑 <strong>리뷰어가 뭘 확인해 주면 좋은지</strong>를 적으세요.</p>
+    <p class="say">올리고 나면 이렇게 열립니다. 탭이 네 개인데, 리뷰어가 제일 오래 보는 건 <strong>Files changed</strong>예요. <strong>초록 줄이 추가, 빨간 줄이 삭제</strong>고, 줄 번호 옆을 누르면 그 줄에 바로 코멘트를 달 수 있습니다.</p>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">2.6</span><h3>main에 머지하기</h3><span class="time">2분</span></div>
+    <div class="cue"><span>[화면]</span> 2.6 main에 합치기 → 결과 확인</div>
+    <p class="say">리뷰가 끝나고 팀이 좋다고 하면 합칩니다. <strong>No conflicts</strong> 확인하고, Merge 누르고, Confirm 누르면 끝이에요. 상태가 보라색 <strong>Merged</strong>로 바뀝니다.</p>
+    <p class="say">main으로 가 보면 내용이 반영돼 있고 커밋 수가 늘어 있어요. <strong>한 바퀴 정리하면 — 레포에서, 내 브랜치 만들고, 거기서 고치고 커밋하고, PR 올리고, 리뷰 후 머지.</strong> 팀 프로젝트 내내 이 다섯 단계를 반복합니다.</p>
+    <div class="note"><b>넘어가는 말:</b> “도구는 여기까지예요. 그런데 진짜 어려운 건 도구가 아니라 <b>사람끼리 맞추는 것</b>입니다. 3부에서 그 이야기를 할게요.”</div>
+  </div>
+</section>
+
+<!-- ================= 3부 ================= -->
+<section class="part" id="p3">
+  <h2>3부 · 협업하는 법</h2>
+  <p class="sub">20분 — 리뷰를 주고받고, 일을 나누고, 팀 약속을 정하는 법</p>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">3.1</span><h3>리뷰 주고받기</h3><span class="time">7분</span></div>
+    <div class="cue"><span>[화면]</span> 3.1 PR은 한 번에 통과하지 않습니다 (그림)</div>
+    <p class="say">먼저 마음의 준비부터. <strong>PR은 한 번에 통과하지 않습니다.</strong> 그림에서 되돌아오는 화살표 두 개 보이시죠. 자동 검사에서 막히거나, 리뷰에서 “여기 이렇게 해볼까요?”가 오면 고쳐서 다시 올려요. <strong>이게 정상입니다.</strong> 한 번에 통과하는 PR이 오히려 드물어요.</p>
+    <div class="cue"><span>[화면]</span> 3.1 같은 지적도 쓰기 나름입니다</div>
+    <p class="say">그런데 리뷰는 말로 하는 거라 <strong>쓰기 나름</strong>이에요. 왼쪽처럼 “이거 왜 이렇게 했어요?”, “코드가 이상한데요”, “이건 기본 아닌가요?” — 이러면 팀이 상합니다.</p>
+    <p class="say">오른쪽처럼 쓰세요. “여기 별점이 없을 때 에러가 날 것 같은데, 확인해 주실 수 있을까요?” 이렇게요.</p>
+    <p class="say">규칙 셋만 기억하면 돼요. <strong>하나, 코드를 지적하지 사람을 지적하지 않는다. 둘, 무엇이 문제인지 구체적으로 쓴다. 셋, 사소한 지적은 사소하다고 밝힌다.</strong></p>
+    <p class="say">마지막 게 특히 중요해요. <strong>오타 지적이랑 설계 지적이 같은 무게로 읽히면 받는 사람이 지칩니다.</strong> “(사소함) 오타인 것 같아요” 이렇게 한마디만 붙이면 됩니다.</p>
+    <div class="cue"><span>[화면]</span> 3.1 리뷰를 받을 때</div>
+    <p class="say">받는 쪽도 봅시다. 첫 번째 관문은 이거예요. <strong>지적은 코드에 대한 것이지 나에 대한 평가가 아닙니다.</strong> 이걸 분리하는 게 처음엔 잘 안 돼요.</p>
+    <p class="say">그리고 <strong>동의하지 않으면 말해도 됩니다.</strong> “이건 이런 이유로 이렇게 했습니다”는 완전히 정당해요. 리뷰는 대화지 심사가 아니에요. 모르면 예시를 달라고 하시고, 고쳤으면 “반영했습니다” 한 줄 남겨 주세요.</p>
+    <p class="say">마지막으로 하나. <strong>경력 10년차도 리뷰에서 지적받습니다.</strong> 지적받는 횟수는 실력과 상관없어요. 상관있는 건 <strong>같은 지적을 두 번 받는지</strong>입니다.</p>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">3.2</span><h3>일 나누기</h3><span class="time">7분</span></div>
+    <div class="cue"><span>[화면]</span> 3.2 가로로 자르지 말고 세로로 자르세요 (그림)</div>
+    <p class="say">여기가 <strong>팀 프로젝트가 늘어지는 가장 큰 이유</strong>가 있는 곳이에요. 같은 인원이 같은 걸 만들어도 <strong>자르는 방향</strong>에 따라 결과가 달라집니다.</p>
+    <p class="say">왼쪽이 <strong>가로로 자르기</strong>. A는 화면, B는 서버, C는 데이터. 이러면 <strong>A는 B가 끝나야 눌러볼 수 있어요.</strong> 서로 기다리게 됩니다. 그리고 각자 자기 층만 배우게 돼요.</p>
+    <p class="say">오른쪽이 <strong>세로로 자르기</strong>. A는 리뷰 기능을 화면부터 데이터까지, B는 로그인을 화면부터 데이터까지. <strong>각자 끝까지 혼자 갈 수 있고, 양쪽을 다 배웁니다.</strong></p>
+    <p class="say">1부에서 “여러분은 양쪽을 다 만듭니다” 했던 게 여기랑 연결돼요. 그리고 이렇게 나누면 <strong>API 약속이 팀원 사이의 경계에서 필요</strong>해집니다. B가 만든 로그인을 A의 리뷰 기능이 쓸 때요.</p>
+    <div class="cue"><span>[화면]</span> 3.2 무엇을 기준으로 쪼갤까 (표)</div>
+    <p class="say">기준은 기능 단위가 제일 무난하고, 화면 단위도 괜찮아요. <strong>층 단위만 피하시면 됩니다.</strong></p>
+    <p class="say">정답은 없는데, 하나만 지키세요. <strong>“이번 주에 내가 끝낼 것”이 한 문장으로 말해져야 합니다.</strong></p>
+    <div class="cue"><span>[화면]</span> 3.2 이슈 — 누가 뭘 하고 있는지</div>
+    <p class="say">그리고 할 일 관리. GitHub에 <strong>이슈</strong>라는 게 있어요. 할 일 하나를 글 하나로 만들고, 담당자 붙이고, 끝나면 닫습니다.</p>
+    <p class="say"><strong>카톡으로 관리하지 마세요.</strong> 스크롤 올리다 사라집니다. 이슈 하나는 <strong>한 사람이 며칠 안에 끝낼 수 있는 크기</strong>로요. “로그인 만들기”는 너무 큽니다.</p>
+    <p class="say">도구는 노션이든 지라든 뭐든 상관없어요. 중요한 건 <strong>“한 곳에만 있을 것”</strong>입니다. 두 군데 적으면 반드시 어긋나요.</p>
+  </div>
+
+  <div class="ch">
+    <div class="ch-head"><span class="num">3.3</span><h3>팀 약속과 질문하는 법</h3><span class="time">6분</span></div>
+    <div class="cue"><span>[화면]</span> 3.3 팀이 합의해야 할 것들 (체크리스트)</div>
+    <p class="say">팀 배정되면 <strong>첫 모임에서 이 여섯 개를 정하고 시작하세요.</strong> 브랜치·커밋 규칙, 합치는 조건, 일 나누는 기준, 모이는 시간, 막혔을 때 혼자 몇 시간까지 붙들지, 코드 스타일.</p>
+    <p class="say">저는 <strong>“막혔을 때”</strong>를 제일 강조하고 싶어요. 예를 들어 두 시간. 그 이상 혼자 붙들지 않기로 정해두면 팀 전체 속도가 달라집니다.</p>
+    <p class="say">이거 정하는 데 <strong>한 시간이면 충분해요.</strong> 안 정하고 시작하면 매번 다시 의논하느라 훨씬 더 씁니다.</p>
+    <div class="cue"><span>[화면]</span> 3.3 막혔을 때 잘 물어보는 법</div>
+    <p class="say">마지막으로 <strong>오늘 제일 실전적인 기술</strong>입니다. 이걸 잘하는 사람이 제일 빨리 늘어요.</p>
+    <p class="say">“안 돼요”, “에러 나요”, 스크린샷 한 장 덜렁 — 이러면 도와주고 싶어도 못 도와줘요. 네 가지를 같이 적으세요. <strong>뭘 하려고 했는지, 뭘 했는지, 뭐가 나왔는지 — 에러 메시지는 전문 그대로 — 그리고 뭘 시도해 봤는지.</strong></p>
+    <p class="say">부작용이 하나 있는데요, <strong>이걸 적다가 스스로 답을 찾는 경우가 절반쯤 됩니다.</strong> 정리하는 과정 자체가 디버깅이에요.</p>
+    <div class="cue"><span>[화면]</span> 3.3 협업, 세 문장으로</div>
+    <p class="say">3부를 세 문장으로 정리하면 이렇습니다. <strong>커밋은 저장점이 아니라 기록이고, PR은 검사가 아니라 공유고, 일을 나누는 방식이 프로젝트 속도를 정합니다.</strong></p>
+  </div>
+
+  <div class="end">
+    <h3>오늘 닫는 말 · 1분</h3>
+    <p class="say">오늘 한 걸 한 문장으로 하면 — <strong>“코딩을 시작하기 전에 정해야 하는 것들과, 여럿이 같이 만들 때 필요한 약속”</strong>이었어요.</p>
+    <p class="say">팀 배정되면 <strong>첫 주에 코딩부터 시작하지 마세요.</strong> 문제를 정하고, 안 만들 것을 정하고, 데이터를 그려보고, 팀 약속을 정하고, 그다음에 시작하세요. 한 시간이면 됩니다.</p>
+    <p class="say">핸드북 링크는 지금 채널에 올릴게요. <strong>다음 시간에는 인프라, 로그인, AI 도구</strong>를 합니다. 그때까지 설치 세 개만 해 오시면 돼요. 질문 있으신 분?</p>
+  </div>
+</section>
+</main>
+
+</body>
+</html>

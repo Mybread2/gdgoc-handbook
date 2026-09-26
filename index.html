@@ -1,0 +1,2202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>팀 프로젝트 핸드북</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+:root {
+  --base: #1b1622; --raise: #221b28; --card: #241c22; --field: #282132; --code: #171220;
+  --ink: #f0eae4; --ink-2: #d3c8cb; --ink-3: #b1a6ac; --ink-4: #968b91;
+  --line: rgba(240,234,228,.12); --line-soft: rgba(240,234,228,.07); --line-strong: rgba(240,234,228,.24);
+  --ember: #d08155; --ember-soft: rgba(208,129,85,.12); --ember-line: rgba(208,129,85,.45);
+  --ok: #86c08f; --ok-soft: rgba(134,192,143,.12); --ok-line: rgba(134,192,143,.42);
+  --err: #d9756a; --err-soft: rgba(217,117,106,.12); --err-line: rgba(217,117,106,.4);
+  --info: #a9bbe0; --info-soft: rgba(169,187,224,.12); --info-line: rgba(169,187,224,.38);
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -16px rgba(0,0,0,.6);
+  --sans: 'IBM Plex Sans KR', 'Pretendard', -apple-system, 'Malgun Gothic', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --base: #f6f1ec; --raise: #efe8e1; --card: #fffcf9; --field: #ebe3db; --code: #f0e9e2;
+    --ink: #221b26; --ink-2: #3e3541; --ink-3: #5d535a; --ink-4: #7b7075;
+    --line: rgba(34,27,38,.13); --line-soft: rgba(34,27,38,.07); --line-strong: rgba(34,27,38,.26);
+    --ember: #b25a2b; --ember-soft: rgba(178,90,43,.1); --ember-line: rgba(178,90,43,.45);
+    --ok: #2f7b47; --ok-soft: rgba(47,123,71,.1); --ok-line: rgba(47,123,71,.42);
+    --err: #b3443a; --err-soft: rgba(179,68,58,.09); --err-line: rgba(179,68,58,.4);
+    --info: #3c5b9f; --info-soft: rgba(60,91,159,.09); --info-line: rgba(60,91,159,.38);
+    --shadow: 0 1px 2px rgba(34,27,38,.06), 0 10px 26px -16px rgba(34,27,38,.22);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --base: #f6f1ec; --raise: #efe8e1; --card: #fffcf9; --field: #ebe3db; --code: #f0e9e2;
+  --ink: #221b26; --ink-2: #3e3541; --ink-3: #5d535a; --ink-4: #7b7075;
+  --line: rgba(34,27,38,.13); --line-soft: rgba(34,27,38,.07); --line-strong: rgba(34,27,38,.26);
+  --ember: #b25a2b; --ember-soft: rgba(178,90,43,.1); --ember-line: rgba(178,90,43,.45);
+  --ok: #2f7b47; --ok-soft: rgba(47,123,71,.1); --ok-line: rgba(47,123,71,.42);
+  --err: #b3443a; --err-soft: rgba(179,68,58,.09); --err-line: rgba(179,68,58,.4);
+  --info: #3c5b9f; --info-soft: rgba(60,91,159,.09); --info-line: rgba(60,91,159,.38);
+  --shadow: 0 1px 2px rgba(34,27,38,.06), 0 10px 26px -16px rgba(34,27,38,.22);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-padding-top: calc(64px + env(safe-area-inset-top, 0px)); }
+body { background: var(--base); color: var(--ink); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--ember); text-underline-offset: 3px; }
+a:focus-visible, summary:focus-visible, .btn:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; border-radius: 4px; }
+img { max-width: 100%; }
+
+/* ---------- top bar ---------- */
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  display: flex; align-items: center; gap: 14px;
+  padding-inline: clamp(16px, 4vw, 32px); padding-block: 11px;
+  background: color-mix(in srgb, var(--base) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand { font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ember); text-decoration: none; white-space: nowrap; }
+.brand b { color: var(--ink-4); font-weight: 400; margin-left: 6px; }
+.crumb { font-size: .82rem; color: var(--ink-3); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.menu { margin-left: auto; position: relative; }
+.menu summary { list-style: none; cursor: pointer; font-family: var(--mono); font-size: .76rem; color: var(--ink-2); border: 1px solid var(--line); background: var(--raise); border-radius: 8px; padding: 7px 13px; white-space: nowrap; }
+.menu summary::-webkit-details-marker { display: none; }
+.menu summary:hover { border-color: var(--ember); color: var(--ember); }
+.menu ol { position: absolute; right: 0; top: calc(100% + 8px); width: min(340px, calc(100vw - 32px)); max-height: 70vh; overflow-y: auto; list-style: none; margin: 0; padding: 6px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); }
+.menu li a { display: flex; gap: 12px; padding: 8px 10px; border-radius: 8px; color: var(--ink-2); text-decoration: none; font-size: .9rem; }
+.menu li a span { font-family: var(--mono); font-size: .74rem; color: var(--ember); padding-top: .2em; }
+.menu li a:hover, .menu li a[aria-current="page"] { background: var(--ember-soft); color: var(--ink); }
+@media (max-width: 560px) { .brand b, .crumb { display: none; } }
+
+main { padding-inline: clamp(16px, 4vw, 40px); padding-block: 0 96px; }
+
+/* ---------- home ---------- */
+.home { max-width: 980px; margin: 0 auto; }
+.hero { padding-block: clamp(36px, 7vw, 72px) 28px; border-bottom: 1px solid var(--line-soft); }
+.eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ember); margin: 0 0 14px; }
+.hero h1 { font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.1; letter-spacing: -.03em; margin: 0 0 18px; text-wrap: balance; }
+.hero .lead { font-size: clamp(1rem, 1.8vw, 1.15rem); color: var(--ink-3); max-width: 62ch; margin: 0 0 26px; line-height: 1.7; }
+.hero .lead strong { color: var(--ink); font-weight: 600; }
+.hero-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-block; text-decoration: none; font-size: .9rem; font-weight: 600; padding: 10px 18px; border-radius: 10px; background: var(--ember); color: var(--base); border: 1px solid var(--ember); }
+.btn.ghost { background: transparent; color: var(--ink-2); border-color: var(--line-strong); font-weight: 500; }
+.btn.ghost:hover { border-color: var(--ember); color: var(--ember); }
+
+.part { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding-block: 30px; border-bottom: 1px solid var(--line-soft); }
+.part-head h2 { font-size: 1.05rem; margin: 0 0 6px; letter-spacing: -.01em; }
+.part-head p { margin: 0; font-size: .85rem; color: var(--ink-4); line-height: 1.5; }
+@media (max-width: 720px) { .part { grid-template-columns: 1fr; gap: 12px; } }
+.ch-list { display: flex; flex-direction: column; gap: 8px; }
+.ch-card { display: grid; grid-template-columns: 36px 1fr auto; gap: 14px; align-items: start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); text-decoration: none; color: inherit; transition: border-color .15s ease, transform .15s ease; }
+.ch-card:hover { border-color: var(--ember-line); }
+.ch-card.is-wb { background: linear-gradient(90deg, var(--info-soft), transparent 60%), var(--card); border-color: var(--info-line); }
+.ch-num { font-family: var(--mono); font-size: .82rem; color: var(--ember); padding-top: .15em; }
+.ch-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ch-title { font-weight: 600; font-size: 1rem; color: var(--ink); }
+.ch-lede { font-size: .86rem; color: var(--ink-4); line-height: 1.5; }
+.ch-count { font-family: var(--mono); font-size: .72rem; color: var(--ink-4); padding-top: .25em; font-variant-numeric: tabular-nums; }
+.by { display: inline-block; width: fit-content; font-family: var(--mono); font-size: .66rem; letter-spacing: .06em; color: var(--info); border: 1px solid var(--info-line); border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: 2px; }
+.ch-main .by { margin-left: 0; }
+
+/* ---------- chapter shell ---------- */
+.chapter { max-width: 1120px; margin: 0 auto; }
+.ch-head { padding-block: clamp(30px, 6vw, 56px) 26px; border-bottom: 1px solid var(--line-soft); margin-bottom: 30px; max-width: 820px; }
+.ch-eyebrow { font-family: var(--mono); font-size: .74rem; letter-spacing: .14em; color: var(--ember); margin: 0 0 12px; }
+.ch-head h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1.15; letter-spacing: -.025em; margin: 0 0 14px; text-wrap: balance; }
+.ch-lede-l { color: var(--ink-3); font-size: 1.04rem; margin: 0; max-width: 62ch; }
+.ch-body { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 44px; align-items: start; }
+.ch-toc { position: sticky; top: calc(70px + env(safe-area-inset-top, 0px)); max-height: calc(100vh - 90px); overflow-y: auto; }
+.ch-toc summary { font-family: var(--mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-4); cursor: pointer; margin-bottom: 10px; }
+.ch-toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; border-left: 1px solid var(--line); }
+.ch-toc a { display: flex; gap: 10px; padding: 6px 12px; margin-left: -1px; border-left: 2px solid transparent; font-size: .86rem; line-height: 1.4; color: var(--ink-3); text-decoration: none; }
+.ch-toc a span { font-family: var(--mono); font-size: .7rem; color: var(--ink-4); padding-top: .2em; }
+.ch-toc a:hover { color: var(--ink); }
+.ch-toc a.is-on { border-left-color: var(--ember); color: var(--ink); }
+.ch-toc a.is-on span { color: var(--ember); }
+@media (max-width: 900px) {
+  .ch-body { grid-template-columns: 1fr; gap: 20px; }
+  .ch-toc { position: static; max-height: none; background: var(--raise); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .ch-toc summary { margin-bottom: 0; }
+  .ch-toc details[open] summary { margin-bottom: 10px; }
+}
+.ch-content { max-width: 820px; min-width: 0; }
+.csec { padding-block: 10px 44px; margin-bottom: 40px; border-bottom: 1px solid var(--line-soft); scroll-margin-top: calc(72px + env(safe-area-inset-top, 0px)); }
+.csec:last-of-type { border-bottom: 0; }
+
+.pn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.pn { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); text-decoration: none; color: var(--ink); }
+.pn.next { text-align: right; }
+.pn small { font-family: var(--mono); font-size: .72rem; color: var(--ember); }
+.pn b { font-weight: 600; font-size: .95rem; }
+.pn:hover { border-color: var(--ember-line); }
+@media (max-width: 560px) { .pn-row { grid-template-columns: 1fr; } .pn.next { text-align: left; } }
+
+/* ---------- lecture content (슬라이드 원본 구성요소) ---------- */
+.lec .stack { display: flex; flex-direction: column; gap: 22px; }
+.lec h2 { font-size: clamp(1.35rem, 3vw, 1.85rem); line-height: 1.25; letter-spacing: -.02em; margin: 0 0 14px; text-wrap: balance; }
+.lec h2 em { font-style: normal; color: var(--ember); }
+.lec .lead { font-size: 1.04rem; line-height: 1.72; color: var(--ink-3); margin: 0; max-width: 64ch; }
+.lec .lead strong { color: var(--ink); font-weight: 600; }
+.lec .inner > p:not(.eyebrow):not(.big-num) { color: var(--ink-3); }
+.lec .bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.lec .bullets li { position: relative; padding-left: 24px; font-size: 1rem; line-height: 1.65; color: var(--ink-2); }
+.lec .bullets li::before { content: ""; position: absolute; left: 4px; top: .66em; width: 7px; height: 7px; border-radius: 50%; background: var(--ember); }
+.lec .bullets strong, .lec .steps strong { color: var(--ink); font-weight: 600; }
+.lec .bullets em { font-style: normal; color: var(--ink-4); }
+.lec .steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.lec .steps li { counter-increment: s; display: flex; gap: 14px; font-size: 1rem; line-height: 1.62; color: var(--ink-2); }
+.lec .steps li::before { content: counter(s, decimal-leading-zero); font-family: var(--mono); font-size: .74rem; color: var(--ember); flex: none; width: 24px; padding-top: .3em; }
+.lec .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.lec .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.lec .card .tag { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; color: var(--ember); display: block; margin-bottom: 9px; }
+.lec .card p { margin: 0; font-size: .9rem; line-height: 1.55; color: var(--ink-4); }
+.lec .card p + p { margin-top: 7px; color: var(--ink-3); }
+.lec .card strong { color: var(--ink); font-weight: 600; }
+.lec .tw { overflow-x: auto; border: 1px solid var(--line-soft); border-radius: 12px; }
+.lec table { border-collapse: collapse; width: 100%; min-width: 460px; font-size: .92rem; }
+.lec th, .lec td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+.lec tbody tr:last-child td { border-bottom: 0; }
+.lec th { font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-4); font-weight: 500; background: var(--raise); }
+.lec td { color: var(--ink-2); line-height: 1.5; }
+.lec td.hl { color: var(--ember); font-weight: 600; }
+.lec td.dim { color: var(--ink-4); }
+.lec td.ok { color: var(--ok); }
+.lec td.mono { font-family: var(--mono); font-size: .86rem; }
+.lec td em { font-style: normal; color: var(--ink-4); font-size: .85em; }
+.lec code { font-family: var(--mono); font-size: .88em; }
+.lec pre { background: var(--code); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; overflow-x: auto; margin: 0; }
+.lec pre code { font-size: .82rem; line-height: 1.75; color: var(--ink-2); white-space: pre; }
+.lec .c-key { color: var(--info); } .lec .c-str { color: var(--ok); } .lec .c-num { color: var(--ember); } .lec .c-dim { color: var(--ink-4); } .lec .c-err { color: var(--err); }
+.lec .ic { font-family: var(--mono); font-size: .86em; background: var(--field); border: 1px solid var(--line-soft); border-radius: 5px; padding: 1px 6px; color: var(--ink); }
+.lec .callout { border-left: 3px solid var(--ember); background: linear-gradient(90deg, var(--ember-soft), transparent); padding: 14px 18px; border-radius: 0 10px 10px 0; font-size: .98rem; line-height: 1.62; color: var(--ink-2); }
+.lec .callout strong { color: var(--ink); font-weight: 600; }
+.lec .callout em { font-style: normal; color: var(--ink-3); }
+.lec .callout.warn { border-left-color: var(--err); background: linear-gradient(90deg, var(--err-soft), transparent); }
+.lec .callout.ok { border-left-color: var(--ok); background: linear-gradient(90deg, var(--ok-soft), transparent); }
+.lec .callout.xlink { border-left-color: var(--info); background: linear-gradient(90deg, var(--info-soft), transparent); margin-top: 22px; }
+.lec .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.lec .chip { font-family: var(--mono); font-size: .74rem; color: var(--ink-3); border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; background: var(--raise); }
+.lec .big-num { font-family: var(--mono); font-size: 2.6rem; font-weight: 600; line-height: 1; color: var(--ember); margin: 0 0 14px; }
+.lec .creed { font-size: clamp(1.2rem, 3vw, 1.7rem); line-height: 1.45; font-weight: 600; color: var(--ink); letter-spacing: -.02em; border-left: 4px solid var(--ember); padding-left: clamp(16px, 3vw, 26px); margin: 0; text-wrap: balance; }
+.lec .creed .mark { color: var(--ember); }
+.lec .vs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.lec .vs-box { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--card); }
+.lec .vs-box.bad { border-color: var(--err-line); }
+.lec .vs-box.good { border-color: var(--ok-line); }
+.lec .vs-box .label { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; display: block; margin-bottom: 11px; color: var(--ink-4); }
+.lec .vs-box.bad .label { color: var(--err); }
+.lec .vs-box.good .label { color: var(--ok); }
+.lec .vs-box ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lec .vs-box li { font-size: .92rem; line-height: 1.55; color: var(--ink-3); }
+.lec .vs-box li code { color: var(--ink-2); }
+.lec .vs-box strong { color: var(--ink); font-weight: 600; }
+.lec .vs-box em { font-style: normal; color: var(--ink-4); }
+.lec .vs-box .strike { color: var(--ink-4); text-decoration: line-through; text-decoration-color: var(--err-line); }
+.lec .vs-box .cost { display: block; margin-top: 13px; padding-top: 11px; border-top: 1px dashed var(--line); font-family: var(--mono); font-size: .78rem; }
+.lec .vs-box.bad .cost { color: var(--err); }
+.lec .vs-box.good .cost { color: var(--ok); }
+.lec .checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; }
+.lec .check { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 13px 15px; border: 1px solid var(--line-soft); border-radius: 10px; background: var(--raise); }
+.lec .check .box { width: 15px; height: 15px; border: 1.5px solid var(--ember); border-radius: 4px; margin-top: 3px; }
+.lec .check .txt { font-size: .9rem; line-height: 1.5; color: var(--ink-3); }
+.lec .check .txt b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
+.lec figure { margin: 0; color: var(--ink-3); }
+.lec .figwrap { overflow-x: auto; background: var(--raise); border: 1px solid var(--line-soft); border-radius: 12px; padding: 14px; }
+.lec figure svg { width: 100%; min-width: 520px; height: auto; display: block; }
+.lec figcaption { margin-top: 12px; font-size: .86rem; color: var(--ink-4); line-height: 1.55; text-align: center; }
+.lec figcaption strong { color: var(--ink-2); }
+
+/* ---------- 자료 공통 ---------- */
+.wb {
+  --bg: var(--base); --surface: var(--card); --surface-2: var(--field);
+  --text: var(--ink); --text-muted: var(--ink-3); --border: var(--line);
+  --primary: var(--ember); --primary-soft: var(--ember-soft);
+  --accent: var(--info); --accent-soft: var(--info-soft);
+  --success: var(--ok); --success-soft: var(--ok-soft);
+  --danger: var(--err); --danger-soft: var(--err-soft);
+  --code-bg: var(--code); --code-text: var(--ink-2);
+}
+.wb .ch-content { font-size: .98rem; line-height: 1.65; }
+.wb .ch-content h2, .wb .ch-content h3, .wb .ch-content h4 { letter-spacing: -.01em; text-wrap: balance; }
+.wb .ch-content p { max-width: 68ch; }
+.wb .mono, .wb .redir-uri, .wb .term-key { font-family: var(--mono); }
+.wb .csec .module, .wb .csec .closing { margin: 0; padding: 0; border: 0; }
+.pending { color: var(--ink-4); font-style: italic; }
+
+/* ---------- 인프라 ---------- */
+.nt-h2 { font-size: clamp(1.35rem, 3vw, 1.8rem); letter-spacing: -.02em; margin: 0 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.nt-h3 { font-size: 1.2rem; margin: 30px 0 10px; }
+.csec > .nt-h3:first-child { margin-top: 0; }
+.nt-h4 { font-size: 1.02rem; margin: 26px 0 8px; color: var(--ink); }
+.wb .csec p { margin: 0 0 10px; color: var(--ink-2); }
+.wb .csec strong { color: var(--ink); font-weight: 600; }
+.wb .csec code { font-family: var(--mono); font-size: .86em; background: var(--field); border: 1px solid var(--line-soft); border-radius: 5px; padding: 1px 5px; color: var(--err); }
+.nt-ul { margin: 4px 0 14px; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; color: var(--ink-2); }
+.nt-ul .nt-ul { margin: 6px 0 2px; }
+.nt-ul li::marker { color: var(--ember); }
+.nt-ol { margin: 6px 0 16px; padding-left: 1.5em; display: flex; flex-direction: column; gap: 12px; color: var(--ink-2); }
+.nt-ol li::marker { color: var(--ember); font-family: var(--mono); font-size: .9em; }
+.nt-ol li p { margin: 0 0 8px; }
+.nt-img { margin: 12px 0 18px; }
+.nt-img img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line); background: #fff; }
+.nt-table { overflow-x: auto; margin: 14px 0 20px; border: 1px solid var(--line); border-radius: 12px; }
+.nt-table table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: .9rem; background: var(--card); }
+.nt-table th, .nt-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; line-height: 1.5; color: var(--ink-2); }
+.nt-table th { background: var(--raise); color: var(--ink); font-weight: 600; }
+.nt-table tbody tr:last-child td { border-bottom: 0; }
+.nt-code { background: var(--code); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; overflow-x: auto; margin: 8px 0 18px; }
+.wb .nt-code code { background: none; border: 0; padding: 0; color: var(--ink-2); font-size: .84rem; line-height: 1.7; }
+.nt-links { display: flex; flex-direction: column; gap: 6px; margin: 6px 0 16px; }
+.nt-links a { text-decoration: none; overflow-wrap: anywhere; }
+.wb .nt-links code { color: var(--info); }
+.nt-links a:hover code { border-color: var(--info-line); }
+.glossary-t td:first-child { white-space: nowrap; color: var(--ember); }
+
+/* ===== v2: 6개 파트 구조 ===== */
+.parts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding-block: 28px 0; }
+@media (max-width: 760px) { .parts { grid-template-columns: 1fr; } }
+.part { display: flex; flex-direction: column; gap: 0; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--card); overflow: hidden; grid-template-columns: none; }
+.part-head { display: grid; grid-template-columns: auto 1fr auto; column-gap: 12px; row-gap: 4px; align-items: baseline; padding: 18px 20px 14px; text-decoration: none; color: inherit; border-bottom: 1px solid var(--line-soft); }
+.part-head:hover h2 { color: var(--ember); }
+.pnum { font-family: var(--mono); font-size: .8rem; color: var(--ember); }
+.part-head h2 { font-size: 1.2rem; margin: 0; letter-spacing: -.01em; }
+.part-head p { grid-column: 2 / 4; margin: 0; font-size: .86rem; color: var(--ink-4); line-height: 1.5; }
+.pcount { font-family: var(--mono); font-size: .7rem; color: var(--ink-4); }
+.part-list { list-style: none; margin: 0; padding: 6px; display: flex; flex-direction: column; }
+.part-list a { display: grid; grid-template-columns: 36px 1fr; column-gap: 8px; padding: 9px 12px; border-radius: 9px; text-decoration: none; color: inherit; }
+.part-list a:hover { background: var(--ember-soft); }
+.hn { font-family: var(--mono); font-size: .76rem; color: var(--ink-4); padding-top: .15em; font-variant-numeric: tabular-nums; }
+.ht { font-size: .95rem; font-weight: 500; color: var(--ink); display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ht .by { margin-left: 0; }
+.hl { grid-column: 2; font-size: .8rem; color: var(--ink-4); line-height: 1.45; margin-top: 2px; }
+
+/* menu */
+.menu .m-parts { width: min(380px, calc(100vw - 32px)); max-height: 76vh; }
+.m-part { padding-block: 4px; }
+.m-part + .m-part { border-top: 1px solid var(--line-soft); }
+.menu .m-ptitle { font-weight: 600; color: var(--ink); }
+.menu .m-part ol { list-style: none; margin: 0 0 4px; padding: 0 0 0 26px; }
+.menu .m-part ol a { font-size: .86rem; padding-block: 6px; }
+.menu .m-part ol a span { font-size: .7rem; color: var(--ink-4); }
+
+/* sidebar */
+.ch-eyebrow a { color: var(--ember); text-decoration: none; }
+.ch-eyebrow a:hover { text-decoration: underline; }
+.ch-eyebrow span { color: var(--ink-4); }
+.toc-chs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; border-left: 1px solid var(--line); }
+.ch-toc .toc-ch { display: flex; gap: 10px; padding: 7px 12px; margin-left: -1px; border-left: 2px solid transparent; font-size: .88rem; line-height: 1.4; color: var(--ink-3); text-decoration: none; }
+.ch-toc .toc-ch span { font-family: var(--mono); font-size: .7rem; color: var(--ink-4); padding-top: .22em; min-width: 22px; }
+.ch-toc .toc-ch:hover { color: var(--ink); }
+.ch-toc li.is-cur > .toc-ch { border-left-color: var(--ember); color: var(--ink); font-weight: 600; }
+.ch-toc li.is-cur > .toc-ch span { color: var(--ember); }
+.toc-secs { list-style: none; margin: 2px 0 8px; padding: 0 0 0 32px; display: flex; flex-direction: column; }
+.ch-toc .toc-secs a { display: block; padding: 4px 10px; font-size: .8rem; line-height: 1.4; color: var(--ink-4); text-decoration: none; border-radius: 6px; margin: 0; border: 0; }
+.ch-toc .toc-secs a:hover { color: var(--ink); }
+.ch-toc .toc-secs a.is-on { color: var(--ember); background: var(--ember-soft); }
+
+/* guide steps (깃허브·에디터 따라 하기) */
+.g-step { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px; }
+.g-num { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--ember); color: var(--ember); font-family: var(--mono); font-size: .8rem; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+.g-body { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.g-body p { margin: 0; color: var(--ink-2); line-height: 1.7; }
+.g-body strong { color: var(--ink); font-weight: 600; }
+.g-body em { font-style: normal; color: var(--ink-3); }
+.g-body pre { margin: 0; }
+.g-shot { margin: 4px 0 0; }
+.g-shot img { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--line-strong); box-shadow: var(--shadow); }
+.g-shot figcaption { margin-top: 8px; font-size: .82rem; color: var(--ink-4); text-align: left; }
+.lec .inner > .g-shot figcaption { text-align: left; }
+
+/* ===== v3: 간격 · 리스트 정리 ===== */
+.lec .steps li { display: block; position: relative; padding-left: 38px; }
+.lec .steps li::before { position: absolute; left: 0; top: .15em; width: auto; padding-top: .22em; }
+.lec .csec { display: flex; flex-direction: column; gap: 22px; }
+.lec .csec > div > .eyebrow { margin-bottom: 10px; }
+.lec .csec > div > h2 { margin-bottom: 12px; }
+.lec .csec > div > h2:last-child { margin-bottom: 0; }
+.lec .csec > p { margin: 0; }
+.lec .creed { margin-block: 6px; }
+
+/* 전체 목차 드롭다운: 하위 목록은 팝업이 아니라 펼쳐진 목록 */
+.menu .m-part ol { position: static; width: auto; max-height: none; overflow: visible; background: none; border: 0; border-radius: 0; box-shadow: none; padding: 0 0 4px 26px; margin: 0; }
+.menu .m-part { list-style: none; }
+.lec .callout.xlink { margin-top: 0; }
+/* 인프라 가독성 */
+.wb .ch-content { font-size: 1rem; line-height: 1.72; }
+.wb .csec p { margin: 0 0 12px; }
+.nt-h3 { margin: 40px 0 12px; font-size: 1.22rem; }
+.nt-h4 { margin: 30px 0 10px; }
+.nt-ul { gap: 8px; margin: 6px 0 18px; }
+.nt-ol { gap: 22px; margin: 10px 0 22px; }
+.nt-ol li p { margin: 0 0 10px; }
+.nt-img { margin: 14px 0 24px; }
+.nt-ol .nt-img { margin: 10px 0 4px; }
+.nt-table { margin: 18px 0 26px; }
+.lec figure svg { max-height: none; }
+.pcount { grid-row: 1; grid-column: 3; }
+.g-body .note { font-size: .92rem; color: var(--ink-3); border-left: 2px solid var(--line-strong); padding-left: 12px; }
+
+.wb .masthead{
+    display:flex; flex-direction:column; gap:14px;
+    padding-block:8px 28px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:36px;
+  }
+.wb .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:.78rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--primary); font-weight:600;
+  }
+.wb .eyebrow::before{
+    content:""; width:7px; height:7px; border-radius:50%;
+    background:var(--accent); display:inline-block;
+  }
+.wb h1.title{ font-size:clamp(1.9rem, 5vw, 2.6rem); margin:0; line-height:1.15; }
+.wb .subtitle{ color:var(--text-muted); font-size:1.02rem; max-width:60ch; margin:0; }
+.wb .toc{
+    display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; padding:0; list-style:none;
+  }
+.wb .toc a{
+    display:inline-block; padding:6px 12px; border-radius:999px;
+    background:var(--surface-2); border:1px solid var(--border);
+    font-size:.86rem; color:var(--text); text-decoration:none; font-weight:500;
+  }
+.wb .toc a:hover{ border-color:var(--primary); color:var(--primary); }
+.wb .module{ margin-block:56px; scroll-margin-top: 20px; }
+.wb .module-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:6px; }
+.wb .module-num{
+    font-family:"IBM Plex Mono",monospace; color:var(--accent);
+    font-size:.95rem; font-weight:600; letter-spacing:.02em;
+  }
+.wb .module h2{ font-size:1.5rem; margin:0; }
+.wb .module-lede{ color:var(--text-muted); margin-top:4px; margin-bottom:24px; }
+.wb .pair{
+    display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-block:20px;
+  }
+@media (max-width:620px){.wb .pair{ grid-template-columns:1fr; }}
+.wb .defcard{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px; box-shadow:var(--shadow);
+  }
+.wb .defcard h3{ font-size:1.05rem; margin:0 0 6px; display:flex; align-items:center; gap:8px;}
+.wb .defcard.auth h3{ color:var(--primary); }
+.wb .defcard.authz h3{ color:var(--accent); }
+.wb .defcard p{ margin:0; font-size:.94rem; color:var(--text-muted); }
+.wb .defcard .analogy{
+    margin-top:12px; padding-top:12px; border-top:1px dashed var(--border);
+    font-size:.88rem; color:var(--text);
+  }
+.wb .defcard .analogy b{ color:inherit; }
+.wb .tablewrap{ overflow-x:auto; margin-block:20px; border-radius:12px; border:1px solid var(--border); }
+.wb table{ border-collapse:collapse; width:100%; min-width:520px; font-size:.92rem; background:var(--surface); }
+.wb th,.wb td{ text-align:left; padding:11px 16px; border-bottom:1px solid var(--border); }
+.wb thead th{ background:var(--surface-2); font-weight:600; color:var(--text-muted); font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }
+.wb tbody tr:last-child td{ border-bottom:none; }
+.wb td.code-cell{ font-family:"IBM Plex Mono",monospace; font-size:.86rem; }
+.wb .pill{ display:inline-block; padding:2px 9px; border-radius:999px; font-size:.78rem; font-weight:600; }
+.wb .pill.err{ background:var(--danger-soft); color:var(--danger); }
+.wb .methods{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-block:20px; }
+@media (max-width:620px){.wb .methods{ grid-template-columns:1fr; }}
+.wb .method{
+    border:1px solid var(--border); border-radius:12px; padding:16px 18px; background:var(--surface);
+  }
+.wb .method .tag{
+    font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--primary); margin-bottom:6px; display:block;
+  }
+.wb .method h4{ margin:0 0 6px; font-size:1rem; font-family:inherit; }
+.wb .method p{ margin:0; font-size:.88rem; color:var(--text-muted); }
+.wb .flow{
+    display:flex; align-items:stretch; gap:0; margin-block:26px; flex-wrap:wrap;
+  }
+.wb .flow-node{
+    flex:1 1 150px; background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:16px; text-align:center; box-shadow:var(--shadow);
+  }
+.wb .flow-node .icon{ font-size:1.5rem; }
+.wb .flow-node h5{ margin:8px 0 4px; font-size:.92rem; font-family:"IBM Plex Sans KR",sans-serif; }
+.wb .flow-node p{ margin:0; font-size:.78rem; color:var(--text-muted); }
+.wb .flow-arrow{
+    flex:0 0 auto; display:flex; align-items:center; justify-content:center;
+    color:var(--text-muted); font-size:1.3rem; padding-inline:6px;
+  }
+@media (max-width:700px){.wb .flow{ flex-direction:column; }
+.wb .flow-arrow{ transform:rotate(90deg); padding-block:2px; }}
+.wb .glossary{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-block:20px; }
+@media (max-width:620px){.wb .glossary{ grid-template-columns:1fr; }}
+.wb .term{ border-left:3px solid var(--primary); padding:4px 0 4px 14px; }
+.wb .term .term-key{ font-weight:700; font-size:.86rem; color:var(--primary); }
+.wb .term p{ margin:2px 0 0; font-size:.85rem; color:var(--text-muted); }
+.wb .practice-goal{
+    background:var(--primary-soft); border:1px solid var(--border); border-radius:14px;
+    padding:18px 20px; margin-block:22px;
+  }
+.wb .practice-goal h4{ margin:0 0 8px; font-size:.95rem; color:var(--primary); }
+.wb .practice-goal ol{ margin:0; padding-left:1.2em; font-size:.9rem; }
+.wb .practice-goal li{ margin-bottom:4px; }
+.wb .subsection{ margin-block:34px; }
+.wb .subsection-head{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.wb .subsection-badge{
+    flex:0 0 auto; width:26px; height:26px; border-radius:50%; background:var(--accent);
+    color:#fff; font-family:"IBM Plex Mono",monospace; font-size:.8rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+.wb .subsection h3{ font-size:1.12rem; margin:0; }
+.wb .step{ display:flex; gap:18px; margin-block:22px; align-items:flex-start; }
+.wb .step-marker{
+    flex:0 0 auto; width:28px; height:28px; border-radius:50%; border:2px solid var(--primary);
+    color:var(--primary); font-family:"IBM Plex Mono",monospace; font-weight:700; font-size:.82rem;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+.wb .step-body{ flex:1 1 auto; min-width:0; }
+.wb .step-body p{ margin:0 0 10px; font-size:.94rem; }
+.wb .step-body p .mono{ background:var(--surface-2); padding:1px 6px; border-radius:5px; font-size:.85em; }
+.wb .console-frame{
+    border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--surface);
+    box-shadow:var(--shadow); max-width:100%;
+  }
+.wb .console-bar{
+    display:flex; align-items:center; gap:6px; padding:9px 12px; background:var(--surface-2);
+    border-bottom:1px solid var(--border);
+  }
+.wb .console-bar span{ width:9px; height:9px; border-radius:50%; display:inline-block; background:var(--border); }
+.wb .console-bar span:nth-child(1){ background:#e0645a; }
+.wb .console-bar span:nth-child(2){ background:#e0b04a; }
+.wb .console-bar span:nth-child(3){ background:#5cb87a; }
+.wb .console-frame img{ display:block; width:100%; height:auto; }
+.wb .caption{ font-size:.8rem; color:var(--text-muted); margin-top:8px; }
+.wb .callout{
+    border-radius:12px; padding:14px 18px; margin-block:18px; font-size:.88rem;
+    border:1px solid var(--border);
+  }
+.wb .callout.warn{ background:var(--accent-soft); border-color:var(--accent); }
+.wb .callout.warn strong{ color:var(--accent); }
+.wb .callout.safe{ background:var(--success-soft); border-color:var(--success); }
+.wb .callout.safe strong{ color:var(--success); }
+.wb .redact-note{ font-size:.78rem; color:var(--text-muted); font-style:italic; }
+.wb .closing{
+    margin-top:60px; padding-top:36px; border-top:1px solid var(--border);
+  }
+.wb .checklist{ list-style:none; padding:0; margin:18px 0; display:grid; gap:10px; }
+.wb .checklist li{
+    display:flex; gap:10px; align-items:flex-start; font-size:.92rem;
+    background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 14px;
+  }
+.wb .checklist li::before{
+    content:"✓"; flex:0 0 auto; width:20px; height:20px; border-radius:50%;
+    background:var(--success-soft); color:var(--success); font-size:.75rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+.wb footer.credits{ margin-top:48px; font-size:.78rem; color:var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div class="app">
+<header class="bar">
+  <a class="brand" href="#/">GDGoC INHA <b>팀 프로젝트 핸드북</b></a>
+  <span class="crumb" id="crumb"></span>
+  <details class="menu" id="menu"><summary>전체 목차</summary><ol class="m-parts"><li class="m-part"><a class="m-ptitle" href="#/c/b-ready"><span>01</span>개발 기초 지식</a><ol><li><a href="#/c/b-ready"><span>1.1</span>시작하기 전에</a></li><li><a href="#/c/b-dev"><span>1.2</span>개발자는 무슨 일을 하는 사람인가</a></li><li><a href="#/c/b-design"><span>1.3</span>설계 — 코드보다 먼저 하는 일</a></li><li><a href="#/c/b-arch"><span>1.4</span>서비스는 어떤 부품으로 되어 있나</a></li></ol></li><li class="m-part"><a class="m-ptitle" href="#/c/g-git"><span>02</span>깃허브</a><ol><li><a href="#/c/g-git"><span>2.1</span>Git과 GitHub</a></li><li><a href="#/c/g-repo"><span>2.2</span>레포지토리</a></li><li><a href="#/c/g-branch"><span>2.3</span>브랜치</a></li><li><a href="#/c/g-work"><span>2.4</span>내 브랜치에서 작업하기</a></li><li><a href="#/c/g-pr"><span>2.5</span>PR 올리기</a></li><li><a href="#/c/g-merge"><span>2.6</span>main에 머지하기</a></li></ol></li><li class="m-part"><a class="m-ptitle" href="#/c/c-review"><span>03</span>협업하는 법</a><ol><li><a href="#/c/c-review"><span>3.1</span>리뷰 주고받기</a></li><li><a href="#/c/c-split"><span>3.2</span>일 나누기</a></li><li><a href="#/c/c-team"><span>3.3</span>팀 약속과 질문하는 법</a></li></ol></li><li class="m-part"><a class="m-ptitle" href="#/c/i-ship"><span>04</span>인프라</a><ol><li><a href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a></li><li><a href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li><a href="#/c/i-api"><span>4.3</span>API</a></li><li><a href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a></li><li><a href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li><a href="#/c/i-render"><span>4.6</span>Render</a></li><li><a href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></li><li class="m-part"><a class="m-ptitle" href="#/c/a-authn"><span>05</span>인증·인가</a><ol><li><a href="#/c/a-authn"><span>5.1</span>인증 — 너 누구냐</a></li><li><a href="#/c/a-authz"><span>5.2</span>인가 — 해도 되냐</a></li><li><a href="#/c/a-wb"><span>5.3</span>인증·인가 워크북</a></li><li><a href="#/c/a-oauth"><span>5.4</span>실습: 구글 OAuth 키 발급</a></li></ol></li><li class="m-part"><a class="m-ptitle" href="#/c/ai-ide"><span>06</span>AI 에이전트 기본</a><ol><li><a href="#/c/ai-ide"><span>6.1</span>에디터와 에이전트 시작하기</a></li><li><a href="#/c/ai-basic"><span>6.2</span>챗봇과 에이전트</a></li><li><a href="#/c/ai-safe"><span>6.3</span>사고 없이 쓰기</a></li><li><a href="#/c/ai-wrap"><span>6.4</span>마치며</a></li></ol></li></ol></details>
+</header>
+<main id="main">
+<section class="home" id="home">
+  <div class="hero">
+    <p class="eyebrow">GDGoC INHA · 팀 프로젝트 준비</p>
+    <h1>팀 프로젝트 핸드북</h1>
+    <p class="lead">곧 팀을 이뤄 <strong>한두 달 안에 돌아가는 서비스를 하나</strong> 만들게 됩니다. 기초 지식부터 깃허브, 협업, 인프라, 로그인, AI 에이전트까지 — 필요한 것을 여섯 갈래로 모았습니다.</p>
+    <div class="hero-row"><a class="btn" href="#/c/b-ready">처음부터 읽기</a></div>
+  </div>
+  <div class="parts"><section class="part" id="part-basics">
+  <a class="part-head" href="#/c/b-ready"><span class="pnum">01</span><h2>개발 기초 지식</h2><p>무엇을 만들지 정하고, 서비스가 어떤 부품으로 되어 있는지</p><span class="pcount">4개 장</span></a>
+  <ol class="part-list"><li><a href="#/c/b-ready"><span class="hn">1.1</span><span class="ht">시작하기 전에</span><span class="hl">강의 전에 설치해 둘 것과, 처음 한 번 해 두면 편한 설정. 모두 무료입니다.</span></a></li><li><a href="#/c/b-dev"><span class="hn">1.2</span><span class="ht">개발자는 무슨 일을 하는 사람인가</span><span class="hl">코딩을 배우기 전에, 코딩이 어디에 쓰이는 일인지부터.</span></a></li><li><a href="#/c/b-design"><span class="hn">1.3</span><span class="ht">설계 — 코드보다 먼저 하는 일</span><span class="hl">개발자는 언어를 아는 사람이 아니라, 시스템을 설계할 수 있는 사람입니다.</span></a></li><li><a href="#/c/b-arch"><span class="hn">1.4</span><span class="ht">서비스는 어떤 부품으로 되어 있나</span><span class="hl">설계한 것을 실제로 만들려면, 부품 이름을 알아야 합니다.</span></a></li></ol>
+</section><section class="part" id="part-github">
+  <a class="part-head" href="#/c/g-git"><span class="pnum">02</span><h2>깃허브</h2><p>레포 → 브랜치 → 커밋 → PR → 머지, 실제 화면으로 한 바퀴</p><span class="pcount">6개 장</span></a>
+  <ol class="part-list"><li><a href="#/c/g-git"><span class="hn">2.1</span><span class="ht">Git과 GitHub</span><span class="hl">혼자 쓸 때도 필요하고, 같이 쓰면 없으면 안 됩니다.</span></a></li><li><a href="#/c/g-repo"><span class="hn">2.2</span><span class="ht">레포지토리</span><span class="hl">팀 프로젝트 하나에 레포 하나. 만들고 둘러보기까지.</span></a></li><li><a href="#/c/g-branch"><span class="hn">2.3</span><span class="ht">브랜치</span><span class="hl">모두가 쓰는 main은 그대로 두고, 내 복사본에서 작업합니다.</span></a></li><li><a href="#/c/g-work"><span class="hn">2.4</span><span class="ht">내 브랜치에서 작업하기</span><span class="hl">고치고, 커밋하고, main이 멀쩡한지 확인합니다.</span></a></li><li><a href="#/c/g-pr"><span class="hn">2.5</span><span class="ht">PR 올리기</span><span class="hl">“내 브랜치를 main에 합쳐도 될까요?”라고 팀에 묻는 글.</span></a></li><li><a href="#/c/g-merge"><span class="hn">2.6</span><span class="ht">main에 머지하기</span><span class="hl">리뷰가 끝나면 합치고, 결과를 확인합니다.</span></a></li></ol>
+</section><section class="part" id="part-collab">
+  <a class="part-head" href="#/c/c-review"><span class="pnum">03</span><h2>협업하는 법</h2><p>리뷰를 주고받고, 일을 나누고, 팀 약속을 정하는 법</p><span class="pcount">3개 장</span></a>
+  <ol class="part-list"><li><a href="#/c/c-review"><span class="hn">3.1</span><span class="ht">리뷰 주고받기</span><span class="hl">PR은 검사가 아니라 공유입니다.</span></a></li><li><a href="#/c/c-split"><span class="hn">3.2</span><span class="ht">일 나누기</span><span class="hl">팀 프로젝트가 늘어지는 가장 큰 이유가 여기 있습니다.</span></a></li><li><a href="#/c/c-team"><span class="hn">3.3</span><span class="ht">팀 약속과 질문하는 법</span><span class="hl">첫 주에 정해 둘 것, 그리고 막혔을 때 묻는 법.</span></a></li></ol>
+</section><section class="part" id="part-infra">
+  <a class="part-head" href="#/c/i-ship"><span class="pnum">04</span><h2>인프라</h2><p>내 노트북 밖으로 서비스를 꺼내 남들이 쓰게 하는 일</p><span class="pcount">7개 장</span></a>
+  <ol class="part-list"><li><a href="#/c/i-ship"><span class="hn">4.1</span><span class="ht">만든 걸 남들이 쓰게 하려면</span><span class="hl">여기서 “예산”이라는 단어가 진짜로 등장합니다.</span></a></li><li><a href="#/c/i-3tier"><span class="hn">4.2</span><span class="ht">3-Tier 아키텍처</span><span class="hl">프론트엔드 · 백엔드 · 데이터베이스, 유튜브를 예로.</span></a></li><li><a href="#/c/i-api"><span class="hn">4.3</span><span class="ht">API</span><span class="hl">HTTP 요청·응답 명세와 JSON, 직접 호출해 보기.</span></a></li><li><a href="#/c/i-vercel"><span class="hn">4.4</span><span class="ht">배포 서비스와 Vercel</span><span class="hl">Vercel · Supabase · Render의 역할, 그리고 프론트엔드 배포.</span></a></li><li><a href="#/c/i-supabase"><span class="hn">4.5</span><span class="ht">Supabase</span><span class="hl">DB 관리 · 자동 API 생성 · 회원 인증을 한 번에.</span></a></li><li><a href="#/c/i-render"><span class="hn">4.6</span><span class="ht">Render</span><span class="hl">24시간 켜져 있는 백엔드 서버 배포.</span></a></li><li><a href="#/c/i-glossary"><span class="hn">4.7</span><span class="ht">용어 정리</span><span class="hl">인프라에서 자주 나오는 말, 한 줄씩.</span></a></li></ol>
+</section><section class="part" id="part-auth">
+  <a class="part-head" href="#/c/a-authn"><span class="pnum">05</span><h2>인증·인가</h2><p>“너 누구냐”와 “해도 되냐”, 그리고 구글 로그인 키 발급까지</p><span class="pcount">4개 장</span></a>
+  <ol class="part-list"><li><a href="#/c/a-authn"><span class="hn">5.1</span><span class="ht">인증 — 너 누구냐</span><span class="hl">신원을 확인하는 단계. 로그인 기능 하나를 끝까지 파봅니다.</span></a></li><li><a href="#/c/a-authz"><span class="hn">5.2</span><span class="ht">인가 — 해도 되냐</span><span class="hl">누구인지는 알았습니다. 이제 자격을 봅니다.</span></a></li><li><a href="#/c/a-wb"><span class="hn">5.3</span><span class="ht">인증·인가 워크북</span><span class="hl">로그인 버튼 뒤에서 무슨 일이 벌어지는지, 그리고 실제로 구글 클라우드 콘솔에서 OAuth 키를 발급받는 과정까지 — 딱 필요한 만큼만 짚고 넘어갑니다.</span></a></li><li><a href="#/c/a-oauth"><span class="hn">5.4</span><span class="ht">실습: 구글 OAuth 키 발급</span><span class="hl">Google Cloud Console에서 API 키와 OAuth 클라이언트 ID를 직접 발급받습니다.</span></a></li></ol>
+</section><section class="part" id="part-ai">
+  <a class="part-head" href="#/c/ai-ide"><span class="pnum">06</span><h2>AI 에이전트 기본</h2><p>에디터에서 에이전트를 부르고, 사고 없이 쓰는 최소한</p><span class="pcount">4개 장</span></a>
+  <ol class="part-list"><li><a href="#/c/ai-ide"><span class="hn">6.1</span><span class="ht">에디터와 에이전트 시작하기</span><span class="hl">에디터를 열고, 팀 레포를 받고, 터미널에서 에이전트를 부르기까지.</span></a></li><li><a href="#/c/ai-basic"><span class="hn">6.2</span><span class="ht">챗봇과 에이전트</span><span class="hl">무엇이 다르고, 무엇을 쓰면 되는지.</span></a></li><li><a href="#/c/ai-safe"><span class="hn">6.3</span><span class="ht">사고 없이 쓰기</span><span class="hl">지킬 것 세 가지와 조심할 것.</span></a></li><li><a href="#/c/ai-wrap"><span class="hn">6.4</span><span class="ht">마치며</span><span class="hl">처음부터 끝까지를 몇 문장으로.</span></a></li></ol>
+</section></div>
+</section>
+<article class="chapter lec" id="c-b-ready" data-crumb="개발 기초 지식 · 1.1 시작하기 전에" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/b-ready">01 개발 기초 지식</a> <span>/ 1.1</span> </p>
+    <h1>시작하기 전에</h1>
+    <p class="ch-lede-l">강의 전에 설치해 둘 것과, 처음 한 번 해 두면 편한 설정. 모두 무료입니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="개발 기초 지식 목차"><details open><summary>개발 기초 지식</summary><ol class="toc-chs"><li class="is-cur"><a class="toc-ch" href="#/c/b-ready"><span>1.1</span>시작하기 전에</a><ol class="toc-secs"><li><a href="#/c/b-ready/1">설치할 것 세 가지</a></li><li><a href="#/c/b-ready/2">처음 한 번 해 둘 설정</a></li><li><a href="#/c/b-ready/3">이건 안 해도 됩니다</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/b-dev"><span>1.2</span>개발자는 무슨 일을 하는 사람인가</a></li><li class=""><a class="toc-ch" href="#/c/b-design"><span>1.3</span>설계 — 코드보다 먼저 하는 일</a></li><li class=""><a class="toc-ch" href="#/c/b-arch"><span>1.4</span>서비스는 어떤 부품으로 되어 있나</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="b-ready-1" data-n="1"><div class="inner stack"><div><p class="eyebrow">강의 전에 미리</p><h2>설치할 것 세 가지</h2><p class="lead">개발이 처음이어도 괜찮습니다. 아래 셋만 깔려 있으면 팀 활동 첫날 바로 시작할 수 있어요. <strong>돈은 한 푼도 들지 않습니다.</strong></p></div><ol class="steps"><li><strong>Antigravity 설치</strong> — 코드를 쓰는 프로그램(에디터)입니다. <a href="https://antigravity.google/download" target="_blank" rel="noopener">antigravity.google/download</a>에서 내 운영체제용을 받아 설치하고, <strong>구글 계정으로 로그인</strong>하면 끝입니다. 무료이고, <strong>AI 에이전트가 처음부터 들어 있습니다.</strong></li><li><strong>Git 설치</strong> — 코드의 변경 기록을 남기는 도구입니다. <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com/downloads</a>. 설치 후 터미널에서 <span class="ic">git --version</span> 을 쳤을 때 버전이 나오면 성공입니다.</li><li><strong>GitHub 계정</strong> — 팀이 코드를 모아 두는 곳입니다. <strong>학교 이메일로 가입</strong>해 두면 다음 항목이 수월합니다.</li></ol><div class="callout ok"><strong>유료 구독은 하지 않아도 됩니다.</strong> Antigravity에 들어 있는 에이전트만으로 팀 프로젝트를 끝까지 만들 수 있습니다. Claude·ChatGPT 구독은 <em>더 깊게 파고 싶은 사람의 선택</em>이지, 준비물이 아닙니다.</div><div class="callout"><strong>왜 Antigravity인가요?</strong> 개발자들이 가장 많이 쓰는 <strong>VS Code를 바탕으로 만든 에디터</strong>라서 화면과 단축키가 거의 같고, 따로 결제하거나 설정하지 않아도 <strong>AI 에이전트가 이미 붙어 있습니다.</strong> 이미 VS Code를 쓰고 있다면 그대로 쓰셔도 됩니다 — 이 핸드북의 설명은 양쪽 모두에 그대로 적용됩니다.</div></div></section><section class="csec" id="b-ready-2" data-n="2"><div class="inner stack"><div><p class="eyebrow">안 해 두면 첫 주에 막힙니다</p><h2>처음 한 번 해 둘 설정</h2><p class="lead">아래 넷은 <strong>매년 팀마다 한 번씩 발목을 잡는 것들</strong>입니다. 지금 해 두면 다시 볼 일이 없습니다.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p><strong>Git에 내 이름과 이메일이 등록되어 있는지 확인</strong><br><em>안 되어 있으면:</em> 터미널에서 첫 커밋을 할 때 <code>Please tell me who you are</code> 에러가 나고 커밋이 안 됩니다.<br>먼저 아래를 쳐서 <code>user.name</code>과 <code>user.email</code>이 보이는지 확인하세요.</p><pre><code>git config --global --list</code></pre><p>안 보이면 등록합니다. 이메일은 <strong>GitHub에 가입한 이메일</strong>로 적으세요 — 커밋에 “누가 했는지”로 찍히는 정보입니다.</p><pre><code>git config --global user.name "Hong Gildong"
+git config --global user.email "gildong@inha.edu"
+git config --global init.defaultBranch main</code></pre><p class="note">이미 되어 있는 사람도 많습니다. GitHub Desktop이나 일부 IDE는 처음 커밋할 때 대신 등록해 주거든요. 반대로 <strong>GitHub 로그인만으로는 채워지지 않습니다</strong> — 로그인은 “이 레포에 올릴 권한이 있느냐”(인증)이고, 이 설정은 “이 커밋을 누가 만들었느냐”(작성자)라서 서로 다른 것입니다.</p></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p><strong>작업 폴더는 영문 경로에</strong><br><em>안 하면:</em> 한글·공백이 섞인 경로나 <strong>클라우드 동기화 폴더(OneDrive·iCloud·구글 드라이브)</strong> 안에서는 도구가 파일을 못 찾거나 동기화와 충돌해, 원인을 알 수 없는 에러가 납니다.<br><span class="ic">C:\dev</span> 나 <span class="ic">~/dev</span> 같은 폴더를 하나 만들고 프로젝트를 거기에 모으세요.</p></div></div><div class="g-step"><span class="g-num">3</span><div class="g-body"><p><strong>(Windows) 파일 확장자 보이게 하기</strong> — 탐색기 → 보기 → <strong>파일 확장명</strong> 체크<br><em>안 하면:</em> <code>index.html</code>과 <code>index.html.txt</code>가 똑같아 보여서, “분명 만들었는데 안 열려요”가 생깁니다.</p></div></div><div class="g-step"><span class="g-num">4</span><div class="g-body"><p><strong>에디터 한국어 언어 팩</strong> — 처음 켜면 오른쪽 아래에 설치를 권하는 알림이 뜹니다<br><em>안 하면:</em> 메뉴가 전부 영어라 이 핸드북의 화면(<span class="ic">파일 → 폴더 열기</span>)과 이름이 달라 보입니다.</p></div></div><div class="callout warn"><strong>언어와 런타임(예: Node.js, Java, Python)은 지금 깔지 마세요.</strong> 팀이 무엇으로 만들지 정한 다음에, 멘토와 함께 필요한 것만 설치하면 됩니다. 미리 이것저것 깔면 버전이 꼬여서 시작이 더 느려집니다.</div></div></section><section class="csec" id="b-ready-3" data-n="3"><div class="inner stack"><div><p class="eyebrow">마음 편히</p><h2>이건 안 해도 됩니다</h2></div><ul class="bullets"><li><strong>유료 구독</strong> — 위에서 말한 대로, 없어도 프로젝트를 끝까지 만들 수 있습니다.</li><li><strong>비싼 노트북</strong> — 브라우저와 에디터가 돌아가면 충분합니다.</li><li><strong>미리 공부해 오기</strong> — 문법을 외워 오지 않아도 됩니다. 이 핸드북은 <em>무엇을 정하고 어떻게 나눠 만드는지</em>부터 시작합니다.</li></ul><div class="callout">설치가 안 되거나 에러가 나면 혼자 오래 붙들지 마세요. <strong>화면과 에러 메시지를 그대로 찍어</strong> 팀 채널이나 멘토에게 물어보면 대부분 몇 분 안에 풀립니다. 잘 물어보는 방법은 <a href="#/c/c-team/2">“막혔을 때 잘 물어보는 법”</a>에 정리해 두었습니다.</div></div></section><nav class="pn-row"><span></span><a class="pn next" href="#/c/b-dev"><small>다음 →</small><b>1.2 · 개발자는 무슨 일을 하는 사람인가</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-b-dev" data-crumb="개발 기초 지식 · 1.2 개발자는 무슨 일을 하는 사람인가" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/b-ready">01 개발 기초 지식</a> <span>/ 1.2</span> </p>
+    <h1>개발자는 무슨 일을 하는 사람인가</h1>
+    <p class="ch-lede-l">코딩을 배우기 전에, 코딩이 어디에 쓰이는 일인지부터.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="개발 기초 지식 목차"><details open><summary>개발 기초 지식</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/b-ready"><span>1.1</span>시작하기 전에</a></li><li class="is-cur"><a class="toc-ch" href="#/c/b-dev"><span>1.2</span>개발자는 무슨 일을 하는 사람인가</a><ol class="toc-secs"><li><a href="#/c/b-dev/1">가장 중요한 한 문장</a></li><li><a href="#/c/b-dev/2">세 덩어리가 들어 있습니다</a></li><li><a href="#/c/b-dev/3">“제일 좋은 기술”은 없습니다</a></li><li><a href="#/c/b-dev/4">이것이 여러분이 가진 전부입니다</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/b-design"><span>1.3</span>설계 — 코드보다 먼저 하는 일</a></li><li class=""><a class="toc-ch" href="#/c/b-arch"><span>1.4</span>서비스는 어떤 부품으로 되어 있나</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="b-dev-1" data-n="1">
+<div>
+<p class="eyebrow">가장 중요한 한 문장</p>
+</div>
+<p class="creed">개발자는 <span class="mark">주어진 시간과 예산 안에서</span><br/>문제를 소프트웨어로 해결하는 사람이다.</p>
+<div class="callout">“코딩을 잘하는 사람”이 아닙니다. <strong>제약 안에서 문제를 푸는 사람</strong>입니다. 이 차이가 이 핸드북 내내, 그리고 팀 프로젝트 내내 따라다닙니다.</div>
+</section><section class="csec" id="b-dev-2" data-n="2">
+<div>
+<p class="eyebrow">문장을 뜯어보면</p>
+<h2>세 덩어리가 들어 있습니다</h2>
+</div>
+<div class="cards">
+<div class="card">
+<span class="tag">① 문제</span>
+<p><strong>누군가 불편한 것</strong>이 있어야 시작합니다.</p>
+<p>“무슨 기술을 써볼까”로 시작한 프로젝트는 대부분 중간에 멈춥니다. 풀 문제가 없으니 어디까지 만들어야 할지도 모릅니다.</p>
+</div>
+<div class="card">
+<span class="tag">② 시간과 예산</span>
+<p><strong>제약은 항상 있습니다.</strong></p>
+<p>시간은 유한하고, 사람 수도 정해져 있고, 돈은 거의 없습니다. 제약이 없는 개발은 존재하지 않습니다.</p>
+</div>
+<div class="card">
+<span class="tag">③ 소프트웨어로 해결</span>
+<p><strong>수단입니다. 목적이 아닙니다.</strong></p>
+<p>엑셀로 5분이면 되는 일에 두 달짜리 시스템을 만들면, 그건 잘못 푼 겁니다.</p>
+</div>
+</div>
+<div class="callout warn">그런데 <strong>“코딩”은 이 문장 어디에도 없습니다.</strong> 코딩은 ③번을 실행하는 수단 중 하나일 뿐입니다. 실제 업무 시간에서 코드를 치는 시간은 생각보다 적습니다.</div>
+</section><section class="csec" id="b-dev-3" data-n="3">
+<div>
+<p class="eyebrow">제약이 답을 바꾼다</p>
+<h2>“제일 좋은 기술”은 없습니다</h2>
+<p class="lead">같은 서비스를 만들어도 <strong>제약이 다르면 정답이 달라집니다.</strong> 아래는 똑같은 “중고 거래 서비스”를 만드는 두 팀입니다.</p>
+</div>
+<div class="tw">
+<table>
+<thead><tr><th></th><th>1년 · 개발자 10명 · 예산 있음</th><th>두 달 · 4명 · 예산 0</th></tr></thead>
+<tbody>
+<tr><td>서버</td><td class="dim">직접 구축하고 직접 관리</td><td class="hl">관리형 서비스를 빌려 씀</td></tr>
+<tr><td>로그인</td><td class="dim">직접 구현 (비번찾기·인증메일까지)</td><td class="hl">구글 로그인 붙임</td></tr>
+<tr><td>결제</td><td class="dim">결제사와 직접 연동</td><td class="hl">안 만듦 — 채팅으로 직거래</td></tr>
+<tr><td>검색</td><td class="dim">검색 엔진 도입</td><td class="hl">제목 일치만</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">오른쪽이 <strong>실력이 부족해서</strong> 저렇게 하는 게 아닙니다. <strong>제약에 맞는 판단</strong>을 한 겁니다. 두 달짜리 팀이 왼쪽을 따라 하면 아무것도 완성하지 못합니다.</div>
+</section><section class="csec" id="b-dev-4" data-n="4">
+<div>
+<p class="eyebrow">그래서, 여러분의 제약</p>
+<h2>이것이 여러분이 가진 전부입니다</h2>
+</div>
+<div class="cards">
+<div class="card"><span class="tag">시간</span><p><strong>한두 달.</strong> 그 안에 기획·개발·수정·발표가 다 들어갑니다. 실제 개발 가능 시간은 더 짧습니다.</p></div>
+<div class="card"><span class="tag">사람</span><p><strong>팀원 몇 명.</strong> 대부분 개발이 처음이고, 다들 수업과 병행합니다.</p></div>
+<div class="card"><span class="tag">돈</span><p><strong>거의 0.</strong> 유료 서비스를 마음껏 쓸 수 없습니다.</p></div>
+<div class="card"><span class="tag">경험</span><p><strong>처음.</strong> 처음 써보는 도구로, 처음 해보는 협업을 합니다.</p></div>
+</div>
+<div class="callout ok">그래서 여러분의 성공 기준은 <strong>“완벽한 서비스”가 아닙니다.</strong> 기간이 끝났을 때 <strong>실제로 돌아가는 것이 있느냐</strong>입니다. 작아도 돌아가는 것이, 크지만 안 돌아가는 것보다 낫습니다. 언제나요.</div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/b-ready"><small>← 이전</small><b>1.1 · 시작하기 전에</b></a><a class="pn next" href="#/c/b-design"><small>다음 →</small><b>1.3 · 설계 — 코드보다 먼저 하는 일</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-b-design" data-crumb="개발 기초 지식 · 1.3 설계 — 코드보다 먼저 하는 일" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/b-ready">01 개발 기초 지식</a> <span>/ 1.3</span> </p>
+    <h1>설계 — 코드보다 먼저 하는 일</h1>
+    <p class="ch-lede-l">개발자는 언어를 아는 사람이 아니라, 시스템을 설계할 수 있는 사람입니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="개발 기초 지식 목차"><details open><summary>개발 기초 지식</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/b-ready"><span>1.1</span>시작하기 전에</a></li><li class=""><a class="toc-ch" href="#/c/b-dev"><span>1.2</span>개발자는 무슨 일을 하는 사람인가</a></li><li class="is-cur"><a class="toc-ch" href="#/c/b-design"><span>1.3</span>설계 — 코드보다 먼저 하는 일</a><ol class="toc-secs"><li><a href="#/c/b-design/1">언어를 아는 것과 만들 수 있는 것은 다릅니다</a></li><li><a href="#/c/b-design/2">무엇을 안 만들지 정하는 일</a></li><li><a href="#/c/b-design/3">문제 하나를 만들 수 있는 조각으로</a></li><li><a href="#/c/b-design/4">데이터를 어떻게 담을지</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/b-arch"><span>1.4</span>서비스는 어떤 부품으로 되어 있나</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="b-design-1" data-n="1">
+<div>
+<p class="eyebrow">두 번째로 중요한 문장</p>
+<h2>언어를 아는 것과 만들 수 있는 것은 다릅니다</h2>
+<p class="lead">문법은 며칠이면 훑습니다. 그런데 문법을 다 외운 사람도 <strong>“서비스를 하나 만들어보세요”</strong> 하면 첫 줄을 못 씁니다. 왜일까요?</p>
+</div>
+<ul class="bullets">
+<li><strong>무엇을 만들지</strong> 정해지지 않았기 때문입니다</li>
+<li><strong>어떤 부품으로 나눌지</strong> 정해지지 않았기 때문입니다</li>
+<li><strong>데이터를 어떻게 담을지</strong> 정해지지 않았기 때문입니다</li>
+</ul>
+<p class="creed" style="font-size: clamp(1.1rem, 2.6vw, 1.6rem);">이 셋을 정하는 일이 <span class="mark">설계</span>입니다.<br/>코드를 한 줄도 쓰지 않은 상태에서 합니다.</p>
+<div class="callout warn"><strong>설계가 틀리면 코딩을 아무리 잘해도 소용없습니다.</strong> 반대로 설계가 정확하면, 코딩은 검색하면서도 할 수 있습니다. 여러분이 길러야 할 건 후자입니다.</div>
+</section><section class="csec" id="b-design-2" data-n="2">
+<div>
+<p class="eyebrow">설계의 절반</p>
+<h2>무엇을 <em>안</em> 만들지 정하는 일</h2>
+<p class="lead">예시로 <strong>“인하대 학식 리뷰 서비스”</strong>를 두 달 안에 만든다고 해봅시다. 아이디어 회의를 하면 기능이 스무 개쯤 나옵니다. 그중 <strong>네 개만 남깁니다.</strong></p>
+</div>
+<div class="vs">
+<div class="vs-box good">
+<span class="label">만든다 — 이게 없으면 서비스가 아니다</span>
+<ul>
+<li>식당 목록과 오늘의 메뉴 보기</li>
+<li>메뉴에 <strong>별점 + 한 줄 평</strong> 남기기</li>
+<li>남들이 쓴 평 보기</li>
+<li>로그인 (누가 썼는지 알아야 하니까)</li>
+</ul>
+</div>
+<div class="vs-box bad">
+<span class="label">안 만든다 — 없어도 서비스가 돌아간다</span>
+<ul>
+<li><span class="strike">사진 업로드</span></li>
+<li><span class="strike">댓글과 대댓글</span></li>
+<li><span class="strike">알림</span></li>
+<li><span class="strike">검색 · 필터</span></li>
+<li><span class="strike">관리자 페이지</span></li>
+<li><span class="strike">주간 랭킹 · 통계</span></li>
+</ul>
+</div>
+</div>
+<div class="callout"><strong>오른쪽을 지우는 게 초보 팀이 가장 못 하는 일이자, 가장 중요한 일입니다.</strong> 전부 만들려다 아무것도 못 끝내는 팀이 매년 나옵니다. 오른쪽은 <em>버리는</em> 게 아니라 <em>나중으로 미루는</em> 겁니다 — 왼쪽이 돌아간 다음에.</div>
+</section><section class="csec" id="b-design-3" data-n="3">
+<div>
+<p class="eyebrow">설계가 실제로 하는 일</p>
+<h2>문제 하나를 만들 수 있는 조각으로</h2>
+</div>
+<figure>
+<div class="figwrap">
+<svg aria-label="하나의 문제가 만들 기능 목록으로, 기능이 다시 화면과 저장할 데이터로 쪼개지고, 마지막에 팀원이 나눠 맡을 작업 단위가 되는 과정" role="img" viewbox="0 0 880 400">
+<defs>
+<marker id="d-ar" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink-3)"></path>
+</marker>
+<marker id="d-em" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ember)"></path>
+</marker>
+</defs>
+<rect height="62" rx="12" style="fill:var(--card);stroke:var(--ember-line)" width="280" x="300" y="14"></rect>
+<text font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1" style="fill:var(--ember)" text-anchor="middle" x="440" y="40">문제</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" style="fill:var(--ink)" text-anchor="middle" x="440" y="62">“오늘 학식 뭐 나오는지, 맛있는지 모르겠다”</text>
+<line marker-end="url(#d-em)" stroke-width="1.6" style="stroke:var(--ember)" x1="440" x2="440" y1="76" y2="108"></line>
+<rect height="58" rx="12" style="fill:var(--card);stroke:var(--line)" width="420" x="230" y="112"></rect>
+<text font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1" style="fill:var(--ink-4)" text-anchor="middle" x="440" y="136">만들 기능 — 네 개만</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="440" y="157">메뉴 보기 · 평 남기기 · 평 읽기 · 로그인</text>
+<path d="M440 170 V194 H190 V216" fill="none" marker-end="url(#d-ar)" stroke-width="1.5" style="stroke:var(--ink-3)"></path>
+<path d="M440 194 H690 V216" fill="none" marker-end="url(#d-ar)" stroke-width="1.5" style="stroke:var(--ink-3)"></path>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="300" y="188">사람이 보는 쪽</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="590" y="188">기억해야 하는 것</text>
+<rect height="110" rx="12" style="fill:var(--card);stroke:var(--info-line)" width="280" x="50" y="220"></rect>
+<text font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1" style="fill:var(--info)" text-anchor="middle" x="190" y="244">화면</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="190" y="268">식당 목록</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="190" y="289">메뉴 상세 + 평 목록</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="190" y="310">평 쓰기</text>
+<rect height="110" rx="12" style="fill:var(--card);stroke:var(--ok-line)" width="280" x="550" y="220"></rect>
+<text font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1" style="fill:var(--ok)" text-anchor="middle" x="690" y="244">데이터</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="690" y="268">식당 — 이름, 위치</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="690" y="289">메뉴 — 날짜, 식당, 음식</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="690" y="310">평 — 누가, 어느 메뉴, 별점</text>
+<path d="M190 330 V356 H420" fill="none" marker-end="url(#d-ar)" stroke-width="1.5" style="stroke:var(--ink-3)"></path>
+<path d="M690 330 V356 H460" fill="none" marker-end="url(#d-ar)" stroke-width="1.5" style="stroke:var(--ink-3)"></path>
+<rect height="46" rx="10" style="fill:var(--field);stroke:var(--ember-line)" width="280" x="300" y="340"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12.5" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="440" y="368">팀원이 하나씩 나눠 맡을 단위</text>
+</svg>
+</div>
+<figcaption>여기까지 하면 <strong>“내일부터 누가 뭘 할지”</strong>가 정해집니다. 코드는 그다음입니다.</figcaption>
+</figure>
+</section><section class="csec" id="b-design-4" data-n="4">
+<div>
+<p class="eyebrow">설계에서 가장 나중에 고치기 어려운 것</p>
+<h2>데이터를 어떻게 담을지</h2>
+<p class="lead">화면은 나중에 바꿀 수 있습니다. 그런데 <strong>데이터 구조는 한번 정하고 데이터가 쌓이면 바꾸기 어렵습니다.</strong> 그래서 여기에 시간을 더 씁니다.</p>
+</div>
+<div class="tw">
+<table>
+<thead><tr><th>표 이름</th><th>담는 것</th><th>한 줄이 뜻하는 것</th></tr></thead>
+<tbody>
+<tr><td class="mono hl">restaurant</td><td>이름, 위치, 운영시간</td><td>식당 하나</td></tr>
+<tr><td class="mono hl">menu</td><td>날짜, 어느 식당, 음식 이름, 가격</td><td>“9/16 학생식당 제육덮밥”</td></tr>
+<tr><td class="mono hl">review</td><td>누가, 어느 메뉴, 별점, 한 줄 평</td><td>평 하나</td></tr>
+<tr><td class="mono hl">user</td><td>이름, 학번, 가입일</td><td>사람 하나</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">요령 하나. <strong>“한 줄이 무엇 하나를 뜻하는지” 말할 수 있으면 잘 나눈 겁니다.</strong> “식당이면서 메뉴이기도 한 표”가 나오면 다시 나눠야 한다는 신호입니다.</div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/b-dev"><small>← 이전</small><b>1.2 · 개발자는 무슨 일을 하는 사람인가</b></a><a class="pn next" href="#/c/b-arch"><small>다음 →</small><b>1.4 · 서비스는 어떤 부품으로 되어 있나</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-b-arch" data-crumb="개발 기초 지식 · 1.4 서비스는 어떤 부품으로 되어 있나" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/b-ready">01 개발 기초 지식</a> <span>/ 1.4</span> </p>
+    <h1>서비스는 어떤 부품으로 되어 있나</h1>
+    <p class="ch-lede-l">설계한 것을 실제로 만들려면, 부품 이름을 알아야 합니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="개발 기초 지식 목차"><details open><summary>개발 기초 지식</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/b-ready"><span>1.1</span>시작하기 전에</a></li><li class=""><a class="toc-ch" href="#/c/b-dev"><span>1.2</span>개발자는 무슨 일을 하는 사람인가</a></li><li class=""><a class="toc-ch" href="#/c/b-design"><span>1.3</span>설계 — 코드보다 먼저 하는 일</a></li><li class="is-cur"><a class="toc-ch" href="#/c/b-arch"><span>1.4</span>서비스는 어떤 부품으로 되어 있나</a><ol class="toc-secs"><li><a href="#/c/b-arch/1">화면 · 판단 · 기억</a></li><li><a href="#/c/b-arch/2">부품마다 할 수 있는 일이 다릅니다</a></li><li><a href="#/c/b-arch/3">API — 화면과 서버 사이의 약속</a></li><li><a href="#/c/b-arch/4">여러분은 양쪽을 다 만듭니다</a></li></ol></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="b-arch-1" data-n="1">
+<div>
+<p class="eyebrow">거의 모든 서비스가 이렇습니다</p>
+<h2>화면 · 판단 · 기억</h2>
+</div>
+<figure>
+<div class="figwrap">
+<svg aria-label="프론트엔드와 백엔드, 데이터베이스가 요청과 응답을 주고받는 구조. 사용자가 볼 수 있는 것은 프론트엔드까지다" role="img" viewbox="0 0 820 240">
+<defs>
+<marker id="ar" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink-3)"></path>
+</marker>
+</defs>
+<rect height="120" rx="12" style="fill:var(--card);stroke:var(--line)" width="200" x="10" y="60"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="15" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="110" y="97">프론트엔드</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-3)" text-anchor="middle" x="110" y="122">화면을 그린다</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-3)" text-anchor="middle" x="110" y="143">브라우저 · 앱에서 돈다</text>
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" style="fill:var(--ember)" text-anchor="middle" x="110" y="166">React · Flutter · …</text>
+<rect height="120" rx="12" style="fill:var(--card);stroke:var(--line)" width="200" x="310" y="60"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="15" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="410" y="97">백엔드</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-3)" text-anchor="middle" x="410" y="122">규칙을 지킨다</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-3)" text-anchor="middle" x="410" y="143">서버에서 돈다</text>
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" style="fill:var(--ember)" text-anchor="middle" x="410" y="166">Spring · Node · Django · …</text>
+<rect height="120" rx="12" style="fill:var(--card);stroke:var(--line)" width="200" x="610" y="60"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="15" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="710" y="97">데이터베이스</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-3)" text-anchor="middle" x="710" y="122">기억한다</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-3)" text-anchor="middle" x="710" y="143">껐다 켜도 남는다</text>
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" style="fill:var(--ember)" text-anchor="middle" x="710" y="166">PostgreSQL · MySQL · …</text>
+<line marker-end="url(#ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="216" x2="302" y1="100" y2="100"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="259" y="90">요청</text>
+<line marker-end="url(#ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="302" x2="216" y1="142" y2="142"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="259" y="162">응답</text>
+<line marker-end="url(#ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="516" x2="602" y1="100" y2="100"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="559" y="90">질의</text>
+<line marker-end="url(#ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="602" x2="516" y1="142" y2="142"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="559" y="162">결과</text>
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1" style="fill:var(--ink-4)" text-anchor="middle" x="110" y="34">사용자가 보는 것</text>
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1" style="fill:var(--ink-4)" text-anchor="middle" x="560" y="34">사용자가 못 보는 것</text>
+<line stroke-dasharray="3 4" stroke-width="1" style="stroke:var(--line-strong)" x1="10" x2="210" y1="44" y2="44"></line>
+<line stroke-dasharray="3 4" stroke-width="1" style="stroke:var(--line-strong)" x1="310" x2="810" y1="44" y2="44"></line>
+</svg>
+</div>
+<figcaption>웹이든 앱이든 이 구조는 같습니다. 바뀌는 건 <strong>맨 왼쪽이 브라우저냐 스마트폰이냐</strong>뿐입니다.</figcaption>
+</figure>
+</section><section class="csec" id="b-arch-2" data-n="2">
+<div>
+<p class="eyebrow">부품별 역할</p>
+<h2>부품마다 할 수 있는 일이 다릅니다</h2>
+</div>
+<div class="cards">
+<div class="card">
+<span class="tag">프론트엔드</span>
+<p>보이는 전부를 만듭니다. 버튼, 목록, 입력창, 클릭 반응.</p>
+<p><strong>못 하는 일:</strong> 비밀 지키기. 브라우저·앱 코드는 사용자가 뜯어볼 수 있습니다.</p>
+</div>
+<div class="card">
+<span class="tag">백엔드</span>
+<p>판단하고 저장합니다. “이 사람이 이걸 해도 되나”, “이미 쓴 평인가”.</p>
+<p><strong>여기서만 가능한 일:</strong> 믿을 수 있는 검사.</p>
+</div>
+<div class="card">
+<span class="tag">데이터베이스</span>
+<p>표에 적어둡니다. 엑셀 시트와 비슷하지만, 수천 명이 동시에 써도 안 깨집니다.</p>
+<p><strong>설계가 제일 중요한 곳</strong>입니다.</p>
+</div>
+</div>
+<div class="callout warn">자주 나는 실수 하나. <strong>프론트엔드에서 막은 것은 막은 게 아닙니다.</strong> 버튼을 숨겨도 요청은 보낼 수 있습니다. 중요한 검사는 <strong>반드시 백엔드에서 한 번 더</strong> 합니다. (<a href="#/c/a-authz/2">“인가 — 해도 되냐”</a> 장에서 자세히)</div>
+</section><section class="csec" id="b-arch-3" data-n="3">
+<div>
+<p class="eyebrow">부품을 잇는 것</p>
+<h2>API — 화면과 서버 사이의 약속</h2>
+<p class="lead">화면 쪽과 서버 쪽은 <strong>서로의 속을 몰라도 됩니다.</strong> “이렇게 물어보면 이렇게 답한다”만 정하면 됩니다. <strong>한 사람이 양쪽을 다 만들 때도 마찬가지입니다</strong> — 먼저 정해두면 순서가 생깁니다.</p>
+</div>
+<pre><code><span class="c-dim"># 화면에서 이렇게 물어보면</span>
+GET /api/restaurants/<span class="c-num">3</span>/menus?date=<span class="c-str">2026-09-16</span>
+
+<span class="c-dim"># 서버가 이렇게 답한다</span>
+{
+  <span class="c-key">"menus"</span>: [
+    { <span class="c-key">"id"</span>: <span class="c-num">17</span>, <span class="c-key">"name"</span>: <span class="c-str">"제육덮밥"</span>, <span class="c-key">"price"</span>: <span class="c-num">5000</span>,
+      <span class="c-key">"avgRating"</span>: <span class="c-num">4.2</span>, <span class="c-key">"reviewCount"</span>: <span class="c-num">31</span> }
+  ]
+}</code></pre>
+<div class="callout ok">이 약속을 먼저 정해두면 <strong>서버를 아직 안 만들었어도 화면부터 시작할 수 있습니다</strong> — 저 모양의 가짜 데이터로요. 순서에 막히지 않는다는 뜻이고, 두 달짜리 팀에게 이건 <strong>시간을 버는 기술</strong>입니다.</div>
+</section><section class="csec" id="b-arch-4" data-n="4">
+<div>
+<p class="eyebrow">이 프로그램의 방침</p>
+<h2>여러분은 양쪽을 다 만듭니다</h2>
+<p class="lead">“나는 화면 할게, 너는 서버 해” — <strong>이렇게 나누지 않습니다.</strong> 팀원 모두가 화면부터 데이터까지 한 바퀴를 돕니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>전체를 못 보면 설계를 못 합니다.</strong> 앞에서 내내 이야기한 그것 — 화면만 아는 사람은 데이터를 어떻게 담을지 정할 수 없습니다.</li>
+<li><strong>한쪽만 하면 상대를 이해하지 못합니다.</strong> “그건 서버에서 해주세요”가 얼마나 큰 일인지 모른 채 말하게 됩니다.</li>
+<li><strong>두 달 팀에서는 위험합니다.</strong> 한 명이 바빠지면 그 층이 통째로 멈춥니다.</li>
+<li><strong>깊게 파는 건 나중에 언제든 할 수 있습니다.</strong> 한 바퀴를 직접 도는 경험은 지금이 아니면 잘 오지 않습니다.</li>
+</ul>
+<div class="callout">그래서 일은 <strong>“화면 담당 / 서버 담당”이 아니라 기능 단위로</strong> 나눕니다. “A는 리뷰 기능을 화면부터 데이터까지, B는 로그인을 화면부터 데이터까지.” 어떻게 나누는지는 <a href="#/c/c-split">“일 나누기”</a> 장에서 자세히 봅니다.</div>
+<div class="callout ok xlink">프론트엔드 · 백엔드 · 데이터베이스와 API를 더 자세히 보려면 인프라 파트의 <a href="#/c/i-3tier">“3-Tier 아키텍처”</a> · <a href="#/c/i-api">“API”</a> 장으로.</div></section><nav class="pn-row"><a class="pn prev" href="#/c/b-design"><small>← 이전</small><b>1.3 · 설계 — 코드보다 먼저 하는 일</b></a><a class="pn next" href="#/c/g-git"><small>다음 →</small><b>2.1 · Git과 GitHub</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-g-git" data-crumb="깃허브 · 2.1 Git과 GitHub" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/g-git">02 깃허브</a> <span>/ 2.1</span> </p>
+    <h1>Git과 GitHub</h1>
+    <p class="ch-lede-l">혼자 쓸 때도 필요하고, 같이 쓰면 없으면 안 됩니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="깃허브 목차"><details open><summary>깃허브</summary><ol class="toc-chs"><li class="is-cur"><a class="toc-ch" href="#/c/g-git"><span>2.1</span>Git과 GitHub</a><ol class="toc-secs"><li><a href="#/c/g-git/1">보고서_최종_진짜최종_v2_수정.hwp</a></li><li><a href="#/c/g-git/2">커밋 = 저장점 + 메모</a></li><li><a href="#/c/g-git/3">2주 뒤의 나에게 쓰는 편지</a></li><li><a href="#/c/g-git/4">Git과 GitHub은 다릅니다</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/g-repo"><span>2.2</span>레포지토리</a></li><li class=""><a class="toc-ch" href="#/c/g-branch"><span>2.3</span>브랜치</a></li><li class=""><a class="toc-ch" href="#/c/g-work"><span>2.4</span>내 브랜치에서 작업하기</a></li><li class=""><a class="toc-ch" href="#/c/g-pr"><span>2.5</span>PR 올리기</a></li><li class=""><a class="toc-ch" href="#/c/g-merge"><span>2.6</span>main에 머지하기</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="g-git-1" data-n="1">
+<div>
+<p class="eyebrow">모두가 겪어본 문제</p>
+<h2>보고서_최종_진짜최종_v2_수정.hwp</h2>
+<p class="lead">웃기지만 이게 정확히 개발자들이 겪던 문제입니다. 코드에서는 훨씬 심각해집니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>어제는 됐는데 오늘 안 됩니다.</strong> 뭘 바꿨는지 기억이 안 납니다.</li>
+<li><strong>되돌리고 싶은데</strong> 어디까지 되돌려야 할지 모릅니다.</li>
+<li><strong>왜 이렇게 짰는지</strong> 2주 뒤의 내가 모릅니다.</li>
+<li>팀이면: <strong>누가 언제 뭘 고쳤는지</strong> 아무도 모릅니다. 파일을 카톡으로 주고받으면 반드시 덮어씁니다.</li>
+</ul>
+<div class="callout">Git은 이 넷을 한꺼번에 해결합니다. <strong>“언제, 누가, 무엇을, 왜 바꿨는지”를 전부 기록</strong>하고, 아무 시점으로나 되돌아갈 수 있게 합니다.</div>
+</section><section class="csec" id="g-git-2" data-n="2">
+<div>
+<p class="eyebrow">핵심 개념</p>
+<h2>커밋 = 저장점 + 메모</h2>
+<p class="lead">게임의 세이브 포인트를 떠올리세요. 다만 <strong>“여기서 무엇을 왜 했는지” 메모가 반드시 따라붙습니다.</strong></p>
+</div>
+<div class="cards">
+<div class="card">
+<span class="tag">커밋이 담는 것</span>
+<p>바뀐 파일과 바뀐 줄</p>
+<p>누가 언제 했는지</p>
+<p><strong>왜 했는지 (메시지)</strong></p>
+</div>
+<div class="card">
+<span class="tag">그래서 가능해지는 것</span>
+<p>어느 시점으로든 되돌아가기</p>
+<p>“이 줄 누가 왜 썼지?” 추적</p>
+<p>두 시점 사이의 차이만 보기</p>
+</div>
+<div class="card">
+<span class="tag">감 잡기</span>
+<p>한 커밋 = <strong>한 가지 일.</strong> “로그인 버그 수정”과 “버튼 색 변경”은 따로 커밋합니다. 섞으면 되돌릴 때 같이 딸려옵니다.</p>
+</div>
+</div>
+</section><section class="csec" id="g-git-3" data-n="3">
+<div>
+<p class="eyebrow">커밋 메시지</p>
+<h2>2주 뒤의 나에게 쓰는 편지</h2>
+</div>
+<div class="vs">
+<div class="vs-box bad">
+<span class="label">이러면 아무 도움이 안 됩니다</span>
+<ul>
+<li><code>수정</code></li>
+<li><code>ㅇㅇ</code></li>
+<li><code>fix bug</code></li>
+<li><code>최종</code></li>
+<li><code>asdf</code></li>
+</ul>
+</div>
+<div class="vs-box good">
+<span class="label">이렇게 씁니다</span>
+<ul>
+<li><code>리뷰 작성 시 별점 없이 제출되던 문제 수정</code></li>
+<li><code>식당 목록 화면 추가</code></li>
+<li><code>로그인 후 원래 보던 페이지로 돌아가게 함</code></li>
+</ul>
+</div>
+</div>
+<div class="callout"><strong>판단 기준 하나:</strong> 2주 뒤의 내가 이 메시지만 보고 “아 그거” 하고 떠올릴 수 있으면 합격입니다. 영어로 쓸지 한국어로 쓸지는 <strong>팀이 정하면 됩니다</strong> — 섞어 쓰지만 않으면 됩니다.</div>
+</section><section class="csec" id="g-git-4" data-n="4">
+<div>
+<p class="eyebrow">자주 헷갈리는 것</p>
+<h2>Git과 GitHub은 다릅니다</h2>
+</div>
+<div class="vs">
+<div class="vs-box">
+<span class="label" style="color: var(--info);">GIT</span>
+<ul>
+<li><strong>도구</strong>입니다. 내 컴퓨터에 설치합니다.</li>
+<li>인터넷 없이도 동작합니다.</li>
+<li>기록하고 되돌리는 일을 합니다.</li>
+</ul>
+</div>
+<div class="vs-box">
+<span class="label" style="color: var(--ember);">GITHUB</span>
+<ul>
+<li><strong>웹사이트</strong>입니다.</li>
+<li>Git 기록을 <em>올려두고 공유하는 곳</em>입니다.</li>
+<li>여기에 리뷰·이슈·자동 배포가 붙습니다.</li>
+<li>비슷한 것: GitLab, Bitbucket</li>
+</ul>
+</div>
+</div>
+<div class="callout">비유하자면 <strong>Git은 카메라, GitHub은 사진을 올리는 곳</strong>입니다. 팀 프로젝트에서는 둘 다 씁니다 — 각자 카메라로 찍고, 한 곳에 모읍니다.</div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/b-arch"><small>← 이전</small><b>1.4 · 서비스는 어떤 부품으로 되어 있나</b></a><a class="pn next" href="#/c/g-repo"><small>다음 →</small><b>2.2 · 레포지토리</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-g-repo" data-crumb="깃허브 · 2.2 레포지토리" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/g-git">02 깃허브</a> <span>/ 2.2</span> </p>
+    <h1>레포지토리</h1>
+    <p class="ch-lede-l">팀 프로젝트 하나에 레포 하나. 만들고 둘러보기까지.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="깃허브 목차"><details open><summary>깃허브</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/g-git"><span>2.1</span>Git과 GitHub</a></li><li class="is-cur"><a class="toc-ch" href="#/c/g-repo"><span>2.2</span>레포지토리</a><ol class="toc-secs"><li><a href="#/c/g-repo/1">레포지토리가 뭔가요</a></li><li><a href="#/c/g-repo/2">새 레포 만들기</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/g-branch"><span>2.3</span>브랜치</a></li><li class=""><a class="toc-ch" href="#/c/g-work"><span>2.4</span>내 브랜치에서 작업하기</a></li><li class=""><a class="toc-ch" href="#/c/g-pr"><span>2.5</span>PR 올리기</a></li><li class=""><a class="toc-ch" href="#/c/g-merge"><span>2.6</span>main에 머지하기</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="g-repo-1" data-n="1"><div class="inner stack"><div><p class="eyebrow">먼저 단어부터</p><h2>레포지토리 = 프로젝트 폴더 + 모든 변경 기록</h2><p class="lead">줄여서 <strong>레포(repo)</strong>라고 부릅니다. 팀 프로젝트 하나에 레포 하나를 만들고, 팀원 모두가 여기에 코드를 올립니다.</p></div><ul class="bullets"><li><strong>파일</strong>이 들어 있고</li><li>그 파일이 <strong>언제, 누가, 왜 바뀌었는지</strong>가 전부 남습니다 — 이 기록 하나하나가 커밋입니다</li><li>GitHub에 올려두면 팀원 모두가 <strong>같은 레포</strong>를 봅니다</li></ul><div class="callout">이 장부터는 실제 GitHub 화면으로 따라갑니다. 예시 레포는 <a href="https://github.com/Mybread2/github-practice" target="_blank" rel="noopener"><code>Mybread2/github-practice</code></a>입니다 — 들어가서 직접 둘러봐도 됩니다.</div></div></section><section class="csec" id="g-repo-2" data-n="2"><div class="inner stack"><div><p class="eyebrow">따라 하기</p><h2>새 레포 만들기</h2></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p>GitHub 오른쪽 위 <span class="ic">+</span> → <span class="ic">New repository</span>를 누릅니다. <strong>Repository name</strong>에 이름을 넣습니다 — 영문 소문자와 하이픈(<code>-</code>)으로 짓는 게 관례입니다. 초록색 <em>“is available”</em>이 뜨면 쓸 수 있는 이름입니다.</p><figure class="g-shot"><img src="img/1e27dc33425f.jpg" alt="새 레포 만들기 화면. Repository name에 github-practice, Description에 설명을 입력한 상태" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p>아래로 내려 <strong>Add README</strong>를 <strong>On</strong>으로 켜고 <span class="ic">Create repository</span>를 누릅니다. README는 레포 첫 화면에 보이는 설명 파일입니다. 켜 두면 빈 레포가 아니라서 바로 브랜치를 만들 수 있습니다.</p><figure class="g-shot"><img src="img/530bd9a190e7.jpg" alt="Configuration 영역. Public 선택, Add README가 On, Create repository 버튼" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">3</span><div class="g-body"><p>레포가 만들어졌습니다. 왼쪽 위 <span class="ic">main</span>이 지금 보고 있는 <strong>브랜치</strong>, 오른쪽 <span class="ic">1 Commit</span>이 지금까지 쌓인 기록입니다.</p><figure class="g-shot"><img src="img/bce1245077e5.jpg" alt="레포 첫 화면. main 브랜치, README.md 파일 하나, 1 Commit" loading="lazy"></figure></div></div><div class="callout ok">팀 프로젝트에서는 <strong>한 명이 레포를 만들고</strong> <span class="ic">Settings → Collaborators</span>에서 팀원을 초대합니다. 초대받은 사람은 메일이나 GitHub 알림에서 수락하면 됩니다.</div></div></section><nav class="pn-row"><a class="pn prev" href="#/c/g-git"><small>← 이전</small><b>2.1 · Git과 GitHub</b></a><a class="pn next" href="#/c/g-branch"><small>다음 →</small><b>2.3 · 브랜치</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-g-branch" data-crumb="깃허브 · 2.3 브랜치" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/g-git">02 깃허브</a> <span>/ 2.3</span> </p>
+    <h1>브랜치</h1>
+    <p class="ch-lede-l">모두가 쓰는 main은 그대로 두고, 내 복사본에서 작업합니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="깃허브 목차"><details open><summary>깃허브</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/g-git"><span>2.1</span>Git과 GitHub</a></li><li class=""><a class="toc-ch" href="#/c/g-repo"><span>2.2</span>레포지토리</a></li><li class="is-cur"><a class="toc-ch" href="#/c/g-branch"><span>2.3</span>브랜치</a><ol class="toc-secs"><li><a href="#/c/g-branch/1">브랜치는 “내 복사본에서 작업하기”입니다</a></li><li><a href="#/c/g-branch/2">두 달짜리 팀은 단순하게 가세요</a></li><li><a href="#/c/g-branch/3">브랜치 만들기</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/g-work"><span>2.4</span>내 브랜치에서 작업하기</a></li><li class=""><a class="toc-ch" href="#/c/g-pr"><span>2.5</span>PR 올리기</a></li><li class=""><a class="toc-ch" href="#/c/g-merge"><span>2.6</span>main에 머지하기</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="g-branch-1" data-n="1">
+<div>
+<p class="eyebrow">핵심 개념</p>
+<h2>브랜치는 “내 복사본에서 작업하기”입니다</h2>
+</div>
+<figure>
+<div class="figwrap">
+<svg aria-label="main 브랜치에서 두 사람이 각각 자기 브랜치를 갈라 작업한 뒤, 리뷰를 거쳐 다시 main으로 합쳐지는 흐름" role="img" viewbox="0 0 880 300">
+<defs>
+<marker id="b-ar" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink-3)"></path>
+</marker>
+</defs>
+<text font-family="IBM Plex Mono, monospace" font-size="11" style="fill:var(--ember)" text-anchor="end" x="128" y="64">feature/review</text>
+<text font-family="IBM Plex Mono, monospace" font-size="11" style="fill:var(--ink)" text-anchor="end" x="128" y="164">main</text>
+<text font-family="IBM Plex Mono, monospace" font-size="11" style="fill:var(--info)" text-anchor="end" x="128" y="264">feature/login</text>
+<line opacity="0.5" stroke-width="2" style="stroke:var(--ink)" x1="140" x2="840" y1="160" y2="160"></line>
+<path d="M200 160 C 222 160, 228 60, 250 60 L 420 60 C 442 60, 448 160, 470 160" fill="none" stroke-width="2" style="stroke:var(--ember)"></path>
+<path d="M240 160 C 262 160, 268 260, 290 260 L 560 260 C 582 260, 588 160, 610 160" fill="none" stroke-width="2" style="stroke:var(--info)"></path>
+<circle cx="200" cy="160" r="5" style="fill:var(--ink)"></circle>
+<circle cx="240" cy="160" r="5" style="fill:var(--ink)"></circle>
+<circle cx="300" cy="60" r="5.5" style="fill:var(--ember)"></circle>
+<circle cx="370" cy="60" r="5.5" style="fill:var(--ember)"></circle>
+<circle cx="470" cy="160" r="6" style="fill:var(--ember)"></circle>
+<circle cx="360" cy="260" r="5.5" style="fill:var(--info)"></circle>
+<circle cx="460" cy="260" r="5.5" style="fill:var(--info)"></circle>
+<circle cx="610" cy="160" r="6" style="fill:var(--info)"></circle>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="335" y="36">A가 리뷰 기능을 만든다</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="410" y="288">B가 동시에 로그인을 만든다 — 서로 영향 없음</text>
+<line stroke-width="1.3" style="stroke:var(--ink-3)" x1="470" x2="470" y1="138" y2="118"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-2)" text-anchor="middle" x="470" y="110">리뷰 후 합침</text>
+<line stroke-width="1.3" style="stroke:var(--ink-3)" x1="610" x2="610" y1="182" y2="202"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-2)" text-anchor="middle" x="610" y="216">리뷰 후 합침</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="end" x="840" y="146">항상 돌아가는 상태를 유지</text>
+</svg>
+</div>
+<figcaption>내 브랜치에서 아무리 망가뜨려도 <strong>남의 작업과 돌아가는 버전은 멀쩡합니다.</strong></figcaption>
+</figure>
+</section><section class="csec" id="g-branch-2" data-n="2">
+<div>
+<p class="eyebrow">팀이 정할 것 ①</p>
+<h2>두 달짜리 팀은 단순하게 가세요</h2>
+<p class="lead">브랜치 전략은 종류가 많습니다. 회사에서 쓰는 복잡한 방식을 그대로 가져오면 <strong>배우는 데만 한 주를 씁니다.</strong></p>
+</div>
+<div class="tw">
+<table>
+<thead><tr><th>방식</th><th>구성</th><th>어울리는 곳</th></tr></thead>
+<tbody>
+<tr><td class="hl">단순형</td><td><code>main</code> + 각자 <code>feature/○○</code></td><td><strong>여러분 같은 소규모 단기 팀</strong></td></tr>
+<tr><td class="dim">3단계형</td><td><code>main</code> + <code>develop</code> + <code>feature/○○</code></td><td>운영 중인 서비스, 배포를 나눠야 할 때</td></tr>
+<tr><td class="dim">그 이상</td><td>릴리스·핫픽스 브랜치까지</td><td>규모 있는 조직</td></tr>
+</tbody>
+</table>
+</div>
+<ul class="bullets">
+<li><strong>규칙은 두 줄이면 충분합니다.</strong> ① <code>main</code>에 직접 push 하지 않는다 ② 작업은 항상 새 브랜치에서 한다</li>
+<li>브랜치 이름은 <strong>보면 무슨 작업인지 알게</strong> — <code>feature/review-write</code>, <code>fix/login-redirect</code></li>
+<li><code>main</code>은 <strong>언제든 돌아가는 상태</strong>로 유지합니다. 발표 전날 여기가 깨져 있으면 답이 없습니다.</li>
+</ul>
+</section><section class="csec" id="g-branch-3" data-n="3"><div class="inner stack"><div><p class="eyebrow">따라 하기</p><h2>내 브랜치 만들기</h2><p class="lead">작업을 시작하기 전에 <strong>항상 새 브랜치부터</strong> 만듭니다. 이름은 보면 무슨 작업인지 알게 — <code>feature/add-intro</code>, <code>fix/login-redirect</code> 처럼 짓습니다.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p>레포 첫 화면에서 <span class="ic">main</span> 버튼을 누르고, 검색 칸에 새 브랜치 이름을 입력합니다. 아직 없는 이름이면 <strong>Create branch … from main</strong>이 나타납니다 — 누릅니다.</p><figure class="g-shot"><img src="img/803190c95676.jpg" alt="브랜치 선택 메뉴에 feature/add-intro를 입력하자 Create branch feature/add-intro from main 항목이 나타난 화면" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p>왼쪽 위가 <span class="ic">feature/add-intro</span>로 바뀌었고, 브랜치 수가 <strong>2 Branches</strong>가 됐습니다. <em>“This branch is up to date with main”</em> — 아직은 main과 똑같은 복사본이라는 뜻입니다.</p><figure class="g-shot"><img src="img/9270c68cb09d.jpg" alt="현재 브랜치가 feature/add-intro로 바뀌고 2 Branches로 표시된 화면" loading="lazy"></figure></div></div></div></section><nav class="pn-row"><a class="pn prev" href="#/c/g-repo"><small>← 이전</small><b>2.2 · 레포지토리</b></a><a class="pn next" href="#/c/g-work"><small>다음 →</small><b>2.4 · 내 브랜치에서 작업하기</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-g-work" data-crumb="깃허브 · 2.4 내 브랜치에서 작업하기" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/g-git">02 깃허브</a> <span>/ 2.4</span> </p>
+    <h1>내 브랜치에서 작업하기</h1>
+    <p class="ch-lede-l">고치고, 커밋하고, main이 멀쩡한지 확인합니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="깃허브 목차"><details open><summary>깃허브</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/g-git"><span>2.1</span>Git과 GitHub</a></li><li class=""><a class="toc-ch" href="#/c/g-repo"><span>2.2</span>레포지토리</a></li><li class=""><a class="toc-ch" href="#/c/g-branch"><span>2.3</span>브랜치</a></li><li class="is-cur"><a class="toc-ch" href="#/c/g-work"><span>2.4</span>내 브랜치에서 작업하기</a><ol class="toc-secs"><li><a href="#/c/g-work/1">파일 고치고 커밋하기</a></li><li><a href="#/c/g-work/2">main은 아직 그대로</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/g-pr"><span>2.5</span>PR 올리기</a></li><li class=""><a class="toc-ch" href="#/c/g-merge"><span>2.6</span>main에 머지하기</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="g-work-1" data-n="1"><div class="inner stack"><div><p class="eyebrow">따라 하기</p><h2>내 브랜치에서 작업하고 커밋하기</h2><p class="lead">실제로는 내 컴퓨터의 에디터에서 코드를 고치지만, 흐름을 보기 위해 여기서는 GitHub 웹에서 README를 직접 고칩니다. <strong>순서는 똑같습니다</strong> — 고치고, 커밋합니다.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p>README 오른쪽의 연필 아이콘을 누르면 편집 화면이 열립니다. 위쪽에 <strong><code>in feature/add-intro</code></strong> — 지금 <strong>내 브랜치</strong>를 고치고 있다는 표시입니다. 여기서는 팀 소개 네 줄을 추가했습니다.</p><figure class="g-shot"><img src="img/ce4c882d49dc.jpg" alt="README.md 편집 화면. in feature/add-intro 표시, 팀 소개 섹션을 추가한 상태" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p><span class="ic">Commit changes…</span>를 누르면 커밋 창이 뜹니다. <strong>Commit message</strong>에 무엇을 왜 바꿨는지 적습니다. 아래 선택지는 <strong>Commit directly to the feature/add-intro branch</strong> — 내 브랜치에 커밋 — 그대로 두고 <span class="ic">Commit changes</span>.</p><figure class="g-shot"><img src="img/9c61850c2002.jpg" alt="커밋 창. 커밋 메시지 README에 팀 소개 추가, Commit directly to the feature/add-intro branch 선택" loading="lazy"></figure></div></div><div class="callout warn"><strong>Copilot이 커밋 메시지를 영어로 자동으로 채워 줄 때가 있습니다.</strong> 그대로 써도 되지만, 팀이 정한 언어와 형식이 있으면 그걸 따르세요. 메시지를 잘 쓰는 법은 <a href="#/c/g-git/3">“2주 뒤의 나에게 쓰는 편지”</a>에 있습니다.</div></div></section><section class="csec" id="g-work-2" data-n="2"><div class="inner stack"><div><p class="eyebrow">확인하기</p><h2>main은 아직 그대로입니다</h2></div><div class="g-step"><span class="g-num">3</span><div class="g-body"><p>레포 첫 화면으로 돌아오면 두 가지가 보입니다. 위쪽 노란 띠 — <em>“feature/add-intro had recent pushes”</em> — 방금 내 브랜치에 변경이 올라갔다는 알림입니다. 그리고 아래 <span class="ic">main</span>에는 여전히 <strong>Initial commit 하나뿐</strong>입니다.</p><figure class="g-shot"><img src="img/80dc9948b495.jpg" alt="레포 첫 화면. feature/add-intro had recent pushes 알림과 Compare & pull request 버튼, main에는 Initial commit만 있음" loading="lazy"></figure></div></div><div class="callout">이게 브랜치를 쓰는 이유입니다. <strong>내 작업은 내 브랜치에만 있고, 모두가 쓰는 main은 멀쩡합니다.</strong> main에 넣으려면 다음 장의 PR을 거칩니다.</div></div></section><nav class="pn-row"><a class="pn prev" href="#/c/g-branch"><small>← 이전</small><b>2.3 · 브랜치</b></a><a class="pn next" href="#/c/g-pr"><small>다음 →</small><b>2.5 · PR 올리기</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-g-pr" data-crumb="깃허브 · 2.5 PR 올리기" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/g-git">02 깃허브</a> <span>/ 2.5</span> </p>
+    <h1>PR 올리기</h1>
+    <p class="ch-lede-l">“내 브랜치를 main에 합쳐도 될까요?”라고 팀에 묻는 글.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="깃허브 목차"><details open><summary>깃허브</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/g-git"><span>2.1</span>Git과 GitHub</a></li><li class=""><a class="toc-ch" href="#/c/g-repo"><span>2.2</span>레포지토리</a></li><li class=""><a class="toc-ch" href="#/c/g-branch"><span>2.3</span>브랜치</a></li><li class=""><a class="toc-ch" href="#/c/g-work"><span>2.4</span>내 브랜치에서 작업하기</a></li><li class="is-cur"><a class="toc-ch" href="#/c/g-pr"><span>2.5</span>PR 올리기</a><ol class="toc-secs"><li><a href="#/c/g-pr/1">“이거 합쳐도 될까요?”라고 묻는 자리</a></li><li><a href="#/c/g-pr/2">PR 만들기</a></li><li><a href="#/c/g-pr/3">PR 화면 읽기</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/g-merge"><span>2.6</span>main에 머지하기</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="g-pr-1" data-n="1">
+<div>
+<p class="eyebrow">왜 한 단계를 더 거치나</p>
+<h2>“이거 합쳐도 될까요?”라고 묻는 자리</h2>
+<p class="lead">내 브랜치 작업이 끝나면 바로 합치지 않습니다. <strong>PR을 열어 팀에 보여주고 나서</strong> 합칩니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>바뀐 줄이 전부 보입니다.</strong> 무엇을 건드렸는지 한눈에 드러납니다.</li>
+<li><strong>다른 사람이 읽습니다.</strong> 나만 아는 코드가 줄어듭니다 — 팀원이 아프면 프로젝트가 멈추는 상황을 막습니다.</li>
+<li><strong>기록이 남습니다.</strong> 나중에 “이거 왜 이렇게 했지?”의 답이 PR에 있습니다.</li>
+<li>자동 검사를 붙여두면 <strong>기계가 먼저 걸러줍니다.</strong></li>
+</ul>
+<div class="callout">PR은 <em>검사받는 자리</em>가 아니라 <strong>공유하는 자리</strong>입니다. 실력을 평가하는 게 아니라, <strong>팀이 코드를 같이 아는 것</strong>이 목적입니다.</div>
+</section><section class="csec" id="g-pr-2" data-n="2"><div class="inner stack"><div><p class="eyebrow">따라 하기</p><h2>Pull Request 올리기</h2><p class="lead">PR은 <strong>“내 브랜치를 main에 합쳐도 될까요?”</strong>라고 팀에 묻는 글입니다. 바뀐 줄이 전부 보이고, 팀원이 읽고, 기록이 남습니다.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p>앞 장 마지막 화면의 초록 버튼 <span class="ic">Compare &amp; pull request</span>를 누릅니다. (버튼이 사라졌다면 <span class="ic">Pull requests</span> 탭 → <span class="ic">New pull request</span>.)</p></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p>맨 위 줄을 먼저 봅니다 — <strong><code>base: main ← compare: feature/add-intro</code></strong>. <em>“feature/add-intro를 main으로”</em>라는 뜻입니다. <strong>Able to merge</strong>는 충돌 없이 합칠 수 있다는 뜻입니다.</p><p>제목과 설명을 씁니다. 설명에는 <strong>무엇을 바꿨는지</strong>와 <strong>리뷰어가 무엇을 확인해 주면 좋은지</strong>를 적습니다.</p><figure class="g-shot"><img src="img/f58c8799d5b9.jpg" alt="Open a pull request 화면. base main, compare feature/add-intro, Able to merge 표시, 제목과 설명 입력" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">3</span><div class="g-body"><p>아래 <span class="ic">Create pull request</span>를 누릅니다. 맨 아래 <strong>1 commit · 1 file changed</strong>로 이 PR에 무엇이 들어가는지 미리 볼 수 있습니다.</p><figure class="g-shot"><img src="img/26f6f4bb9a1c.jpg" alt="Create pull request 버튼과 1 commit, 1 file changed, 1 contributor 요약" loading="lazy"></figure></div></div></div></section><section class="csec" id="g-pr-3" data-n="3"><div class="inner stack"><div><p class="eyebrow">확인하기</p><h2>PR이 열렸습니다</h2></div><div class="g-step"><span class="g-num">4</span><div class="g-body"><p>초록색 <strong>Open</strong> 표시와 함께 PR 번호(<strong>#1</strong>)가 붙었습니다. 탭이 네 개 있습니다 — <strong>Conversation</strong>(대화), <strong>Commits</strong>(들어간 커밋), <strong>Checks</strong>(자동 검사), <strong>Files changed</strong>(바뀐 파일).</p><figure class="g-shot"><img src="img/d2bef9a541fe.jpg" alt="열린 PR #1 화면. Open 상태, Conversation·Commits·Checks·Files changed 탭" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">5</span><div class="g-body"><p><span class="ic">Files changed</span> 탭이 리뷰어가 가장 오래 보는 곳입니다. <strong>초록 줄이 추가</strong>, 빨간 줄이 삭제된 부분입니다. 줄 번호 옆을 누르면 그 줄에 바로 코멘트를 달 수 있습니다.</p><figure class="g-shot"><img src="img/85405c805540.jpg" alt="Files changed 탭. README.md에 추가된 네 줄이 초록색으로 표시됨" loading="lazy"></figure></div></div><div class="callout ok">리뷰 코멘트를 어떻게 쓰고 받는지는 다음 파트 <strong>협업하는 법</strong>에서 다룹니다.</div></div><div class="callout ok xlink">터미널에서 <code>gh pr create</code> 한 줄로 올리는 방법, 그리고 에이전트에게 맡기는 방법은 <a href="#/c/ai-ide/4">“에디터와 에이전트 시작하기”</a> 절에 있습니다.</div></section><nav class="pn-row"><a class="pn prev" href="#/c/g-work"><small>← 이전</small><b>2.4 · 내 브랜치에서 작업하기</b></a><a class="pn next" href="#/c/g-merge"><small>다음 →</small><b>2.6 · main에 머지하기</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-g-merge" data-crumb="깃허브 · 2.6 main에 머지하기" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/g-git">02 깃허브</a> <span>/ 2.6</span> </p>
+    <h1>main에 머지하기</h1>
+    <p class="ch-lede-l">리뷰가 끝나면 합치고, 결과를 확인합니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="깃허브 목차"><details open><summary>깃허브</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/g-git"><span>2.1</span>Git과 GitHub</a></li><li class=""><a class="toc-ch" href="#/c/g-repo"><span>2.2</span>레포지토리</a></li><li class=""><a class="toc-ch" href="#/c/g-branch"><span>2.3</span>브랜치</a></li><li class=""><a class="toc-ch" href="#/c/g-work"><span>2.4</span>내 브랜치에서 작업하기</a></li><li class=""><a class="toc-ch" href="#/c/g-pr"><span>2.5</span>PR 올리기</a></li><li class="is-cur"><a class="toc-ch" href="#/c/g-merge"><span>2.6</span>main에 머지하기</a><ol class="toc-secs"><li><a href="#/c/g-merge/1">main에 합치기</a></li><li><a href="#/c/g-merge/2">결과 확인</a></li></ol></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="g-merge-1" data-n="1"><div class="inner stack"><div><p class="eyebrow">따라 하기</p><h2>main에 머지하기</h2><p class="lead">리뷰가 끝나고 팀이 “좋아요” 하면 합칩니다. 팀이 정한 조건(예: 리뷰 1명 이상 승인)을 채운 뒤에 누르세요.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p>Conversation 탭 아래쪽에 <strong>No conflicts with base branch</strong> — 충돌 없이 합칠 수 있다는 표시가 있습니다. <span class="ic">Merge pull request</span>를 누릅니다.</p><figure class="g-shot"><img src="img/014deefa8664.jpg" alt="No conflicts with base branch 표시와 Merge pull request 버튼" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p>머지 커밋 메시지가 자동으로 채워집니다. 확인하고 <span class="ic">Confirm merge</span>.</p><figure class="g-shot"><img src="img/2c8949456caf.jpg" alt="Confirm merge 창. Merge pull request #1 from Mybread2/feature/add-intro 메시지" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">3</span><div class="g-body"><p>PR 상태가 보라색 <strong>Merged</strong>로 바뀌었습니다. <em>“merged 1 commit into main from feature/add-intro”</em>.</p><figure class="g-shot"><img src="img/4267c23c9500.jpg" alt="PR #1이 Merged 상태로 바뀐 화면" loading="lazy"></figure></div></div></div></section><section class="csec" id="g-merge-2" data-n="2"><div class="inner stack"><div><p class="eyebrow">확인하기</p><h2>main에 들어왔습니다</h2></div><div class="g-step"><span class="g-num">4</span><div class="g-body"><p>레포 첫 화면(main)으로 가면 README에 팀 소개가 보입니다. 맨 위 기록은 <strong>Merge pull request #1</strong>, 커밋 수는 <strong>3 Commits</strong>가 됐습니다.</p><figure class="g-shot"><img src="img/3f21676e0b56.jpg" alt="main 브랜치 README에 팀 소개가 반영되고 3 Commits로 늘어난 화면" loading="lazy"></figure></div></div><div class="callout"><strong>한 바퀴 정리</strong> — ① 레포에서 ② 내 브랜치를 만들고 ③ 거기서 고치고 커밋하고 ④ PR을 올리고 ⑤ 리뷰 후 main에 머지. 팀 프로젝트 내내 이 다섯 단계를 반복합니다.</div><div class="callout ok">머지가 끝난 브랜치는 PR 화면의 <span class="ic">Delete branch</span>로 지워도 됩니다. 기록은 main에 남습니다. 다음 작업은 <strong>다시 main에서 새 브랜치</strong>를 만들어 시작합니다.</div></div></section><nav class="pn-row"><a class="pn prev" href="#/c/g-pr"><small>← 이전</small><b>2.5 · PR 올리기</b></a><a class="pn next" href="#/c/c-review"><small>다음 →</small><b>3.1 · 리뷰 주고받기</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-c-review" data-crumb="협업하는 법 · 3.1 리뷰 주고받기" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/c-review">03 협업하는 법</a> <span>/ 3.1</span> </p>
+    <h1>리뷰 주고받기</h1>
+    <p class="ch-lede-l">PR은 검사가 아니라 공유입니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="협업하는 법 목차"><details open><summary>협업하는 법</summary><ol class="toc-chs"><li class="is-cur"><a class="toc-ch" href="#/c/c-review"><span>3.1</span>리뷰 주고받기</a><ol class="toc-secs"><li><a href="#/c/c-review/1">PR은 한 번에 통과하지 않습니다</a></li><li><a href="#/c/c-review/2">같은 지적도 쓰기 나름입니다</a></li><li><a href="#/c/c-review/3">리뷰를 받을 때</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/c-split"><span>3.2</span>일 나누기</a></li><li class=""><a class="toc-ch" href="#/c/c-team"><span>3.3</span>팀 약속과 질문하는 법</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="c-review-1" data-n="1">
+<div>
+<p class="eyebrow">실제 흐름</p>
+<h2>PR은 한 번에 통과하지 않습니다</h2>
+</div>
+<figure>
+<div class="figwrap">
+<svg aria-label="작업, PR 생성, 자동 검사, 리뷰, 합치기 다섯 단계. 검사가 실패하거나 리뷰에서 변경 요청이 오면 작업 단계로 되돌아간다" role="img" viewbox="0 0 900 270">
+<defs>
+<marker id="p-ar" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink-3)"></path>
+</marker>
+<marker id="p-info" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--info)"></path>
+</marker>
+<marker id="p-err" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--err)"></path>
+</marker>
+</defs>
+<rect height="88" rx="11" style="fill:var(--card);stroke:var(--line)" width="150" x="15" y="88"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="90" y="122">작업 · 커밋</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="90" y="145">내 브랜치에서</text>
+<rect height="88" rx="11" style="fill:var(--card);stroke:var(--line)" width="150" x="195" y="88"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="270" y="122">PR 열기</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="270" y="145">무엇을 왜 했는지 적기</text>
+<rect height="88" rx="11" style="fill:var(--card);stroke:var(--line)" width="150" x="375" y="88"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="450" y="122">자동 검사</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="450" y="145">빌드 · 테스트</text>
+<rect height="88" rx="11" style="fill:var(--card);stroke:var(--line)" width="150" x="555" y="88"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="630" y="122">팀원이 읽기</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="630" y="145">코드 리뷰</text>
+<rect height="88" rx="11" style="fill:var(--card);stroke:var(--ember-line)" width="150" x="735" y="88"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="810" y="122">합치기</text>
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" style="fill:var(--ember)" text-anchor="middle" x="810" y="145">main 에 반영</text>
+<line marker-end="url(#p-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="165" x2="191" y1="132" y2="132"></line>
+<line marker-end="url(#p-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="345" x2="371" y1="132" y2="132"></line>
+<line marker-end="url(#p-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="525" x2="551" y1="132" y2="132"></line>
+<line marker-end="url(#p-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="705" x2="731" y1="132" y2="132"></line>
+<path d="M630 88 C 630 40, 90 40, 90 84" fill="none" marker-end="url(#p-info)" stroke-width="1.6" style="stroke:var(--info)"></path>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--info)" text-anchor="middle" x="360" y="32">“여기 이렇게 해볼까요?” — 고쳐서 다시 올린다</text>
+<path d="M450 176 C 450 224, 90 224, 90 180" fill="none" marker-end="url(#p-err)" stroke-width="1.6" style="stroke:var(--err)"></path>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--err)" text-anchor="middle" x="270" y="244">검사 실패 — 여기서 막힌다</text>
+</svg>
+</div>
+<figcaption>되돌아오는 화살표가 정상입니다. <strong>한 번에 통과하는 PR이 오히려 드뭅니다.</strong></figcaption>
+</figure>
+</section><section class="csec" id="c-review-2" data-n="2">
+<div>
+<p class="eyebrow">리뷰 코멘트</p>
+<h2>같은 지적도 쓰기 나름입니다</h2>
+</div>
+<div class="vs">
+<div class="vs-box bad">
+<span class="label">이렇게 쓰면 팀이 상합니다</span>
+<ul>
+<li>“이거 왜 이렇게 했어요?”</li>
+<li>“코드가 이상한데요”</li>
+<li>“다시 하세요”</li>
+<li>“이건 기본 아닌가요?”</li>
+</ul>
+</div>
+<div class="vs-box good">
+<span class="label">이렇게 씁니다</span>
+<ul>
+<li>“여기 별점이 없을 때 에러가 날 것 같은데, 확인해주실 수 있을까요?”</li>
+<li>“동작에는 문제없어요. 다만 이 부분은 아래 함수를 쓰면 더 짧아질 것 같습니다.”</li>
+<li>“<strong>(사소함)</strong> 오타인 것 같아요 — <code>recieve</code> → <code>receive</code>”</li>
+</ul>
+</div>
+</div>
+<div class="callout">규칙 셋. <strong>① 코드를 지적하지 사람을 지적하지 않는다 ② 무엇이 문제인지 구체적으로 쓴다 ③ 사소한 지적은 사소하다고 밝힌다.</strong> 마지막이 특히 중요합니다 — 오타 지적과 설계 지적이 같은 무게로 읽히면 받는 사람이 지칩니다.</div>
+</section><section class="csec" id="c-review-3" data-n="3">
+<div>
+<p class="eyebrow">받는 쪽 이야기</p>
+<h2>리뷰를 받을 때</h2>
+</div>
+<ul class="bullets">
+<li><strong>지적은 코드에 대한 것입니다.</strong> 나에 대한 평가가 아닙니다. 이걸 분리하는 게 첫 관문입니다.</li>
+<li><strong>동의하지 않으면 말해도 됩니다.</strong> “이건 이런 이유로 이렇게 했습니다”는 완전히 정당합니다. 리뷰는 대화입니다.</li>
+<li><strong>모르면 물어보세요.</strong> “무슨 말씀인지 잘 모르겠어요, 예시를 주실 수 있나요?”</li>
+<li><strong>고쳤으면 답을 남기세요.</strong> “반영했습니다” 한 줄이면 리뷰어가 다시 볼 곳을 압니다.</li>
+</ul>
+<div class="callout">경력 10년차도 리뷰에서 지적받습니다. <strong>지적받는 횟수는 실력과 상관없습니다.</strong> 상관있는 건 같은 지적을 두 번 받는지입니다.</div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/g-merge"><small>← 이전</small><b>2.6 · main에 머지하기</b></a><a class="pn next" href="#/c/c-split"><small>다음 →</small><b>3.2 · 일 나누기</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-c-split" data-crumb="협업하는 법 · 3.2 일 나누기" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/c-review">03 협업하는 법</a> <span>/ 3.2</span> </p>
+    <h1>일 나누기</h1>
+    <p class="ch-lede-l">팀 프로젝트가 늘어지는 가장 큰 이유가 여기 있습니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="협업하는 법 목차"><details open><summary>협업하는 법</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/c-review"><span>3.1</span>리뷰 주고받기</a></li><li class="is-cur"><a class="toc-ch" href="#/c/c-split"><span>3.2</span>일 나누기</a><ol class="toc-secs"><li><a href="#/c/c-split/1">가로로 자르지 말고 세로로 자르세요</a></li><li><a href="#/c/c-split/2">무엇을 기준으로 쪼갤까</a></li><li><a href="#/c/c-split/3">이슈 — “누가 뭘 하고 있는지”를 한 곳에</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/c-team"><span>3.3</span>팀 약속과 질문하는 법</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="c-split-1" data-n="1">
+<div>
+<p class="eyebrow">가장 흔한 함정</p>
+<h2>가로로 자르지 말고 세로로 자르세요</h2>
+<p class="lead"><a href="#/c/b-arch/4">앞에서</a> 정한 대로 <strong>모두가 화면부터 데이터까지 다 만듭니다.</strong> 그러면 일은 어떻게 나눌까요 — 같은 인원이라도 <strong>자르는 방향</strong>에 따라 결과가 달라집니다.</p>
+</div>
+<figure>
+<div class="figwrap">
+<svg aria-label="층으로 나누면 각자 화면, 서버, 데이터 한 층씩만 맡아 서로를 기다리게 되고, 기능으로 나누면 각자 자기 기능의 화면부터 데이터까지 전부 만들어 독립적으로 진행된다" role="img" viewbox="0 0 880 235">
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1" style="fill:var(--err)" text-anchor="middle" x="215" y="22">가로로 자르기 — 층 단위</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="215" y="44">한 사람이 한 층씩 맡는다</text>
+<rect height="30" rx="7" style="fill:var(--card);stroke:var(--err-line)" width="330" x="50" y="60"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" x="68" y="80">화면</text>
+<text font-family="IBM Plex Mono, monospace" font-size="11" style="fill:var(--ink-4)" text-anchor="end" x="362" y="80">A</text>
+<rect height="30" rx="7" style="fill:var(--card);stroke:var(--err-line)" width="330" x="50" y="96"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" x="68" y="116">서버</text>
+<text font-family="IBM Plex Mono, monospace" font-size="11" style="fill:var(--ink-4)" text-anchor="end" x="362" y="116">B</text>
+<rect height="30" rx="7" style="fill:var(--card);stroke:var(--err-line)" width="330" x="50" y="132"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" x="68" y="152">데이터</text>
+<text font-family="IBM Plex Mono, monospace" font-size="11" style="fill:var(--ink-4)" text-anchor="end" x="362" y="152">C</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--err)" text-anchor="middle" x="215" y="192">A는 B가 끝나야 눌러볼 수 있다</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-4)" text-anchor="middle" x="215" y="213">그리고 각자 자기 층만 배운다</text>
+<line stroke-dasharray="3 5" stroke-width="1" style="stroke:var(--line-strong)" x1="445" x2="445" y1="16" y2="218"></line>
+<text font-family="IBM Plex Mono, monospace" font-size="10.5" letter-spacing="1" style="fill:var(--ok)" text-anchor="middle" x="670" y="22">세로로 자르기 — 기능 단위</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-2)" text-anchor="middle" x="580" y="44">리뷰 기능 — A</text>
+<rect fill="none" height="118" rx="10" style="stroke:var(--ok-line)" width="150" x="505" y="52"></rect>
+<rect height="30" rx="6" style="fill:var(--card);stroke:var(--line)" width="134" x="513" y="60"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="580" y="80">화면</text>
+<rect height="30" rx="6" style="fill:var(--card);stroke:var(--line)" width="134" x="513" y="96"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="580" y="116">서버</text>
+<rect height="30" rx="6" style="fill:var(--card);stroke:var(--line)" width="134" x="513" y="132"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="580" y="152">데이터</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-2)" text-anchor="middle" x="760" y="44">로그인 — B</text>
+<rect fill="none" height="118" rx="10" style="stroke:var(--ok-line)" width="150" x="685" y="52"></rect>
+<rect height="30" rx="6" style="fill:var(--card);stroke:var(--line)" width="134" x="693" y="60"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="760" y="80">화면</text>
+<rect height="30" rx="6" style="fill:var(--card);stroke:var(--line)" width="134" x="693" y="96"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="760" y="116">서버</text>
+<rect height="30" rx="6" style="fill:var(--card);stroke:var(--line)" width="134" x="693" y="132"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="760" y="152">데이터</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ok)" text-anchor="middle" x="670" y="192">각자 끝까지 혼자 간다</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-4)" text-anchor="middle" x="670" y="213">그리고 양쪽을 다 배운다</text>
+</svg>
+</div>
+<figcaption>같은 인원이 같은 것을 만들어도, <strong>자르는 방향이 속도와 배움을 모두 바꿉니다.</strong></figcaption>
+</figure>
+<div class="callout">세로로 자르면 <strong>API 약속은 팀원 사이의 경계에서</strong> 필요해집니다 — B가 만든 로그인을 A의 리뷰 기능이 쓸 때요. <a href="#/c/b-arch/3">“서비스는 어떤 부품으로 되어 있나”</a> 장에서 본 그 약속을 여기서 씁니다.</div>
+</section><section class="csec" id="c-split-2" data-n="2">
+<div>
+<p class="eyebrow">팀이 정할 것 ②</p>
+<h2>무엇을 기준으로 쪼갤까</h2>
+</div>
+<div class="tw">
+<table>
+<thead><tr><th>기준</th><th>예시</th><th>장점 / 단점</th></tr></thead>
+<tbody>
+<tr><td class="hl">기능 단위 <em>(추천)</em></td><td>A는 리뷰를, B는 로그인을 — 각자 화면부터 데이터까지</td><td>서로 안 겹치고 <strong>전체를 한 바퀴 배웁니다</strong></td></tr>
+<tr><td class="hl">화면 단위</td><td>A는 목록 화면, B는 상세 화면 — 역시 각자 뒤까지</td><td>나누기 쉬움 / 공통 부분에서 충돌</td></tr>
+<tr><td class="dim">층 단위 <em>(권하지 않음)</em></td><td>A는 화면 전부, B는 서버 전부</td><td>서로 기다리게 되고 <strong>각자 반쪽만 배웁니다</strong></td></tr>
+</tbody>
+</table>
+</div>
+<ul class="bullets">
+<li><strong>정답은 없습니다.</strong> 팀원 실력과 인원에 따라 다릅니다.</li>
+<li>다만 <strong>“이번 주에 내가 끝낼 것”이 한 문장으로 말해져야</strong> 합니다.</li>
+<li>그리고 어떤 기준을 택하든 <strong>자기가 맡은 것은 화면부터 데이터까지 끝까지</strong> 만듭니다. 그래야 전체가 보입니다.</li>
+</ul>
+</section><section class="csec" id="c-split-3" data-n="3">
+<div>
+<p class="eyebrow">할 일 관리</p>
+<h2>이슈 — “누가 뭘 하고 있는지”를 한 곳에</h2>
+<p class="lead">GitHub에는 <strong>이슈</strong>가 있습니다. 할 일 하나를 글 하나로 만들고, 담당자를 붙이고, 끝나면 닫습니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>카톡으로 관리하지 마세요.</strong> 스크롤 올리다 사라집니다.</li>
+<li>이슈 하나 = <strong>한 사람이 며칠 안에 끝낼 수 있는 크기</strong>. “로그인 만들기”는 너무 큽니다.</li>
+<li>PR에 <span class="ic">#12</span> 처럼 번호를 적으면 <strong>이슈와 코드가 연결</strong>됩니다.</li>
+<li>회의 때 이슈 목록만 보면 <strong>진행 상황이 바로 보입니다.</strong></li>
+</ul>
+<div class="callout">도구는 뭐든 상관없습니다 — 노션이든 지라든. 중요한 건 <strong>“한 곳에만 있을 것”</strong>입니다. 두 군데 적으면 반드시 어긋납니다.</div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/c-review"><small>← 이전</small><b>3.1 · 리뷰 주고받기</b></a><a class="pn next" href="#/c/c-team"><small>다음 →</small><b>3.3 · 팀 약속과 질문하는 법</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-c-team" data-crumb="협업하는 법 · 3.3 팀 약속과 질문하는 법" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/c-review">03 협업하는 법</a> <span>/ 3.3</span> </p>
+    <h1>팀 약속과 질문하는 법</h1>
+    <p class="ch-lede-l">첫 주에 정해 둘 것, 그리고 막혔을 때 묻는 법.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="협업하는 법 목차"><details open><summary>협업하는 법</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/c-review"><span>3.1</span>리뷰 주고받기</a></li><li class=""><a class="toc-ch" href="#/c/c-split"><span>3.2</span>일 나누기</a></li><li class="is-cur"><a class="toc-ch" href="#/c/c-team"><span>3.3</span>팀 약속과 질문하는 법</a><ol class="toc-secs"><li><a href="#/c/c-team/1">팀이 합의해야 할 것들</a></li><li><a href="#/c/c-team/2">막혔을 때 잘 물어보는 법</a></li><li><a href="#/c/c-team/3">협업, 세 문장으로</a></li></ol></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="c-team-1" data-n="1">
+<div>
+<p class="eyebrow">첫 주에 정하고 시작하세요</p>
+<h2>팀이 합의해야 할 것들</h2>
+</div>
+<div class="checks">
+<div class="check"><span class="box"></span><span class="txt"><b>브랜치 · 커밋 규칙</b>이름을 어떻게 짓고, 메시지를 어떤 언어로 쓸지</span></div>
+<div class="check"><span class="box"></span><span class="txt"><b>합치는 조건</b>리뷰를 몇 명이 봐야 합칠 수 있는지</span></div>
+<div class="check"><span class="box"></span><span class="txt"><b>일을 나누는 기준</b>기능 단위인지 화면 단위인지</span></div>
+<div class="check"><span class="box"></span><span class="txt"><b>모이는 시간</b>주 몇 회, 언제. 안 정하면 안 모입니다</span></div>
+<div class="check"><span class="box"></span><span class="txt"><b>막혔을 때</b>혼자 몇 시간까지 붙들지 (예: 2시간)</span></div>
+<div class="check"><span class="box"></span><span class="txt"><b>코드 스타일</b>포매터를 정해두면 다투지 않아도 됩니다</span></div>
+</div>
+<div class="callout ok">이걸 정하는 데 <strong>한 시간이면 충분합니다.</strong> 안 정하고 시작하면 매번 다시 의논하느라 훨씬 더 씁니다.</div>
+</section><section class="csec" id="c-team-2" data-n="2">
+<div>
+<p class="eyebrow">가장 실전적인 기술</p>
+<h2>막혔을 때 잘 물어보는 법</h2>
+<p class="lead">이걸 잘하는 사람이 제일 빨리 늡니다. 팀원에게도, 멘토에게도 이대로 물어보세요.</p>
+</div>
+<div class="vs">
+<div class="vs-box bad">
+<span class="label">이러면 답하기 어렵습니다</span>
+<ul>
+<li>“안 돼요”</li>
+<li>“에러 나요”</li>
+<li>“이거 어떻게 해요?”</li>
+<li>(스크린샷 한 장만 덜렁)</li>
+</ul>
+</div>
+<div class="vs-box good">
+<span class="label">이렇게 물어보세요</span>
+<ul>
+<li><strong>① 뭘 하려고 했는지</strong> — “리뷰 목록을 불러오려고 했습니다”</li>
+<li><strong>② 뭘 했는지</strong> — “이 주소를 호출했습니다”</li>
+<li><strong>③ 뭐가 나왔는지</strong> — 에러 메시지 <em>전문</em>을 그대로</li>
+<li><strong>④ 뭘 시도했는지</strong> — “주소를 바꿔봤는데 같았습니다”</li>
+</ul>
+</div>
+</div>
+<div class="callout"><strong>부작용:</strong> ①~④를 적다가 스스로 답을 찾는 경우가 절반쯤 됩니다. 정리하는 과정 자체가 디버깅입니다.</div>
+</section><section class="csec" id="c-team-3" data-n="3">
+<div>
+<p class="eyebrow">여기까지 정리</p>
+<h2>협업, 세 문장으로</h2>
+</div>
+<ol class="steps">
+<li><strong>커밋은 저장점이 아니라 기록입니다.</strong> “왜 바꿨는지”가 핵심이고, 브랜치는 남에게 영향 없이 망가뜨릴 공간입니다.</li>
+<li><strong>PR은 검사가 아니라 공유입니다.</strong> 팀이 코드를 같이 아는 것이 목적입니다.</li>
+<li><strong>일을 나누는 방식이 프로젝트 속도를 정합니다.</strong> 서로 기다리는 구조로 나누면 인원이 늘어도 빨라지지 않습니다.</li>
+</ol>
+<div class="callout">팀에 배정되면 <strong>첫 모임에서 <a href="#/c/c-team/1">“팀이 합의해야 할 것들”</a> 체크리스트를 채우고 시작하세요.</strong> 한 시간이면 됩니다.</div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/c-split"><small>← 이전</small><b>3.2 · 일 나누기</b></a><a class="pn next" href="#/c/i-ship"><small>다음 →</small><b>4.1 · 만든 걸 남들이 쓰게 하려면</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-i-ship" data-crumb="인프라 · 4.1 만든 걸 남들이 쓰게 하려면" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/i-ship">04 인프라</a> <span>/ 4.1</span> </p>
+    <h1>만든 걸 남들이 쓰게 하려면</h1>
+    <p class="ch-lede-l">여기서 “예산”이라는 단어가 진짜로 등장합니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인프라 목차"><details open><summary>인프라</summary><ol class="toc-chs"><li class="is-cur"><a class="toc-ch" href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a><ol class="toc-secs"><li><a href="#/c/i-ship/1">“제 노트북에서는 되는데요”</a></li><li><a href="#/c/i-ship/2">서버는 특별한 물건이 아닙니다</a></li><li><a href="#/c/i-ship/3">직접 만들 것인가, 빌려올 것인가</a></li><li><a href="#/c/i-ship/4">배포 — 한 번 만들어두면 계속 씁니다</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li class=""><a class="toc-ch" href="#/c/i-api"><span>4.3</span>API</a></li><li class=""><a class="toc-ch" href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a></li><li class=""><a class="toc-ch" href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li class=""><a class="toc-ch" href="#/c/i-render"><span>4.6</span>Render</a></li><li class=""><a class="toc-ch" href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="i-ship-1" data-n="1">
+<div>
+<p class="eyebrow">출발점</p>
+<h2>“제 노트북에서는 되는데요”</h2>
+<p class="lead">코드를 다 짜고 실행하면 내 화면에 서비스가 뜹니다. 그런데 이 주소는 <strong>나만 볼 수 있습니다.</strong></p>
+</div>
+<ul class="bullets">
+<li>친구에게 주소를 보내면? <strong>친구 본인 컴퓨터</strong>를 가리킵니다. 안 열립니다.</li>
+<li>내 노트북을 닫으면? <strong>서비스가 사라집니다.</strong></li>
+<li>발표 날 노트북이 꺼지면? <strong>시연이 안 됩니다.</strong></li>
+</ul>
+<div class="callout">그래서 필요한 게 셋입니다. <strong>① 꺼지지 않는 컴퓨터 ② 남들이 찾아올 주소 ③ 코드를 거기로 옮기는 방법.</strong> 이걸 통틀어 <strong>인프라</strong>라고 부릅니다.</div>
+</section><section class="csec" id="i-ship-2" data-n="2">
+<div>
+<p class="eyebrow">꺼지지 않는 컴퓨터</p>
+<h2>서버는 특별한 물건이 아닙니다</h2>
+<p class="lead">그냥 <strong>끄지 않는 컴퓨터</strong>입니다. 모니터도 키보드도 없이, 인터넷에 연결된 채 24시간 켜져 있을 뿐입니다.</p>
+</div>
+<div class="vs">
+<div class="vs-box">
+<span class="label">직접 사면</span>
+<ul>
+<li>컴퓨터값 + 전기요금 + 인터넷 회선</li>
+<li>고장 나면 내가 고쳐야 함</li>
+<li>사람이 몰려도 못 늘림</li>
+<li><strong>두 달짜리 팀에게는 비현실적</strong></li>
+</ul>
+</div>
+<div class="vs-box good">
+<span class="label">빌리면 — 클라우드</span>
+<ul>
+<li>몇 분이면 생김</li>
+<li>쓴 만큼만 냄, <strong>무료 구간이 있음</strong></li>
+<li>고장·전기·회선은 남이 책임</li>
+<li>안 쓰면 지우면 끝</li>
+</ul>
+</div>
+</div>
+<div class="callout">클라우드는 신비로운 기술이 아니라 <strong>임대업</strong>입니다. AWS, Google Cloud, Azure 같은 회사가 컴퓨터를 빌려줍니다.</div>
+</section><section class="csec" id="i-ship-3" data-n="3">
+<div>
+<p class="eyebrow">예산 0인 팀의 현실적 선택</p>
+<h2>직접 만들 것인가, 빌려올 것인가</h2>
+<p class="lead">아래 네 가지는 <strong>전부 직접 만들 수도 있고, 전부 빌려 쓸 수도 있습니다.</strong> 두 달짜리 팀의 답은 대체로 한쪽으로 기웁니다.</p>
+</div>
+<div class="tw">
+<table>
+<thead><tr><th>필요한 것</th><th>직접 하면</th><th>빌리면</th><th>두 달 팀</th></tr></thead>
+<tbody>
+<tr><td>화면 배포</td><td class="dim">서버 설치·설정</td><td>Vercel, Netlify 등 무료 구간</td><td class="hl">빌린다</td></tr>
+<tr><td>서버 실행</td><td class="dim">클라우드 서버 직접 세팅</td><td>Render, Railway, Cloudtype 등</td><td class="hl">빌린다</td></tr>
+<tr><td>데이터베이스</td><td class="dim">설치·백업·보안 직접</td><td>Supabase, Firebase 등</td><td class="hl">빌린다</td></tr>
+<tr><td>로그인</td><td class="dim">회원가입·비번찾기·인증메일</td><td>구글 로그인, Firebase Auth 등</td><td class="hl">빌린다</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout ok"><strong>직접 만드는 것은 “우리 서비스에만 있는 것”에 씁니다.</strong> 로그인은 어느 서비스에나 있습니다 — 거기에 두 주를 쓰면 정작 학식 평점 기능을 만들 시간이 없습니다.</div>
+</section><section class="csec" id="i-ship-4" data-n="4">
+<div>
+<p class="eyebrow">코드를 옮기는 방법</p>
+<h2>배포 — 한 번 만들어두면 계속 씁니다</h2>
+<p class="lead">배포는 <strong>내 컴퓨터의 코드를 사용자가 쓰는 곳으로 옮기는 일</strong>입니다. 요즘은 대부분 자동입니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>코드를 GitHub에 올리면</strong> → 알아서 빌드하고 → 알아서 올라갑니다</li>
+<li>사람이 하는 일은 <em>“이 코드를 올리겠다”</em>고 결정하는 것뿐입니다</li>
+<li>그래서 발표 전날 새벽에도 <strong>똑같은 순서로</strong> 배포됩니다</li>
+<li>자동화의 진짜 이득은 “편하다”가 아니라 <strong>“매번 똑같다”</strong>입니다</li>
+</ul>
+<div class="callout warn"><strong>배포는 프로젝트 마지막에 하지 마세요.</strong> 초반에 “아무것도 없는 빈 화면”을 먼저 배포해두고 시작하는 팀이 훨씬 안전합니다. 마지막 주에 처음 배포하다가 발표를 못 하는 팀이 매년 나옵니다.</div>
+<div class="callout ok xlink">실제로 Vercel · Supabase · Render에 올리는 과정은 <a href="#/c/i-3tier">이어지는 인프라 장들</a>에서 화면과 함께 따라갑니다.</div></section><nav class="pn-row"><a class="pn prev" href="#/c/c-team"><small>← 이전</small><b>3.3 · 팀 약속과 질문하는 법</b></a><a class="pn next" href="#/c/i-3tier"><small>다음 →</small><b>4.2 · 3-Tier 아키텍처</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-i-3tier" data-crumb="인프라 · 4.2 3-Tier 아키텍처" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/i-ship">04 인프라</a> <span>/ 4.2</span> </p>
+    <h1>3-Tier 아키텍처</h1>
+    <p class="ch-lede-l">프론트엔드 · 백엔드 · 데이터베이스, 유튜브를 예로.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인프라 목차"><details open><summary>인프라</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a></li><li class="is-cur"><a class="toc-ch" href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li class=""><a class="toc-ch" href="#/c/i-api"><span>4.3</span>API</a></li><li class=""><a class="toc-ch" href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a></li><li class=""><a class="toc-ch" href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li class=""><a class="toc-ch" href="#/c/i-render"><span>4.6</span>Render</a></li><li class=""><a class="toc-ch" href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="i-3tier-1" data-n="1"><p>웹 애플리케이션은 역할과 책임에 따라 3개의 계층으로 분리됩니다. 각 계층은 독립된 서버 및 환경에서 동작할 수 있으므로 네트워크 통신 규약이 필요합니다.</p><div class="nt-table"><table><thead><tr><th><strong>계층 (Tier)</strong></th><th><strong>역할 및 책임</strong></th><th><strong>주요 처리 작업</strong></th></tr></thead><tbody><tr><td><strong>프론트엔드 (Presentation Layer)</strong></td><td>사용자 인터페이스(UI) 렌더링 및 입출력 처리</td><td>HTML/CSS/JS 실행, 사용자 이벤트 수집, API 요청 전송, 응답 데이터 화면 동적 반영</td></tr><tr><td><strong>백엔드 (Application Layer)</strong></td><td>비즈니스 로직 연산 및 데이터 제어</td><td>요청 유효성 검증, 인가/인증 처리, 데이터베이스 트랜잭션 제어, 응답 데이터 가공</td></tr><tr><td><strong>데이터베이스 (Data Layer)</strong></td><td>데이터 영속성(Persistence) 보장 및 관리</td><td>정형/비정형 데이터 구조화 저장, Indexing을 통한 데이터 검색, 수정 및 삭제(CRUD)</td></tr></tbody></table></div><figure class="nt-img"><img src="img/80403dc5323f.png" alt="노션 원본 이미지 1" style="max-width:min(100%,1000px)" loading="lazy"></figure><figure class="nt-img"><img src="img/a8e58431ae1a.png" alt="노션 원본 이미지 2" style="max-width:min(100%,1000px)" loading="lazy"></figure><h3 class="nt-h3">프론트엔드</h3><p>현재 화면에서 <strong>눈에 보이는 모든 시각적 요소와 사용자의 조작</strong>을 담당합니다.</p><p><strong>역할:</strong></p><ul class="nt-ul"><li>백엔드에서 받아온 데이터(제목, 영상 링크, 추천 목록 등)를 브라우저에 보기 좋게 배치합니다.</li><li>사용자가 '좋아요' 버튼을 누르거나 검색창에 글자를 입력하는 이벤트를 감지하여 백엔드로 전달합니다.</li></ul><h3 class="nt-h3">백엔드</h3><p><strong>실제 로직을 판단하고 처리하는 엔진</strong>입니다.</p><p><strong>처리 로직 예시:</strong></p><ul class="nt-ul"><li><strong>페이지 로딩 시:</strong> 현재 로그인한 유저의 시청 기록과 취향을 분석하여 우측 상단에 띄울 '추천 동영상 목록'을 계산하고 결정합니다.</li><li><strong>좋아요 클릭 시:</strong> 로그인된 유저인지 검증하고, 이미 좋아요를 누른 영상인지 확인한 뒤 DB에 좋아요 수를 1 증가시키도록 요청합니다.</li><li><strong>댓글 작성 시</strong> : 로그인된 유저인지 검증하고, DB에 사용자가 작성한 댓글 내용을 추가하도록 요청합니다.</li></ul><h3 class="nt-h3">데이터베이스</h3><p>유튜브 서비스 운영에 필요한 <strong>모든 원본 정보가 영구적으로 저장되는 곳</strong>입니다.</p><p><strong>저장되는 데이터:</strong></p><ul class="nt-ul"><li><strong>영상 정보 테이블:</strong> 영상 파일 경로, 제목, 업로드 날짜, 카테고리</li><li><strong>통계 데이터:</strong> 조회수(<code>102만회</code>), 좋아요 수(<code>1.5만</code>), 댓글 내용 및 등록 시간</li><li><strong>계정/채널 정보:</strong> 채널명(<code>빵송국</code>, <code>피식대학</code>), 구독자 목록, 회원 로그인 정보</li></ul><p>등등…..</p><h3 class="nt-h3">정리</h3><div class="nt-table"><table><thead><tr><th></th><th>하는 일</th><th>비유</th></tr></thead><tbody><tr><td>프론트엔드</td><td>화면을 그리고 사용자 입력을 받음</td><td>식당 홀</td></tr><tr><td>백엔드</td><td>규칙에 따라 입력 및 기본 규칙 처리·판단</td><td>주방</td></tr><tr><td>데이터베이스 (DB)</td><td>데이터를 저장하고 꺼내줌</td><td>창고</td></tr></tbody></table></div></section><nav class="pn-row"><a class="pn prev" href="#/c/i-ship"><small>← 이전</small><b>4.1 · 만든 걸 남들이 쓰게 하려면</b></a><a class="pn next" href="#/c/i-api"><small>다음 →</small><b>4.3 · API</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-i-api" data-crumb="인프라 · 4.3 API" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/i-ship">04 인프라</a> <span>/ 4.3</span> </p>
+    <h1>API</h1>
+    <p class="ch-lede-l">HTTP 요청·응답 명세와 JSON, 직접 호출해 보기.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인프라 목차"><details open><summary>인프라</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a></li><li class=""><a class="toc-ch" href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li class="is-cur"><a class="toc-ch" href="#/c/i-api"><span>4.3</span>API</a></li><li class=""><a class="toc-ch" href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a></li><li class=""><a class="toc-ch" href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li class=""><a class="toc-ch" href="#/c/i-render"><span>4.6</span>Render</a></li><li class=""><a class="toc-ch" href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="i-api-1" data-n="1"><p>API는 클라이언트와 서버, 혹은 서로 다른 시스템 간에 정의된 규격에 따라 데이터를 주고받기 위한 인터페이스 명세입니다.</p><p>간단하게 표현하자면, 프론트엔드 ↔ 백엔드끼리 데이터를 주고 받기 위한 연결다리, 매개체 정도로 생각하면 됩니다.</p><h4 class="nt-h4">1) HTTP 요청 (Request) 명세</h4><ul class="nt-ul"><li><strong>Endpoint (URL):</strong> 요청을 전달할 서버의 네트워크 주소 및 자원 경로<br>예: <code>https://api.example.com/v1/posts</code></li><li><strong>HTTP Method:</strong> 자원에 대해 수행할 작업의 종류<ul class="nt-ul"><li><code>GET</code>: 자원 조회</li><li><code>POST</code>: 새로운 자원 생성</li><li><code>PUT</code> / <code>PATCH</code>: 자원 전체 수정 / 일부 수정</li><li><code>DELETE</code>: 자원 삭제</li></ul></li><li><strong>Headers:</strong> 메타데이터 및 인증 정보 (<code>Content-Type</code>, <code>Authorization</code> Bearer 토큰 등)</li><li><strong>Body:</strong> 서버로 전송할 데이터 페이로드 (주로 <code>POST</code>, <code>PATCH</code> 시 사용)</li></ul><h4 class="nt-h4">2) HTTP 응답 (Response) 명세</h4><ul class="nt-ul"><li><strong>Status Code:</strong> 요청 처리 결과를 나타내는 3자리 숫자 규격<ul class="nt-ul"><li><code>200 OK</code>: 요청 성공</li><li><code>201 Created</code>: 자원 생성 성공</li><li><code>401 Unauthorized</code>: 인증 자격 증명 미비</li><li><code>403 Forbidden</code>: 해당 자원에 대한 접근 권한 없음</li><li><code>404 Not Found</code>: 요청한 엔드포인트 또는 자원이 존재하지 않음</li><li><code>500 Internal Server Error</code>: 서버 내부 런타임 에러 발생</li></ul></li><li><strong>Body (JSON):</strong> 경량화된 텍스트 기반 데이터 교환 포맷 (Key-Value 구조)</li></ul><h4 class="nt-h4">3) JSON</h4><pre class="nt-code"><code>{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;안녕하세요원이입니다잘부탁드립니다&quot;,
+  &quot;message&quot;: &quot;오이쉬에&quot;
+}</code></pre><h4 class="nt-h4">직접 보기</h4><div class="nt-links"><a href="https://dummyjson.com/products/1" target="_blank" rel="noopener"><code>https://dummyjson.com/products/1</code></a><a href="https://jsonplaceholder.typicode.com/posts/1" target="_blank" rel="noopener"><code>https://jsonplaceholder.typicode.com/posts/1</code></a><a href="https://api.open-meteo.com/v1/forecast?latitude=37.5665&amp;longitude=126.9780&amp;current_weather=true" target="_blank" rel="noopener"><code>https://api.open-meteo.com/v1/forecast?latitude=37.5665&amp;longitude=126.9780&amp;current_weather=true</code></a></div><figure class="nt-img"><img src="img/7eb5ddacdf2f.png" alt="노션 원본 이미지 3" style="max-width:min(100%,1000px)" loading="lazy"></figure></section><nav class="pn-row"><a class="pn prev" href="#/c/i-3tier"><small>← 이전</small><b>4.2 · 3-Tier 아키텍처</b></a><a class="pn next" href="#/c/i-vercel"><small>다음 →</small><b>4.4 · 배포 서비스와 Vercel</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-i-vercel" data-crumb="인프라 · 4.4 배포 서비스와 Vercel" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/i-ship">04 인프라</a> <span>/ 4.4</span> </p>
+    <h1>배포 서비스와 Vercel</h1>
+    <p class="ch-lede-l">Vercel · Supabase · Render의 역할, 그리고 프론트엔드 배포.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인프라 목차"><details open><summary>인프라</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a></li><li class=""><a class="toc-ch" href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li class=""><a class="toc-ch" href="#/c/i-api"><span>4.3</span>API</a></li><li class="is-cur"><a class="toc-ch" href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a><ol class="toc-secs"><li><a href="#/c/i-vercel/1">배포를 위한 서비스</a></li><li><a href="#/c/i-vercel/2">Vercel - 프론트엔드 배포</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li class=""><a class="toc-ch" href="#/c/i-render"><span>4.6</span>Render</a></li><li class=""><a class="toc-ch" href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="i-vercel-1" data-n="1"><h2 class="nt-h2">배포를 위한 서비스</h2><h3 class="nt-h3">서비스별 역할</h3><ul class="nt-ul"><li><strong>Vercel:</strong> 정적 자원 호스팅 및 Serverless Function 플랫폼 <strong>(프론트엔드 배포)</strong></li><li><strong>Supabase:</strong> PostgreSQL 기반의 BaaS. 데이터베이스 호스팅, 데이터베이스 접근 API, Auth(인증) 기능 제공</li><li><strong>Render:</strong> PaaS. 애플리케이션 컨테이너를 지속적으로 실행하는 서버 환경 제공 <strong>(백엔드 배포)</strong></li></ul></section><section class="csec" id="i-vercel-2" data-n="2"><h3 class="nt-h3">Vercel - 프론트엔드 배포</h3><figure class="nt-img"><img src="img/563868f9bca6.png" alt="노션 원본 이미지 4" style="max-width:min(100%,320px)" loading="lazy"></figure><p>GitHub 저장소와 Vercel 계정을 연동해 두면, Vercel이 코드 변경 사항을 실시간 감지합니다.</p><p>코드를 수정하고 레포에 push하면 Vercel이 자동으로 소스코드를 불러와서 배포를 자동으로 진행합니다.</p><h4 class="nt-h4">Vercel - Github 연동법</h4><ol class="nt-ol" start="1"><li><p>프론트엔드 배포용 레포 생성</p><figure class="nt-img"><img src="img/909d83508392.png" alt="노션 원본 이미지 5" style="max-width:min(100%,1000px)" loading="lazy"></figure></li><li><p><a href="https://vercel.com/" target="_blank" rel="noopener">Vercel</a> → Vercel 홈페이지 이동</p></li><li><p>로그인 진행 → Github로 로그인</p><figure class="nt-img"><img src="img/75b7d8baa666.png" alt="노션 원본 이미지 6" style="max-width:min(100%,465px)" loading="lazy"></figure></li><li><p>접속 후 우측 상단에 있는 Add New &gt; Project 클릭</p><figure class="nt-img"><img src="img/0f39dd1ff7c1.png" alt="노션 원본 이미지 7" style="max-width:min(100%,559px)" loading="lazy"></figure></li><li><p>Import Git Repository 하단 박스 &gt; Add GitHub Scope 선택</p><figure class="nt-img"><img src="img/d001c4f6278d.png" alt="노션 원본 이미지 8" style="max-width:min(100%,354px)" loading="lazy"></figure></li><li><p>뜨는 창에서, 프론트엔드 배포용 레포가 존재하는 organization이나, account선택</p><figure class="nt-img"><img src="img/32da8a7b9a12.png" alt="노션 원본 이미지 9" style="max-width:min(100%,541px)" loading="lazy"></figure></li><li><p>선택 후, 접속된 페이지에서 스크롤을 조금 내려 Repository access 박스로 이동.<br>Only select repositories &gt; Select repositories에서 프론트 배포용 레포 선택</p><figure class="nt-img"><img src="img/0aba66cbb1f8.png" alt="노션 원본 이미지 10" style="max-width:min(100%,679px)" loading="lazy"></figure><figure class="nt-img"><img src="img/9d5031009318.png" alt="노션 원본 이미지 11" style="max-width:min(100%,619px)" loading="lazy"></figure></li><li><p>선택 후 Save &gt; 레포 - vercel 연동 완료</p></li><li><p>다시 Import Git Repository &gt; 추가된 레포 확인 및 import 버튼 클릭</p><figure class="nt-img"><img src="img/5f56dc41d07c.png" alt="노션 원본 이미지 12" style="max-width:min(100%,840px)" loading="lazy"></figure></li><li><p>환경 변수 및 기타 설정 후 Deploy 버튼을 누르면 배포 완료</p><figure class="nt-img"><img src="img/c901d3c509b9.png" alt="노션 원본 이미지 13" style="max-width:min(100%,753px)" loading="lazy"></figure></li><li><p>배포된 서비스는 git push시마다 자동으로 업데이트 반영되어 재배포됨.</p><figure class="nt-img"><img src="img/1fe2cfbdb360.png" alt="노션 원본 이미지 14" style="max-width:min(100%,1000px)" loading="lazy"></figure></li></ol><p><strong>배포된 상태 확인, 도메인 확인 - 대쉬보드에서</strong></p><figure class="nt-img"><img src="img/ed1956a06640.png" alt="노션 원본 이미지 15" style="max-width:min(100%,1000px)" loading="lazy"></figure></section><nav class="pn-row"><a class="pn prev" href="#/c/i-api"><small>← 이전</small><b>4.3 · API</b></a><a class="pn next" href="#/c/i-supabase"><small>다음 →</small><b>4.5 · Supabase</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-i-supabase" data-crumb="인프라 · 4.5 Supabase" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/i-ship">04 인프라</a> <span>/ 4.5</span> </p>
+    <h1>Supabase</h1>
+    <p class="ch-lede-l">DB 관리 · 자동 API 생성 · 회원 인증을 한 번에.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인프라 목차"><details open><summary>인프라</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a></li><li class=""><a class="toc-ch" href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li class=""><a class="toc-ch" href="#/c/i-api"><span>4.3</span>API</a></li><li class=""><a class="toc-ch" href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a></li><li class="is-cur"><a class="toc-ch" href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li class=""><a class="toc-ch" href="#/c/i-render"><span>4.6</span>Render</a></li><li class=""><a class="toc-ch" href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="i-supabase-1" data-n="1"><h3 class="nt-h3">Supabase - DB 관리 · 자동 API 생성 · 회원 인증(Auth) 통합 제공</h3><figure class="nt-img"><img src="img/b5e2f8129bed.png" alt="노션 원본 이미지 16" style="max-width:min(100%,320px)" loading="lazy"></figure><ol class="nt-ol" start="1"><li><p><a href="https://supabase.com/" target="_blank" rel="noopener">Supabase</a> - 접속</p></li><li><p>로그인 진행 &gt; GitHub로 로그인</p><figure class="nt-img"><img src="img/55fd51be92ac.png" alt="노션 원본 이미지 17" style="max-width:min(100%,553px)" loading="lazy"></figure></li><li><p>Projects &gt; New project로 새로운 프로젝트 생성 가능</p><figure class="nt-img"><img src="img/d6765c8fbb30.png" alt="노션 원본 이미지 18" style="max-width:min(100%,1000px)" loading="lazy"></figure></li></ol><figure class="nt-img"><img src="img/56abe6e987d7.png" alt="노션 원본 이미지 19" style="max-width:min(100%,1000px)" loading="lazy"></figure><h4 class="nt-h4"><strong>Supabase 기본 사용 5단계 흐름</strong></h4><ol class="nt-ol" start="1"><li><p><strong>테이블 만들기</strong><br>• Table Editor에서 엑셀처럼 표를 만들고 컬럼(<code>id</code>, <code>title</code>, <code>created_at</code> 등) 지정</p></li><li><p><strong>API Key 확인 (Supabase)</strong><br>• Project Settings &gt; API에서 Project URL과 anon public Key 복사</p></li><li><p><strong>환경변수 설정 (프론트엔드)</strong><br>• 프로젝트 루트의 <code>.env</code> 파일에 복사한 주소와 키 저장, SDK 연동 및 데이터 호출 (프론트엔드)</p></li><li><p><strong>RLS 보안 정책 설정 (Supabase)</strong><br>• anon 키가 프론트엔드에 노출되므로, DB 대시보드에서 Row Level Security(RLS)를 켜고 "누구나 읽기 가능 / 로그인한 사용자만 쓰기 가능" 같은 권한 규칙 설정</p></li></ol></section><nav class="pn-row"><a class="pn prev" href="#/c/i-vercel"><small>← 이전</small><b>4.4 · 배포 서비스와 Vercel</b></a><a class="pn next" href="#/c/i-render"><small>다음 →</small><b>4.6 · Render</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-i-render" data-crumb="인프라 · 4.6 Render" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/i-ship">04 인프라</a> <span>/ 4.6</span> </p>
+    <h1>Render</h1>
+    <p class="ch-lede-l">24시간 켜져 있는 백엔드 서버 배포.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인프라 목차"><details open><summary>인프라</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a></li><li class=""><a class="toc-ch" href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li class=""><a class="toc-ch" href="#/c/i-api"><span>4.3</span>API</a></li><li class=""><a class="toc-ch" href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a></li><li class=""><a class="toc-ch" href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li class="is-cur"><a class="toc-ch" href="#/c/i-render"><span>4.6</span>Render</a></li><li class=""><a class="toc-ch" href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="i-render-1" data-n="1"><h3 class="nt-h3">Render - 백엔드 서버 배포용</h3><figure class="nt-img"><img src="img/c0bb1cf6d445.png" alt="노션 원본 이미지 20" style="max-width:min(100%,320px)" loading="lazy"></figure><ul class="nt-ul"><li><strong>Vercel의 한계:</strong> 요청이 올 때만 잠깐 켜지는 서버리스 방식이라, 수십 초 이상 걸리는 무거운 작업은 도중에 꺼져버립니다.</li><li><strong>Supabase의 한계:</strong> DB 저장과 간단한 CRUD는 쉽지만, 복잡한 자체 비즈니스 로직이나 보안이 중요한 결제/외부 API 처리에는 한계가 있습니다.</li><li><strong>Render의 역할:</strong> 24시간 프로세스가 상시 켜져 있으므로, <strong>크롤링, AI API 연동, 장시간 계산 작업, 예약 스케줄러</strong> 같은 복잡한 백엔드 로직을 제한 없이 처리합니다.</li></ul><ol class="nt-ol" start="1"><li><p><a href="https://render.com/" target="_blank" rel="noopener">Render</a> → 사이트 접속</p></li><li><p>로그인 진행</p><figure class="nt-img"><img src="img/3c5119a3b352.png" alt="노션 원본 이미지 21" style="max-width:min(100%,722px)" loading="lazy"></figure></li><li><p>우측 상단 New &gt; Web Service 선택</p><figure class="nt-img"><img src="img/126483be00c1.png" alt="노션 원본 이미지 22" style="max-width:min(100%,540px)" loading="lazy"></figure></li><li><p>Vercel과 마찬가지로 백엔드 레포에 연결</p><figure class="nt-img"><img src="img/0f7f2423763a.png" alt="노션 원본 이미지 23" style="max-width:min(100%,1000px)" loading="lazy"></figure></li></ol></section><nav class="pn-row"><a class="pn prev" href="#/c/i-supabase"><small>← 이전</small><b>4.5 · Supabase</b></a><a class="pn next" href="#/c/i-glossary"><small>다음 →</small><b>4.7 · 용어 정리</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-i-glossary" data-crumb="인프라 · 4.7 용어 정리" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/i-ship">04 인프라</a> <span>/ 4.7</span> </p>
+    <h1>용어 정리</h1>
+    <p class="ch-lede-l">인프라에서 자주 나오는 말, 한 줄씩.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인프라 목차"><details open><summary>인프라</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/i-ship"><span>4.1</span>만든 걸 남들이 쓰게 하려면</a></li><li class=""><a class="toc-ch" href="#/c/i-3tier"><span>4.2</span>3-Tier 아키텍처</a></li><li class=""><a class="toc-ch" href="#/c/i-api"><span>4.3</span>API</a></li><li class=""><a class="toc-ch" href="#/c/i-vercel"><span>4.4</span>배포 서비스와 Vercel</a></li><li class=""><a class="toc-ch" href="#/c/i-supabase"><span>4.5</span>Supabase</a></li><li class=""><a class="toc-ch" href="#/c/i-render"><span>4.6</span>Render</a></li><li class="is-cur"><a class="toc-ch" href="#/c/i-glossary"><span>4.7</span>용어 정리</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="i-glossary-1" data-n="1"><div class="nt-table"><table class="glossary-t"><thead><tr><th><strong>카테고리</strong></th><th><strong>용어</strong></th><th><strong>한 줄 설명</strong></th></tr></thead><tbody><tr><td><strong>기본 구조</strong></td><td><strong>프론트엔드</strong></td><td>사람이 직접 눈으로 보고 조작하는 웹 화면 영역</td></tr><tr><td></td><td><strong>백엔드</strong></td><td>화면 뒤에서 데이터 처리, 비즈니스 로직 연산, 데이터베이스 전달을 담당하는 영역</td></tr><tr><td></td><td><strong>데이터베이스 (DB)</strong></td><td>데이터를 영구적으로 안전하게 쌓아두고 검색·관리하는 저장소</td></tr><tr><td></td><td><strong>서버</strong></td><td>클라이언트의 요청을 받아 처리해 주는, 24시간 켜져 있는 컴퓨터</td></tr><tr><td></td><td><strong>localhost</strong></td><td>내 컴퓨터 자체를 가리키는 내부 IP 주소 (나에게만 보이는 테스트 주소)</td></tr><tr><td></td><td><strong>도메인 (Domain)</strong></td><td>숫자로 된 서버 IP 주소를 사람이 읽기 쉽게 만든 웹 주소 (예: <code>naver.com</code>)</td></tr><tr><td></td><td><strong>포트 (Port)</strong></td><td>한 서버 컴퓨터 내에서 특정 프로그램이 외부와 통신하기 위해 여는 문 번호 (예: 8080, 3000)</td></tr><tr><td><strong>API &amp; 통신</strong></td><td><strong>API</strong></td><td>프로그램끼리 정해진 규칙과 형식으로 데이터를 주고받기 위한 통신 인터페이스</td></tr><tr><td></td><td><strong>엔드포인트</strong></td><td>API에서 특정 기능이나 데이터에 접근하기 위해 할당된 세부 URL 주소</td></tr><tr><td></td><td><strong>JSON</strong></td><td>컴퓨터 간 데이터를 주고받기 위해 사용하는 표준 텍스트 Format (Key-Value 구조)</td></tr><tr><td></td><td><strong>HTTP Method ★</strong></td><td>API 요청 시 수행할 작업의 종류를 지정하는 규격 (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code> 등)</td></tr><tr><td></td><td><strong>상태 코드</strong></td><td>API 요청 결과를 3자리 숫자로 알려주는 통신 규격 (<code>200 잘됨</code>, <code>404 없음</code>, <code>500 터짐</code>)</td></tr><tr><td></td><td><strong>Header / Body</strong></td><td><strong>Header:</strong> 요청/응답의 메타데이터(인증키, 데이터 타입 등) / <strong>Body:</strong> 실제 보내는 알맹이 데이터</td></tr><tr><td></td><td><strong>CORS</strong></td><td>출처(주소)가 다른 프론트엔드와 백엔드 간 요청을 브라우저가 보안상 차단하는 현상</td></tr><tr><td><strong>배포 &amp; 인프라</strong></td><td><strong>배포 (Deploy)</strong></td><td>작성한 코드를 항상 켜져 있는 클라우드 서버에 올리고 인터넷에 공개하는 것</td></tr><tr><td></td><td><strong>자동 배포 (CI/CD)</strong></td><td>GitHub에 코드를 <code>push</code>하면 배포 플랫폼이 감지하여 자동으로 다시 빌드·배포하는 기능</td></tr><tr><td></td><td><strong>빌드 (Build)</strong></td><td>작성한 소스코드를 서버나 브라우저가 실제로 실행할 수 있는 파일 형태로 변환하는 과정</td></tr><tr><td></td><td><strong>서버리스 (Serverless)</strong></td><td>항상 켜두지 않고, 요청이 들어올 때만 순간적으로 깨어나 처리하는 서버 작동 방식</td></tr><tr><td></td><td><strong>콜드 스타트</strong></td><td>잠들어 있던 서버리스 인스턴스가 첫 요청을 받아 깨어나느라 발생하 응답 지연 현상</td></tr><tr><td></td><td><strong>로그 (Logs)</strong></td><td>서버나 프로그램이 실행되면서 발생시킨 동작 기록 및 에러 추적 메시지</td></tr><tr><td><strong>형상 관리 &amp; 보안</strong></td><td><strong>Repository (레포)</strong></td><td>GitHub에서 프로젝트 소스코드와 변경 이력을 모아두는 원격 저장소</td></tr><tr><td></td><td><strong>.gitignore ★</strong></td><td><code>.env</code>나 설정 파일 등 GitHub 저장소에 올리지 않을 항목을 지정하는 예외 파일</td></tr><tr><td></td><td><strong>환경변수 (.env)</strong></td><td>API 키, DB 비밀번호 등 유출되면 안 되는 보안 정보들을 코드 밖에 따로 저장하는 방식</td></tr><tr><td></td><td><strong>API Key ★</strong></td><td>허가된 사용자나 애플리케이션만 API를 호출할 수 있도록 발급하는 식별 열쇠</td></tr><tr><td></td><td><strong>RLS (Row Level Security)</strong></td><td>Supabase(PostgreSQL)에서 테이블의 행(Row) 단위로 접근 권한을 제한하는 보안 잠금장치</td></tr><tr><td></td><td><strong>CRUD</strong></td><td>데이터베이스 다루기 기본 4동작: <strong>C</strong>reate(생성), <strong>R</strong>ead(읽기), <strong>U</strong>pdate(수정), <strong>D</strong>elete(삭제)</td></tr><tr><td></td><td><strong>인증 vs 인가 ★</strong></td><td><strong>인증(Authentication):</strong> "너 누구니?" (로그인) / <strong>인가(Authorization):</strong> "너 이거 할 권한 있니?" (권한 확인)</td></tr></tbody></table></div></section><nav class="pn-row"><a class="pn prev" href="#/c/i-render"><small>← 이전</small><b>4.6 · Render</b></a><a class="pn next" href="#/c/a-authn"><small>다음 →</small><b>5.1 · 인증 — 너 누구냐</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-a-authn" data-crumb="인증·인가 · 5.1 인증 — 너 누구냐" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/a-authn">05 인증·인가</a> <span>/ 5.1</span> </p>
+    <h1>인증 — 너 누구냐</h1>
+    <p class="ch-lede-l">신원을 확인하는 단계. 로그인 기능 하나를 끝까지 파봅니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인증·인가 목차"><details open><summary>인증·인가</summary><ol class="toc-chs"><li class="is-cur"><a class="toc-ch" href="#/c/a-authn"><span>5.1</span>인증 — 너 누구냐</a><ol class="toc-secs"><li><a href="#/c/a-authn/1">왜 하필 로그인인가</a></li><li><a href="#/c/a-authn/2">인증과 인가는 다른 일입니다</a></li><li><a href="#/c/a-authn/3">서버는 여러분을 기억하지 못합니다</a></li><li><a href="#/c/a-authn/4">로그인하고 나서 벌어지는 일</a></li><li><a href="#/c/a-authn/5">출입증을 두 장 주는 이유</a></li><li><a href="#/c/a-authn/6">비밀번호는 저장하지 않습니다</a></li><li><a href="#/c/a-authn/7">로그인을 직접 만들 것인가</a></li><li><a href="#/c/a-authn/8">소셜 로그인 — 비밀번호를 남에게 안 주고 신원 증명하기</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/a-authz"><span>5.2</span>인가 — 해도 되냐</a></li><li class=""><a class="toc-ch" href="#/c/a-wb"><span>5.3</span>인증·인가 워크북</a></li><li class=""><a class="toc-ch" href="#/c/a-oauth"><span>5.4</span>실습: 구글 OAuth 키 발급</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="a-authn-1" data-n="1">
+<div>
+<p class="eyebrow">기능 하나를 끝까지</p>
+<h2>왜 하필 로그인인가</h2>
+<p class="lead">기능 하나를 골라 끝까지 파보려는 겁니다. 로그인을 고른 이유가 있습니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>거의 모든 서비스에 있습니다.</strong> 여러분 팀도 십중팔구 만들게 됩니다.</li>
+<li><strong>이미 매일 쓰고 있습니다.</strong> 설명하기도, 이해하기도 좋습니다.</li>
+<li><strong><a href="#/c/i-ship/3">인프라 파트</a>에서 본 “직접 만들까 빌릴까”가 가장 잘 드러납니다.</strong> 두 달짜리 팀에게는 이 판단이 곧 일정입니다.</li>
+<li><strong>잘못 만들면 사고가 납니다.</strong> 남의 계정이 털리는 건 버그 이상의 문제입니다.</li>
+</ul>
+</section><section class="csec" id="a-authn-2" data-n="2">
+<div>
+<p class="eyebrow">먼저 두 단어를 구분합시다</p>
+<h2>인증과 인가는 다른 일입니다</h2>
+<p class="lead">한국어로도 영어로도 비슷하게 생겨서 헷갈립니다. 그런데 <strong>완전히 다른 질문</strong>입니다.</p>
+</div>
+<div class="vs">
+<div class="vs-box">
+<span class="label" style="color: var(--info);">인증 — AUTHENTICATION</span>
+<ul>
+<li><strong>“너 누구야?”</strong></li>
+<li>신분증을 확인하는 일</li>
+<li>건물 입구에서 사원증을 찍는 것</li>
+<li>실패하면 <code>401 Unauthorized</code></li>
+</ul>
+</div>
+<div class="vs-box">
+<span class="label" style="color: var(--ember);">인가 — AUTHORIZATION</span>
+<ul>
+<li><strong>“너 이거 해도 돼?”</strong></li>
+<li>권한을 확인하는 일</li>
+<li>사원증으로 <em>서버실</em> 문이 열리는지</li>
+<li>실패하면 <code>403 Forbidden</code></li>
+</ul>
+</div>
+</div>
+<div class="callout">순서가 있습니다. <strong>누구인지 모르면 자격도 따질 수 없습니다.</strong> 그래서 인증이 항상 먼저입니다.</div>
+</section><section class="csec" id="a-authn-3" data-n="3">
+<div>
+<p class="eyebrow">문제의 출발점</p>
+<h2>서버는 여러분을 기억하지 못합니다</h2>
+<p class="lead">웹의 기본 구조상, 서버는 <strong>요청 하나하나를 처음 보는 사람</strong>처럼 대합니다. 방금 로그인한 사람이라는 걸 모릅니다.</p>
+</div>
+<ul class="bullets">
+<li>요청 1: “로그인할게요” → 서버: “확인했습니다”</li>
+<li>요청 2: “내가 쓴 리뷰 보여주세요” → 서버: <strong>“누구세요?”</strong></li>
+<li>매번 아이디·비밀번호를 보내면? <strong>보낼 때마다 새어나갈 위험</strong>이 생깁니다.</li>
+</ul>
+<div class="callout">그래서 <strong>한 번만 확인하고, 대신 출입증을 줍니다.</strong> 이후로는 출입증만 보여주면 됩니다. 이 출입증을 <strong>토큰(token)</strong>이라고 부릅니다.</div>
+</section><section class="csec" id="a-authn-4" data-n="4">
+<div>
+<p class="eyebrow">전체 흐름</p>
+<h2>로그인하고 나서 벌어지는 일</h2>
+</div>
+<figure>
+<div class="figwrap">
+<svg aria-label="브라우저가 아이디와 비밀번호를 서버에 보내면 서버가 데이터베이스에 조회하고 비밀번호를 대조한 뒤 토큰을 발급하고, 이후 모든 요청은 토큰만으로 신원을 확인하는 흐름" role="img" viewbox="0 0 860 450">
+<defs>
+<marker id="s-ar" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink-3)"></path>
+</marker>
+<marker id="s-em" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ember)"></path>
+</marker>
+</defs>
+<rect height="42" rx="9" style="fill:var(--card);stroke:var(--line)" width="180" x="50" y="14"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="140" y="41">사용자 화면</text>
+<rect height="42" rx="9" style="fill:var(--card);stroke:var(--line)" width="180" x="340" y="14"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="430" y="41">서버</text>
+<rect height="42" rx="9" style="fill:var(--card);stroke:var(--line)" width="180" x="630" y="14"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="13" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="720" y="41">데이터베이스</text>
+<line stroke-dasharray="4 5" stroke-width="1" style="stroke:var(--line)" x1="140" x2="140" y1="56" y2="430"></line>
+<line stroke-dasharray="4 5" stroke-width="1" style="stroke:var(--line)" x1="430" x2="430" y1="56" y2="430"></line>
+<line stroke-dasharray="4 5" stroke-width="1" style="stroke:var(--line)" x1="720" x2="720" y1="56" y2="430"></line>
+<line marker-end="url(#s-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="140" x2="424" y1="96" y2="96"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-2)" text-anchor="middle" x="282" y="88">아이디 + 비밀번호</text>
+<line marker-end="url(#s-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="430" x2="714" y1="136" y2="136"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-2)" text-anchor="middle" x="572" y="128">이 계정 있어?</text>
+<line marker-end="url(#s-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="720" x2="436" y1="176" y2="176"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-2)" text-anchor="middle" x="578" y="168">있음 — 암호화된 비밀번호</text>
+<rect height="36" rx="8" style="fill:var(--field);stroke:var(--line)" width="230" x="340" y="196"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-2)" text-anchor="middle" x="455" y="219">같은 방식으로 암호화해 대조</text>
+<line marker-end="url(#s-em)" stroke-width="1.8" style="stroke:var(--ember)" x1="424" x2="146" y1="266" y2="266"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" font-weight="600" style="fill:var(--ember)" text-anchor="middle" x="285" y="258">출입증(토큰) 발급</text>
+<line stroke-dasharray="3 4" stroke-width="1" style="stroke:var(--line-strong)" x1="40" x2="820" y1="296" y2="296"></line>
+<text font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1" style="fill:var(--ink-4)" x="40" y="288">여기까지가 로그인 — 아래는 이후 모든 요청</text>
+<line marker-end="url(#s-em)" stroke-width="1.5" style="stroke:var(--ember)" x1="140" x2="424" y1="336" y2="336"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ember)" text-anchor="middle" x="282" y="328">요청 + 출입증</text>
+<rect height="36" rx="8" style="fill:var(--field);stroke:var(--ember-line)" width="230" x="340" y="356"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-2)" text-anchor="middle" x="455" y="379">출입증만 보고 누구인지 확인</text>
+<line marker-end="url(#s-ar)" stroke-width="1.5" style="stroke:var(--ink-3)" x1="424" x2="146" y1="420" y2="420"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ink-2)" text-anchor="middle" x="285" y="412">응답 — 비밀번호 다시 안 물어봄</text>
+</svg>
+</div>
+<figcaption>비밀번호가 오가는 건 <strong>맨 처음 한 번뿐</strong>입니다. 그 뒤로는 토큰만 왕복합니다.</figcaption>
+</figure>
+</section><section class="csec" id="a-authn-5" data-n="5">
+<div>
+<p class="eyebrow">설계 판단의 예</p>
+<h2>출입증을 두 장 주는 이유</h2>
+<p class="lead">많은 서비스가 토큰을 <strong>두 종류</strong> 발급합니다. 왜 굳이 그럴까요 — 여기에 트레이드오프가 있습니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>짧게 만들면</strong> 훔쳐가도 금방 못 쓰게 됩니다. 대신 자주 만료돼서 사용자가 불편합니다.</li>
+<li><strong>길게 만들면</strong> 편한데, 새어나갔을 때 오래 악용됩니다.</li>
+<li>그래서 <strong>짧은 것(액세스)</strong>을 요청마다 쓰고, <strong>긴 것(리프레시)</strong>으로 조용히 갱신합니다.</li>
+</ul>
+<div class="callout">이게 “로그인이 유지되는데도 안전한” 이유입니다. <strong>편의와 안전이 충돌할 때 둘을 쪼개서 둘 다 가져간 것</strong> — 설계란 이런 판단의 연속입니다.</div>
+</section><section class="csec" id="a-authn-6" data-n="6">
+<div>
+<p class="eyebrow">지켜야 할 원칙</p>
+<h2>비밀번호는 저장하지 않습니다</h2>
+<p class="lead">데이터베이스에 비밀번호를 <strong>그대로 넣으면 안 됩니다.</strong> 되돌릴 수 없게 변환해서 저장합니다.</p>
+</div>
+<pre><code><span class="c-dim"># 사용자가 입력한 것</span>
+inha1234
+
+<span class="c-dim"># 실제로 DB에 저장되는 것 (되돌릴 수 없음)</span>
+<span class="c-str">$2a$10$N9qo8uLOickgx2ZMRZoMye...</span>
+
+<span class="c-dim"># 로그인할 때는 이렇게 확인합니다</span>
+입력값을 <span class="c-key">같은 방식으로 변환</span> → 저장된 값과 비교
+<span class="c-dim">→ 원문을 알 필요가 없습니다</span></code></pre>
+<div class="callout warn">그래서 <strong>“비밀번호 찾기”가 아니라 “비밀번호 재설정”</strong>인 겁니다. 어떤 서비스가 여러분의 비밀번호를 <em>원문 그대로 알려준다면</em> 그건 심각한 문제입니다. <strong>여러분 서비스도 마찬가지입니다.</strong></div>
+</section><section class="csec" id="a-authn-7" data-n="7">
+<div>
+<p class="eyebrow">가장 실전적인 판단</p>
+<h2>로그인을 직접 만들 것인가</h2>
+<p class="lead">원리를 알았으니 이제 정해야 합니다. <strong>“만들 수 있다”와 “만들어야 한다”는 다릅니다.</strong></p>
+</div>
+<div class="vs">
+<div class="vs-box bad">
+<span class="label">직접 만들면 — 필요한 것 전부</span>
+<ul>
+<li>회원가입 폼과 입력 검증</li>
+<li>비밀번호 암호화 저장</li>
+<li>로그인 · 로그아웃 · 토큰 갱신</li>
+<li>비밀번호 재설정 <em>(메일 발송까지)</em></li>
+<li>이메일 · 휴대폰 인증</li>
+<li>중복 가입 차단, 무차별 시도 방어</li>
+</ul>
+<span class="cost">→ 팀 하나가 몇 주를 씁니다</span>
+</div>
+<div class="vs-box good">
+<span class="label">빌리면</span>
+<ul>
+<li>구글 · 카카오 등 <strong>소셜 로그인 붙이기</strong></li>
+<li>또는 인증 서비스 이용<br/><em>(Firebase Auth, Supabase Auth 등)</em></li>
+<li>비밀번호 관리·재설정·보안을 <strong>그쪽이 책임</strong></li>
+</ul>
+<span class="cost">→ 하루 이틀이면 붙습니다</span>
+</div>
+</div>
+<div class="callout ok"><strong>두 달짜리 프로젝트에서 로그인에 몇 주를 쓰면, 정작 만들려던 것을 못 만듭니다.</strong> 로그인은 어느 서비스에나 있습니다 — <em>여러분 서비스만의 것</em>이 아닙니다. 직접 만드는 시간은 그쪽에 쓰세요.</div>
+</section><section class="csec" id="a-authn-8" data-n="8">
+<div>
+<p class="eyebrow">그래서 이게 왜 안전한가</p>
+<h2>소셜 로그인 — 비밀번호를 남에게 안 주고 신원 증명하기</h2>
+</div>
+<figure>
+<div class="figwrap">
+<svg aria-label="사용자는 구글에만 비밀번호를 입력하고, 구글이 우리 서버에 신원을 보증한다. 비밀번호는 우리 서버를 지나가지 않는다" role="img" viewbox="0 0 820 320">
+<defs>
+<marker id="o-ar" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ok)"></path>
+</marker>
+<marker id="o-em" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10">
+<path d="M0 0 L10 5 L0 10 z" style="fill:var(--ember)"></path>
+</marker>
+</defs>
+<rect height="80" rx="12" style="fill:var(--card);stroke:var(--line)" width="190" x="30" y="150"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="14" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="125" y="182">사용자</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="125" y="205">구글 계정을 가진 사람</text>
+<rect height="80" rx="12" style="fill:var(--card);stroke:var(--ok-line)" width="190" x="315" y="30"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="14" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="410" y="62">구글</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="410" y="85">비밀번호를 아는 유일한 곳</text>
+<rect height="80" rx="12" style="fill:var(--card);stroke:var(--ember-line)" width="190" x="600" y="150"></rect>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="14" font-weight="600" style="fill:var(--ink)" text-anchor="middle" x="695" y="182">여러분의 서버</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="middle" x="695" y="205">팀이 만든 서비스</text>
+<path d="M180 152 L350 112" fill="none" marker-end="url(#o-ar)" stroke-width="1.8" style="stroke:var(--ok)"></path>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ok)" x="212" y="120">비밀번호 입력</text>
+<path d="M470 112 L642 152" fill="none" marker-end="url(#o-em)" stroke-width="1.8" style="stroke:var(--ember)"></path>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--ember)" text-anchor="end" x="608" y="120">“이 사람 맞습니다”</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11" style="fill:var(--ink-4)" text-anchor="end" x="608" y="137">+ 이메일 · 이름</text>
+<line opacity="0.7" stroke-dasharray="6 5" stroke-width="1.5" style="stroke:var(--err)" x1="228" x2="592" y1="190" y2="190"></line>
+<line stroke-width="2" style="stroke:var(--err)" x1="398" x2="422" y1="176" y2="204"></line>
+<line stroke-width="2" style="stroke:var(--err)" x1="422" x2="398" y1="176" y2="204"></line>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="11.5" style="fill:var(--err)" text-anchor="middle" x="410" y="232">비밀번호는 이 길로 안 지나갑니다</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-2)" text-anchor="middle" x="410" y="282">여러분 서버는 사용자의 구글 비밀번호를 영원히 모릅니다.</text>
+<text font-family="IBM Plex Sans KR, sans-serif" font-size="12" style="fill:var(--ink-4)" text-anchor="middle" x="410" y="303">아는 것은 “구글이 보증한 이메일”뿐입니다.</text>
+</svg>
+</div>
+<figcaption>사용자도 편하고(비밀번호 안 만들어도 됨) 여러분도 편합니다(비밀번호를 안 지켜도 됨).</figcaption>
+</figure>
+<div class="callout ok xlink">구글 로그인에 필요한 키를 Google Cloud Console에서 직접 발급받는 과정은 <a href="#/c/a-oauth">“실습: 구글 OAuth 키 발급”</a> 장에 있습니다.</div></section><nav class="pn-row"><a class="pn prev" href="#/c/i-glossary"><small>← 이전</small><b>4.7 · 용어 정리</b></a><a class="pn next" href="#/c/a-authz"><small>다음 →</small><b>5.2 · 인가 — 해도 되냐</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-a-authz" data-crumb="인증·인가 · 5.2 인가 — 해도 되냐" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/a-authn">05 인증·인가</a> <span>/ 5.2</span> </p>
+    <h1>인가 — 해도 되냐</h1>
+    <p class="ch-lede-l">누구인지는 알았습니다. 이제 자격을 봅니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인증·인가 목차"><details open><summary>인증·인가</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/a-authn"><span>5.1</span>인증 — 너 누구냐</a></li><li class="is-cur"><a class="toc-ch" href="#/c/a-authz"><span>5.2</span>인가 — 해도 되냐</a><ol class="toc-secs"><li><a href="#/c/a-authz/1">누가 무엇을 할 수 있는지 미리 적어봅니다</a></li><li><a href="#/c/a-authz/2">화면에서 숨기는 건 막는 게 아닙니다</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/a-wb"><span>5.3</span>인증·인가 워크북</a></li><li class=""><a class="toc-ch" href="#/c/a-oauth"><span>5.4</span>실습: 구글 OAuth 키 발급</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="a-authz-1" data-n="1">
+<div>
+<p class="eyebrow">권한 설계</p>
+<h2>누가 무엇을 할 수 있는지 미리 적어봅니다</h2>
+<p class="lead">코딩 전에 <strong>표 하나만 그려도</strong> 절반은 끝납니다. <a href="#/c/b-design/2">설계 장</a>에서 본 학식 리뷰 서비스로 예를 들면요.</p>
+</div>
+<div class="tw">
+<table>
+<thead><tr><th>동작</th><th>비로그인</th><th>로그인한 사람</th><th>운영자</th></tr></thead>
+<tbody>
+<tr><td>메뉴 보기</td><td class="ok">○</td><td class="ok">○</td><td class="ok">○</td></tr>
+<tr><td>리뷰 읽기</td><td class="ok">○</td><td class="ok">○</td><td class="ok">○</td></tr>
+<tr><td>리뷰 쓰기</td><td class="dim">×</td><td class="ok">○</td><td class="ok">○</td></tr>
+<tr><td><strong>내</strong> 리뷰 수정·삭제</td><td class="dim">×</td><td class="ok">○</td><td class="ok">○</td></tr>
+<tr><td><strong>남의</strong> 리뷰 삭제</td><td class="dim">×</td><td class="dim">×</td><td class="hl">○</td></tr>
+<tr><td>식당 · 메뉴 등록</td><td class="dim">×</td><td class="dim">×</td><td class="hl">○</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">여기서 가장 중요한 줄은 <strong>“내 리뷰”와 “남의 리뷰”를 나눈 줄</strong>입니다. 로그인했다고 아무거나 지울 수 있으면 안 됩니다. <strong>“이 리뷰를 쓴 사람이 지금 요청한 사람과 같은가”</strong>를 서버가 확인해야 합니다.</div>
+</section><section class="csec" id="a-authz-2" data-n="2">
+<div>
+<p class="eyebrow">가장 흔한 보안 사고</p>
+<h2>화면에서 숨기는 건 막는 게 아닙니다</h2>
+<p class="lead"><a href="#/c/b-arch/2">서비스 구조 장</a>에서 했던 이야기가 여기서 돌아옵니다. <strong>브라우저·앱 코드는 사용자 것</strong>입니다.</p>
+</div>
+<div class="vs">
+<div class="vs-box bad">
+<span class="label">이것만 하면 뚫립니다</span>
+<ul>
+<li>삭제 버튼을 안 보이게 처리</li>
+<li>운영자 메뉴를 숨김</li>
+<li>페이지 접근 시 화면에서 튕겨내기</li>
+<li><strong>→ 요청 주소만 알면 그냥 호출됩니다</strong></li>
+</ul>
+</div>
+<div class="vs-box good">
+<span class="label">반드시 같이 해야 하는 것</span>
+<ul>
+<li>서버에서 <strong>요청이 올 때마다</strong> 확인</li>
+<li>“이 사람이 이 리뷰의 작성자인가?”</li>
+<li>자격 없으면 <code>403</code> 으로 거절</li>
+<li>화면에서 숨기는 건 <strong>편의</strong>, 서버에서 막는 게 <strong>보안</strong></li>
+</ul>
+</div>
+</div>
+<div class="callout warn">권한 문제는 <strong>눈으로 봐서는 깨진 걸 모릅니다.</strong> 화면은 멀쩡해 보이거든요. 그래서 권한을 건드릴 때는 <strong>“다른 계정으로 직접 해보는”</strong> 확인이 필요합니다.</div>
+<div class="callout ok xlink">RBAC · ACL · Scope 같은 인가 방식의 이름은 <a href="#/c/a-wb/3">“인증·인가 워크북”</a> 장에 정리되어 있습니다.</div></section><nav class="pn-row"><a class="pn prev" href="#/c/a-authn"><small>← 이전</small><b>5.1 · 인증 — 너 누구냐</b></a><a class="pn next" href="#/c/a-wb"><small>다음 →</small><b>5.3 · 인증·인가 워크북</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-a-wb" data-crumb="인증·인가 · 5.3 인증·인가 워크북" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/a-authn">05 인증·인가</a> <span>/ 5.3</span> </p>
+    <h1>인증·인가 워크북</h1>
+    <p class="ch-lede-l">로그인 버튼 뒤에서 무슨 일이 벌어지는지, 그리고 실제로 구글 클라우드 콘솔에서 OAuth 키를 발급받는 과정까지 — 딱 필요한 만큼만 짚고 넘어갑니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인증·인가 목차"><details open><summary>인증·인가</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/a-authn"><span>5.1</span>인증 — 너 누구냐</a></li><li class=""><a class="toc-ch" href="#/c/a-authz"><span>5.2</span>인가 — 해도 되냐</a></li><li class="is-cur"><a class="toc-ch" href="#/c/a-wb"><span>5.3</span>인증·인가 워크북</a><ol class="toc-secs"><li><a href="#/c/a-wb/1">인증(Authentication) vs 인가(Authorization)</a></li><li><a href="#/c/a-wb/2">인증은 어떻게 이루어질까</a></li><li><a href="#/c/a-wb/3">인가는 어떻게 이루어질까</a></li><li><a href="#/c/a-wb/4">OAuth 2.0, 딱 필요한 만큼만</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/a-oauth"><span>5.4</span>실습: 구글 OAuth 키 발급</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="a-wb-1" data-n="1"><section class="module" id="m1">
+<div class="module-head"><span class="module-num">01</span><h2>인증(Authentication) vs 인가(Authorization)</h2></div>
+<p class="module-lede">두 단어는 늘 붙어 다니지만 하는 일은 완전히 다릅니다. 공연장 입구를 생각하면 헷갈리지 않아요.</p>
+<div class="pair">
+<div class="defcard auth">
+<h3>🪪 인증 — 너 누구야?</h3>
+<p>사용자가 <b>본인이 맞는지</b> 확인하는 절차예요. 아이디·비밀번호, 지문, 문자 인증 같은 것들이 여기에 해당합니다.</p>
+<div class="analogy">공연장 입구에서 <b>신분증과 예매자 이름을 대조</b>하는 것 — "이 사람이 맞는가"를 확인하는 단계.</div>
+</div>
+<div class="defcard authz">
+<h3>🚪 인가 — 뭘 할 수 있어?</h3>
+<p>본인 확인이 끝난 사용자가 <b>무엇에 접근할 수 있는지</b> 결정하는 절차예요. 관리자 페이지 접근, 파일 읽기/쓰기 권한 등이 해당합니다.</p>
+<div class="analogy">신분 확인이 끝난 뒤 <b>VIP석인지 일반석인지</b> 자리를 안내받는 것 — "이 사람이 무엇을 할 수 있는가"를 결정하는 단계.</div>
+</div>
+</div>
+<div class="tablewrap">
+<table>
+<thead><tr><th>질문</th><th>인증 (Authentication)</th><th>인가 (Authorization)</th></tr></thead>
+<tbody>
+<tr><td>핵심 질문</td><td>당신은 누구입니까?</td><td>당신은 무엇을 할 수 있습니까?</td></tr>
+<tr><td>실패 시 응답</td><td class="code-cell"><span class="pill err">401</span> Unauthorized</td><td class="code-cell"><span class="pill err">403</span> Forbidden</td></tr>
+<tr><td>실행 시점</td><td>인가보다 먼저 일어남</td><td>인증이 끝난 뒤에 일어남</td></tr>
+<tr><td>대표 예시</td><td>로그인, 지문 인식, OTP</td><td>역할(Role) 기반 권한, 접근 제어 목록</td></tr>
+</tbody>
+</table>
+</div>
+<p class="module-lede" style="margin-top:0;">즉 <b style="color:var(--text)">인증이 먼저, 인가가 나중</b>입니다. 로그인에 성공(인증)해도 관리자 페이지는 못 볼 수(인가 실패) 있어요.</p>
+</section></section><section class="csec" id="a-wb-2" data-n="2"><section class="module" id="m2">
+<div class="module-head"><span class="module-num">02</span><h2>인증은 어떻게 이루어질까</h2></div>
+<p class="module-lede">서비스마다 신분을 확인하는 방식이 다릅니다. 자주 만나게 될 네 가지만 짚어볼게요.</p>
+<div class="methods">
+<div class="method"><span class="tag">Session</span><h4>세션 기반 로그인</h4><p>로그인하면 서버가 세션을 만들고, 브라우저는 그 세션 ID를 쿠키로 들고 다녀요. 전통적인 웹사이트에서 가장 흔한 방식입니다.</p></div>
+<div class="method"><span class="tag">Token</span><h4>토큰 기반 (JWT)</h4><p>서버가 상태를 저장하지 않고, 사용자 정보가 담긴 토큰을 발급해요. 앱과 API 서버가 분리된 서비스에서 많이 씁니다.</p></div>
+<div class="method"><span class="tag">Delegated</span><h4>소셜 로그인 (OAuth)</h4><p>"Google로 로그인"처럼 다른 서비스에 신분 확인을 맡기는 방식. 이번 자료의 실습 파트에서 직접 다룹니다.</p></div>
+<div class="method"><span class="tag">MFA</span><h4>2단계 인증</h4><p>비밀번호 하나로는 부족하니, 문자·앱 알림·지문 등 <b>두 번째 확인 수단</b>을 추가로 요구하는 방식이에요.</p></div>
+</div>
+</section></section><section class="csec" id="a-wb-3" data-n="3"><section class="module" id="m3">
+<div class="module-head"><span class="module-num">03</span><h2>인가는 어떻게 이루어질까</h2></div>
+<p class="module-lede">인증만큼 자주 등장하진 않지만, 실무에서는 이 세 가지 이름을 알아두면 대화가 훨씬 편해져요.</p>
+<div class="methods">
+<div class="method"><span class="tag">RBAC</span><h4>역할 기반 접근 제어</h4><p>"관리자", "일반 회원"처럼 <b>역할</b>에 권한을 묶어두는 방식. 사람이 아니라 역할에 권한을 주기 때문에 관리가 쉬워요.</p></div>
+<div class="method"><span class="tag">ACL</span><h4>접근 제어 목록</h4><p>파일이나 리소스마다 "누가 읽을 수 있는지·쓸 수 있는지" 목록을 직접 붙이는 방식. 구글 드라이브 공유 설정이 대표적이에요.</p></div>
+<div class="method"><span class="tag">Scope</span><h4>범위(Scope) 기반</h4><p>"이 앱은 이메일 주소만 읽을 수 있음"처럼 <b>권한의 범위를 좁게 쪼개는 방식</b>. OAuth에서 핵심적으로 쓰이는 개념입니다.</p></div>
+</div>
+</section></section><section class="csec" id="a-wb-4" data-n="4"><section class="module" id="m4">
+<div class="module-head"><span class="module-num">04</span><h2>OAuth 2.0, 딱 필요한 만큼만</h2></div>
+<p class="module-lede">OAuth는 "비밀번호를 넘기지 않고, 필요한 권한만 빌려주는" 방식이에요. 등장인물 네 명만 기억하면 흐름이 보입니다.</p>
+<div class="flow">
+<div class="flow-node"><div class="icon">🙋</div><h5>리소스 소유자</h5><p>서비스를 쓰는 사용자 (나)</p></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><div class="icon">📱</div><h5>클라이언트</h5><p>권한을 요청하는 앱</p></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><div class="icon">🛡️</div><h5>인가 서버</h5><p>동의를 받고 토큰을 발급 (예: Google)</p></div>
+<div class="flow-arrow">→</div>
+<div class="flow-node"><div class="icon">🗂️</div><h5>리소스 서버</h5><p>토큰으로 실제 데이터를 내주는 곳</p></div>
+</div>
+<p style="font-size:.92rem;">순서로 보면: <b>① 사용자가 앱에 로그인을 시도 → ② 앱이 인가 서버로 사용자를 보냄 → ③ 사용자가 동의 화면에서 허락 → ④ 인가 서버가 앱에게 액세스 토큰을 발급 → ⑤ 앱이 그 토큰으로 리소스 서버에 데이터를 요청</b>합니다. 이번 실습에서 만들 <b>클라이언트 ID·클라이언트 보안 비밀번호</b>가 바로 ②·④ 단계에서 앱의 신분을 증명하는 데 쓰여요.</p>
+<div class="glossary">
+<div class="term"><span class="term-key">Client ID / Secret</span><p>인가 서버에 등록된 "이 앱은 진짜다"를 증명하는 앱 전용 아이디·비밀번호</p></div>
+<div class="term"><span class="term-key">Redirect URI</span><p>사용자가 동의를 마친 뒤 다시 돌아올 앱의 주소. 등록해둔 주소가 아니면 거절돼요</p></div>
+<div class="term"><span class="term-key">Access Token</span><p>동의를 마친 뒤 발급되는, 리소스 서버에 데이터를 요청할 때 쓰는 통행증</p></div>
+<div class="term"><span class="term-key">Scope</span><p>이 토큰으로 딱 어디까지 접근할 수 있는지 정한 권한 범위</p></div>
+</div>
+</section></section><nav class="pn-row"><a class="pn prev" href="#/c/a-authz"><small>← 이전</small><b>5.2 · 인가 — 해도 되냐</b></a><a class="pn next" href="#/c/a-oauth"><small>다음 →</small><b>5.4 · 실습: 구글 OAuth 키 발급</b></a></nav></div>
+  </div>
+</article><article class="chapter wb" id="c-a-oauth" data-crumb="인증·인가 · 5.4 실습: 구글 OAuth 키 발급" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/a-authn">05 인증·인가</a> <span>/ 5.4</span> </p>
+    <h1>실습: 구글 OAuth 키 발급</h1>
+    <p class="ch-lede-l">Google Cloud Console에서 API 키와 OAuth 클라이언트 ID를 직접 발급받습니다.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="인증·인가 목차"><details open><summary>인증·인가</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/a-authn"><span>5.1</span>인증 — 너 누구냐</a></li><li class=""><a class="toc-ch" href="#/c/a-authz"><span>5.2</span>인가 — 해도 되냐</a></li><li class=""><a class="toc-ch" href="#/c/a-wb"><span>5.3</span>인증·인가 워크북</a></li><li class="is-cur"><a class="toc-ch" href="#/c/a-oauth"><span>5.4</span>실습: 구글 OAuth 키 발급</a><ol class="toc-secs"><li><a href="#/c/a-oauth/1">실습: 구글 클라우드 콘솔에서 직접 발급받기</a></li><li><a href="#/c/a-oauth/2">정리하며</a></li></ol></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="a-oauth-1" data-n="1"><section class="module" id="m5">
+<div class="module-head"><span class="module-num">05</span><h2>실습: 구글 클라우드 콘솔에서 직접 발급받기</h2></div>
+<p class="module-lede">이제 개념은 충분해요. Google Cloud Console에서 <b>새 프로젝트를 만들고, API 키와 OAuth 클라이언트 ID를 실제로 발급</b>받는 과정을 화면과 함께 따라가 봅니다.</p>
+<div class="practice-goal">
+<h4>🎯 실습 목표</h4>
+<ol>
+<li>Google Cloud 프로젝트 새로 만들기</li>
+<li>API 키 발급받기 (간단한 접근용 키)</li>
+<li>OAuth 동의 화면 구성하기 (로그인 동의창의 정체)</li>
+<li>OAuth 클라이언트 ID 발급받기 (Client ID / Secret)</li>
+</ol>
+</div>
+<div class="callout warn"><strong>주의</strong> — API 키와 클라이언트 보안 비밀번호(Secret)는 비밀번호와 같아요. 화면 캡처, 깃허브 공개 저장소, 슬랙 메시지 어디에도 원본 값을 그대로 남기면 안 됩니다. 아래 화면들의 키·비밀번호 값은 실습을 마친 뒤 모두 삭제하고 가려서 실었습니다.</div>
+<div class="subsection">
+<div class="subsection-head"><span class="subsection-badge">A</span><h3>프로젝트 만들기</h3></div>
+<div class="step">
+<div class="step-marker">1</div>
+<div class="step-body">
+<p><a href="https://console.cloud.google.com/projectcreate" rel="noopener" target="_blank">console.cloud.google.com</a>에 접속해 상단 프로젝트 선택기에서 <span class="mono">새 프로젝트</span>를 누르고, 프로젝트 이름을 입력합니다. 이름은 나중에 URL의 일부(프로젝트 ID)가 되니 영문·하이픈으로 적어주세요.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="Google Cloud 새 프로젝트 만들기 화면, 프로젝트 이름에 oauth-lecture-demo 입력" src="img/37cda7da020f.jpg"/>
+</div>
+<p class="caption">프로젝트 이름을 입력하면 아래에 프로젝트 ID가 자동으로 표시돼요. <span class="mono">만들기</span>를 누르면 몇 초 뒤 프로젝트가 생성됩니다.</p>
+</div>
+</div>
+</div>
+<div class="subsection">
+<div class="subsection-head"><span class="subsection-badge">B</span><h3>API 키 발급받기</h3></div>
+<div class="step">
+<div class="step-marker">2</div>
+<div class="step-body">
+<p>왼쪽 메뉴에서 <span class="mono">API 및 서비스 → 사용자 인증 정보</span>로 들어가면, 아직 아무것도 없는 빈 화면이 보여요. 이 프로젝트에서 처음 만드는 인증 정보를 여기서 관리하게 됩니다.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="사용자 인증 정보 빈 화면, OAuth 동의 화면 구성이 필요하다는 경고 표시" src="img/77098f46b6e6.jpg"/>
+</div>
+<p class="caption">노란 경고는 "OAuth를 쓰려면 동의 화면부터 구성하라"는 안내예요. API 키만 만들 땐 무시해도 됩니다.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">3</div>
+<div class="step-body">
+<p>상단의 <span class="mono">+ 사용자 인증 정보 만들기</span>를 누르면 세 가지 선택지가 나와요. 이 중 <b>API 키</b>와 <b>OAuth 클라이언트 ID</b>가 오늘의 주인공입니다.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="사용자 인증 정보 만들기 드롭다운, API 키 / OAuth 클라이언트 ID / 서비스 계정 옵션" src="img/de5aea318a9e.jpg"/>
+</div>
+<p class="caption">API 키는 "간단한 접근 확인용", OAuth 클라이언트 ID는 "사용자 동의가 필요한 로그인용"이라고 구분하면 쉬워요.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">4</div>
+<div class="step-body">
+<p><span class="mono">API 키</span>를 선택하면 이 키로 어떤 API에 접근할지 고르는 패널이 열립니다. 실무에서는 반드시 <b>필요한 API로 제한</b>해서 만들어야 해요.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="API 키 만들기 패널, API 제한사항 선택 드롭다운과 애플리케이션 제한사항 옵션" src="img/c0105df38eac.jpg"/>
+</div>
+<p class="caption"><span class="mono">만들기</span>를 누르면 실제 키 문자열이 발급됩니다.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">5</div>
+<div class="step-body">
+<p>발급이 끝나면 이런 화면이 떠요. 이 값이 바로 <code>?key=API_KEY</code> 형태로 요청에 붙이는 API 키예요.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="API 키 생성 완료 화면, 키 값은 보안을 위해 가려짐" src="img/683b2a99aca9.jpg"/>
+</div>
+<p class="caption redact-note">※ 실제 키 값은 강의자료 공개를 위해 가렸습니다. 이 창을 닫으면 콘솔에서도 전체 값은 다시 보기 어려워요 — 바로 복사해두는 습관을 들이세요.</p>
+</div>
+</div>
+</div>
+<div class="subsection">
+<div class="subsection-head"><span class="subsection-badge">C</span><h3>OAuth 동의 화면 구성하기</h3></div>
+<p style="font-size:.9rem;color:var(--text-muted);margin-top:-4px;">"Google로 로그인" 버튼을 눌렀을 때 뜨는 동의창, 그 내용을 정하는 단계예요. OAuth 클라이언트 ID를 만들기 전에 반드시 먼저 거쳐야 합니다.</p>
+<div class="step">
+<div class="step-marker">6</div>
+<div class="step-body">
+<p>credentials 화면의 <span class="mono">동의 화면 구성</span> 버튼을 누르면 "Google 인증 플랫폼"으로 이동해요. 아직 아무것도 설정되지 않은 상태입니다.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="Google 인증 플랫폼 개요, 아직 구성되지 않음 안내와 시작하기 버튼" src="img/7dd1cb9b1e87.jpg"/>
+</div>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">7</div>
+<div class="step-body">
+<p><span class="mono">앱 이름</span>과 <span class="mono">사용자 지원 이메일</span>을 입력합니다. 앱 이름은 사용자가 동의 화면에서 보게 될 이름이에요.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="앱 정보 입력 단계, 앱 이름과 사용자 지원 이메일 필드, 이메일은 가려짐" src="img/f3ac66642c05.jpg"/>
+</div>
+<p class="caption redact-note">※ 지원 이메일 칸은 개인정보 보호를 위해 가렸습니다.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">8</div>
+<div class="step-body">
+<p>대상 단계에서는 <span class="mono">내부</span>(조직 내부 사용자만)와 <span class="mono">외부</span>(구글 계정이 있는 누구나, 테스트 모드로 시작) 중 고릅니다. 개인 실습이라면 대부분 외부를 선택해요.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="대상 선택 단계, 내부와 외부 라디오 버튼과 각 설명" src="img/86e56058e304.jpg"/>
+</div>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">9</div>
+<div class="step-body">
+<p>연락처 이메일까지 입력하면 마지막으로 Google API 서비스 데이터 정책 동의 체크박스가 남아요. 네 단계 모두 초록 체크가 되면 <span class="mono">만들기</span>를 누릅니다.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="네 단계 모두 완료 체크 표시, 만들기 버튼 활성화" src="img/186f36e0c200.jpg"/>
+</div>
+</div>
+</div>
+</div>
+<div class="subsection">
+<div class="subsection-head"><span class="subsection-badge">D</span><h3>OAuth 클라이언트 ID 발급받기</h3></div>
+<div class="step">
+<div class="step-marker">10</div>
+<div class="step-body">
+<p>동의 화면 구성이 끝났다면 다시 사용자 인증 정보로 돌아와 <span class="mono">OAuth 클라이언트 ID</span>를 선택합니다. 먼저 <span class="mono">애플리케이션 유형</span>을 고르는데, 웹사이트라면 <b>웹 애플리케이션</b>을 선택해요.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="애플리케이션 유형 드롭다운, 웹 애플리케이션 / Android / iOS 등 옵션 목록" src="img/04b2c5717a1d.jpg"/>
+</div>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">11</div>
+<div class="step-body">
+<p>가장 중요한 입력값은 <span class="mono">승인된 리디렉션 URI</span>예요. 사용자가 로그인을 마치고 돌아올 주소를 미리 등록해두는 칸으로, 여기 등록 안 된 주소로는 절대 돌아갈 수 없습니다.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="웹 애플리케이션 폼, 승인된 리디렉션 URI에 콜백 주소가 입력된 상태" src="img/d12dd03ef1a6.jpg"/>
+</div>
+<p class="caption">예: <span class="redir-uri">https://내앱주소.com/callback</span> — 로컬 개발 중이라면 <span class="redir-uri">http://localhost:3000/callback</span>처럼 등록해두면 됩니다.</p>
+</div>
+</div>
+<div class="step">
+<div class="step-marker">12</div>
+<div class="step-body">
+<p><span class="mono">만들기</span>를 누르면 클라이언트 ID와 클라이언트 보안 비밀번호(Secret)가 한 번에 발급됩니다. 이 창을 닫으면 <b>Secret은 다시 볼 수 없으니</b> 바로 안전한 곳(예: <span class="mono">.env</span> 파일)에 복사해두세요.</p>
+<div class="console-frame">
+<div class="console-bar"><span></span><span></span><span></span></div>
+<img alt="OAuth 클라이언트 생성됨 화면, 클라이언트 ID와 클라이언트 보안 비밀번호는 보안을 위해 가려짐" src="img/80730aff6206.jpg"/>
+</div>
+<p class="caption redact-note">※ 클라이언트 ID·Secret 값은 강의자료 공개를 위해 가렸습니다. 실습이 끝난 뒤에는 이 자료를 만들며 사용한 데모 프로젝트와 키를 곧바로 삭제했습니다.</p>
+</div>
+</div>
+</div>
+<div class="callout safe"><strong>실습 후 정리</strong> — 테스트로 만든 프로젝트·API 키·OAuth 클라이언트는 실습이 끝나면 <span class="mono">IAM 및 관리자 → 리소스 관리</span>에서 프로젝트째로 삭제하거나, 사용자 인증 정보 목록에서 각 항목을 개별 삭제하세요. 쓰지 않는 키를 남겨두는 것 자체가 보안 위험입니다.</div>
+</section></section><section class="csec" id="a-oauth-2" data-n="2"><div class="closing">
+<h2 style="font-size:1.3rem;">정리하며</h2>
+<ul class="checklist">
+<li><b>인증</b>은 "누구인지" 확인하는 것, <b>인가</b>는 "무엇을 할 수 있는지" 정하는 것 — 인증이 먼저입니다.</li>
+<li>인증에는 세션, 토큰(JWT), OAuth, 2단계 인증 등 다양한 방식이 있습니다.</li>
+<li>OAuth는 비밀번호를 넘기지 않고 필요한 권한만 위임하는 구조이며, 리소스 소유자·클라이언트·인가 서버·리소스 서버 네 주체로 이루어집니다.</li>
+<li>Google Cloud Console에서는 <span class="mono">사용자 인증 정보</span> 메뉴에서 API 키와 OAuth 클라이언트 ID를 발급하며, OAuth는 반드시 동의 화면 구성이 먼저입니다.</li>
+<li>API 키와 클라이언트 Secret은 비밀번호와 동급으로 다루고, 다 쓴 실습용 키는 바로 삭제하세요.</li>
+</ul>
+<footer class="credits">다음 단계로는 실제 프로젝트에 "Google로 로그인" 버튼을 붙여보며 액세스 토큰이 오가는 과정을 코드로 확인해보는 걸 추천합니다.</footer>
+</div></section><nav class="pn-row"><a class="pn prev" href="#/c/a-wb"><small>← 이전</small><b>5.3 · 인증·인가 워크북</b></a><a class="pn next" href="#/c/ai-ide"><small>다음 →</small><b>6.1 · 에디터와 에이전트 시작하기</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-ai-ide" data-crumb="AI 에이전트 기본 · 6.1 에디터와 에이전트 시작하기" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/ai-ide">06 AI 에이전트 기본</a> <span>/ 6.1</span> </p>
+    <h1>에디터와 에이전트 시작하기</h1>
+    <p class="ch-lede-l">에디터를 열고, 팀 레포를 받고, 터미널에서 에이전트를 부르기까지.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="AI 에이전트 기본 목차"><details open><summary>AI 에이전트 기본</summary><ol class="toc-chs"><li class="is-cur"><a class="toc-ch" href="#/c/ai-ide"><span>6.1</span>에디터와 에이전트 시작하기</a><ol class="toc-secs"><li><a href="#/c/ai-ide/1">에디터 열어 보기</a></li><li><a href="#/c/ai-ide/2">팀 레포 내 컴퓨터로 가져오기</a></li><li><a href="#/c/ai-ide/3">터미널에서 에이전트 부르기</a></li><li><a href="#/c/ai-ide/4">에이전트에게 깃까지 맡기기</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/ai-basic"><span>6.2</span>챗봇과 에이전트</a></li><li class=""><a class="toc-ch" href="#/c/ai-safe"><span>6.3</span>사고 없이 쓰기</a></li><li class=""><a class="toc-ch" href="#/c/ai-wrap"><span>6.4</span>마치며</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="ai-ide-1" data-n="1"><div class="inner stack"><div><p class="eyebrow">준비</p><h2>코드를 쓰는 곳 — 에디터(IDE)</h2><p class="lead">코드를 쓰고, 파일을 보고, 터미널을 여는 일을 한 화면에서 하는 프로그램입니다. <strong>설치는 <a href="#/c/b-ready/1">“설치할 것 네 가지”</a>에서 끝냈습니다</strong> — 여기서는 열어서 무엇이 어디 있는지만 봅니다.</p></div><ul class="bullets"><li><strong>Antigravity</strong>를 기본으로 씁니다. 무료이고, <strong>AI 에이전트가 이미 들어 있어서</strong> 따로 결제하거나 설정할 것이 없습니다.</li><li>VS Code를 이미 쓰고 있다면 그대로 쓰셔도 됩니다. Antigravity가 <strong>VS Code를 바탕으로 만든 에디터</strong>라서 <strong>화면 구성과 단축키가 거의 같습니다</strong> — 왼쪽 탐색기, 가운데 편집기, 아래 터미널. 이 장의 설명은 양쪽에 그대로 적용됩니다.</li><li>VS Code에서 에이전트를 쓰려면 <strong>GitHub Copilot</strong> 같은 확장을 따로 붙여야 합니다. 그게 번거로우면 Antigravity가 편합니다.</li></ul><figure class="g-shot"><img src="img/f4aa3301e3e9.jpg" alt="Antigravity 첫 화면. Open Folder, Clone Repository 버튼" loading="lazy"><figcaption>처음 열면 이런 화면이 나옵니다. “폴더 열기”로 내 프로젝트를 열고, “Clone Repository”로 GitHub 레포를 바로 받을 수도 있습니다.</figcaption></figure><div class="callout ok"><strong>결제는 나중에 생각해도 됩니다.</strong> 팀 프로젝트는 무료 도구만으로 끝까지 만들 수 있습니다. 더 깊게 쓰고 싶어진 사람만 유료 구독을 고민하세요.</div></div></section><section class="csec" id="ai-ide-2" data-n="2"><div class="inner stack"><div><p class="eyebrow">따라 하기</p><h2>팀 레포를 내 컴퓨터로 가져오기 — clone</h2><p class="lead">GitHub에 있는 레포를 내 컴퓨터에 복사하는 걸 <strong>clone</strong>이라고 합니다. 팀 프로젝트를 시작할 때 한 번만 하면 됩니다.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p>메뉴 <span class="ic">터미널 → 새 터미널</span>(단축키 <span class="ic">Ctrl + `</span>)을 누르면 아래에 터미널이 열립니다. 레포를 둘 폴더로 이동한 뒤 clone 합니다. 레포 주소는 GitHub 레포 화면의 초록 <span class="ic">Code</span> 버튼에서 복사합니다.</p><pre><code>cd Desktop
+git clone https://github.com/Mybread2/github-practice.git</code></pre><figure class="g-shot"><img src="img/6c0ccbb6de9b.jpg" alt="터미널에서 git clone을 실행해 github-practice를 받은 화면" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p><span class="ic">파일 → 폴더 열기</span>로 방금 받은 <code>github-practice</code> 폴더를 엽니다. 왼쪽 탐색기에 파일이 보이고, <strong>왼쪽 아래에 지금 브랜치(<code>main</code>)</strong>가 표시됩니다. 터미널을 다시 열면 위치가 자동으로 이 폴더입니다.</p><figure class="g-shot"><img src="img/17cde0a3fb53.jpg" alt="github-practice 폴더를 연 화면. 왼쪽 탐색기, 가운데 README.md, 아래 터미널, 왼쪽 아래 main 브랜치 표시" loading="lazy"><figcaption>왼쪽 탐색기 · 가운데 편집기 · 아래 터미널 — 앞으로 가장 많이 보게 될 배치입니다.</figcaption></figure></div></div><div class="callout ok">여기서부터는 GitHub 웹에서 했던 일(브랜치 → 커밋 → push → PR)을 <strong>내 컴퓨터에서</strong> 하게 됩니다. 명령어는 멘토와 함께 팀 활동에서 익힙니다.</div></div></section><section class="csec" id="ai-ide-3" data-n="3"><div class="inner stack"><div><p class="eyebrow">따라 하기</p><h2>터미널에서 AI 에이전트 부르기</h2><p class="lead">에이전트는 <strong>터미널에 이름을 치면 실행</strong>됩니다. 에이전트는 지금 터미널이 있는 폴더 — 즉 <strong>열어 둔 프로젝트</strong> — 를 읽고 작업합니다.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p>프로젝트 폴더의 터미널에서 설치한 에이전트 이름을 입력합니다. 화면은 Claude Code(<code>claude</code>)이고, 다른 도구도 똑같이 이름만 치면 됩니다 — <code>gemini</code>, <code>codex</code>, <code>copilot</code>.</p><pre><code>claude</code></pre><p>처음 실행하면 <strong>“이 폴더를 믿느냐”</strong>고 묻습니다. 내 프로젝트가 맞으면 허용합니다.</p><figure class="g-shot"><img src="img/d10c58265b28.jpg" alt="터미널에서 claude를 실행해 에이전트 입력창이 뜬 화면" loading="lazy"></figure></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p>입력창에 할 일을 한국어로 씁니다. 처음에는 <strong>읽기만 시키는 부탁</strong>으로 감을 잡아 보세요. 아래는 <em>“README.md를 읽고 이 레포가 어떤 레포인지 두 줄로 설명해 줘. 파일은 수정하지 마.”</em>라고 시킨 결과입니다.</p><figure class="g-shot"><img src="img/e4d6ca7ba67e.jpg" alt="에이전트가 README.md를 읽고 두 줄로 설명한 결과 화면. Read 1 file 표시" loading="lazy"></figure></div></div><div class="callout"><strong>화면에서 볼 것:</strong> <em>“Read 1 file”</em> — 에이전트가 <strong>실제로 파일을 열어 읽었다</strong>는 기록입니다. 에이전트는 무엇을 읽고, 고치고, 실행했는지 이렇게 남깁니다. 결과만 보지 말고 이 기록을 같이 보는 습관을 들이세요.</div><div class="callout warn">끝낼 때는 <span class="ic">/exit</span> 또는 <span class="ic">Ctrl + C</span> 두 번. 에이전트가 파일을 고쳤다면 <strong>커밋하기 전에 바뀐 내용을 꼭 직접 확인</strong>하세요 — 이유는 <a href="#/c/ai-safe/2">“사고 없이 쓰기”</a> 장에 있습니다.</div><div class="callout ok">Antigravity에는 오른쪽에 <strong>Agent 패널</strong>이 따로 있고, VS Code에도 Copilot 채팅 패널이 있습니다. 터미널 방식과 하는 일은 같습니다. 이 핸드북은 <strong>어떤 에디터에서든 똑같이 쓸 수 있는 터미널 방식</strong>을 기준으로 합니다.</div></div></section><section class="csec" id="ai-ide-4" data-n="4"><div class="inner stack"><div><p class="eyebrow">한 걸음 더</p><h2>GitHub CLI — 터미널에서 깃허브까지</h2><p class="lead">에이전트는 <strong>터미널에서 할 수 있는 일</strong>을 대신 해 줍니다. 그래서 <strong>GitHub CLI(<code>gh</code>)</strong>를 깔아 두면, 브랜치 만들기부터 커밋·push·PR 올리기까지 말로 시킬 수 있습니다.</p></div><div class="g-step"><span class="g-num">1</span><div class="g-body"><p><strong>설치</strong> — <a href="https://cli.github.com/" target="_blank" rel="noopener">cli.github.com</a>에서 받거나, 터미널에서 한 줄로 설치합니다.</p><pre><code><span class="c-dim"># Windows</span>
+winget install --id GitHub.cli
+
+<span class="c-dim"># macOS</span>
+brew install gh</code></pre></div></div><div class="g-step"><span class="g-num">2</span><div class="g-body"><p><strong>로그인</strong> — 한 번만 하면 됩니다. 브라우저가 열리고 코드를 입력하면 끝입니다. 이후로는 <code>git push</code>할 때 비밀번호를 묻지 않습니다.</p><pre><code>gh auth login</code></pre></div></div><div class="g-step"><span class="g-num">3</span><div class="g-body"><p><strong>자주 쓰는 명령</strong> — 앞의 깃허브 파트에서 <em>웹 화면으로</em> 했던 일과 똑같습니다.</p><pre><code>gh repo clone Mybread2/github-practice   <span class="c-dim">레포 받기</span>
+gh pr create                             <span class="c-dim">PR 올리기 (제목·설명을 물어봄)</span>
+gh pr view --web                         <span class="c-dim">내 PR을 브라우저로 열기</span>
+gh pr status                             <span class="c-dim">내 PR들이 어떤 상태인지</span></code></pre></div></div><div class="callout ok"><strong>여기서부터가 재미있는 부분입니다.</strong> <code>gh</code>가 깔려 있으면 에이전트에게 이렇게 시킬 수 있습니다 — <em>“지금 바꾼 것들 커밋하고, feature/review-write 브랜치로 push한 다음 PR 올려 줘. 설명에는 무엇을 바꿨는지 적어 줘.”</em> 에이전트가 터미널에서 <code>git</code>과 <code>gh</code>를 차례로 실행합니다.</div><div class="callout warn"><strong>대신 여기서부터는 되돌리기가 어려워집니다.</strong> 커밋은 되돌릴 수 있지만, 올라간 PR은 팀원들이 이미 봅니다. 그래서 두 가지만 지키세요.<ul class="bullets" style="margin-top:10px"><li><strong>무엇을 커밋할지 먼저 확인하기</strong> — <code>git status</code>로 바뀐 파일을 보고 나서 시키세요. <code>.env</code> 같은 파일이 딸려 올라가면 큰일입니다.</li><li><strong>main에는 직접 시키지 않기</strong> — 항상 내 브랜치에서. 사람이 하든 에이전트가 하든 규칙은 같습니다.</li></ul></div><div class="callout">PR을 웹에서 만드는 방법은 <a href="#/c/g-pr/2">“Pull Request 올리기”</a>에 화면과 함께 있습니다. <strong>둘 중 편한 쪽을 쓰면 됩니다</strong> — 결과는 똑같은 PR입니다.</div></div></section><nav class="pn-row"><a class="pn prev" href="#/c/a-oauth"><small>← 이전</small><b>5.4 · 실습: 구글 OAuth 키 발급</b></a><a class="pn next" href="#/c/ai-basic"><small>다음 →</small><b>6.2 · 챗봇과 에이전트</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-ai-basic" data-crumb="AI 에이전트 기본 · 6.2 챗봇과 에이전트" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/ai-ide">06 AI 에이전트 기본</a> <span>/ 6.2</span> </p>
+    <h1>챗봇과 에이전트</h1>
+    <p class="ch-lede-l">무엇이 다르고, 무엇을 쓰면 되는지.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="AI 에이전트 기본 목차"><details open><summary>AI 에이전트 기본</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/ai-ide"><span>6.1</span>에디터와 에이전트 시작하기</a></li><li class="is-cur"><a class="toc-ch" href="#/c/ai-basic"><span>6.2</span>챗봇과 에이전트</a><ol class="toc-secs"><li><a href="#/c/ai-basic/1">챗봇과 에이전트는 다릅니다</a></li><li><a href="#/c/ai-basic/2">무엇을 쓸까 — 돈 안 내도 됩니다</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/ai-safe"><span>6.3</span>사고 없이 쓰기</a></li><li class=""><a class="toc-ch" href="#/c/ai-wrap"><span>6.4</span>마치며</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="ai-basic-1" data-n="1">
+<div>
+<p class="eyebrow">용어 정리</p>
+<h2>챗봇과 에이전트는 다릅니다</h2>
+</div>
+<div class="vs">
+<div class="vs-box">
+<span class="label" style="color: var(--info);">챗봇</span>
+<ul>
+<li>묻고 <strong>답을 받습니다</strong></li>
+<li>“이 에러 뭐야?” → 설명해줌</li>
+<li>실제로 고치는 건 내가 합니다</li>
+</ul>
+</div>
+<div class="vs-box">
+<span class="label" style="color: var(--ember);">에이전트</span>
+<ul>
+<li>묻고 <strong>일을 시킵니다</strong></li>
+<li>파일을 직접 읽고, 고치고, 실행합니다</li>
+<li>여러 단계를 <strong>스스로 이어서</strong> 합니다</li>
+</ul>
+</div>
+</div>
+<div class="callout">차이가 중요한 이유: <strong>에이전트는 실제로 뭔가를 바꿉니다.</strong> 틀린 답은 무시하면 그만이지만, 틀린 작업이 실행되면 되돌려야 합니다. — 앞에서 배운 <strong>Git이 여기서 안전망이 됩니다.</strong></div>
+</section><section class="csec" id="ai-basic-2" data-n="2">
+<div>
+<p class="eyebrow">지갑 사정별 안내</p>
+<h2>무엇을 쓸까 — 돈 안 내도 됩니다</h2>
+<p class="lead">맨 윗줄은 에디터에 이미 들어 있고, 나머지는 <strong>터미널에 설치해서 쓰는</strong> 도구들입니다. 어느 쪽이든 에디터 터미널에서 그대로 돌아갑니다.</p>
+</div>
+<div class="tw">
+<table>
+<thead><tr><th>상황</th><th>도구</th><th>비용</th></tr></thead>
+<tbody>
+<tr><td>아무것도 없다 <em>(기본)</em></td><td class="hl">Antigravity 내장 에이전트</td><td>설치만 하면 <strong>무료</strong> — 구글 계정</td></tr><tr><td>이미 구독 중이다</td><td class="hl">Claude Code · Codex CLI</td><td>쓰던 구독에 포함</td></tr>
+
+<tr><td>터미널에서 따로 쓰고 싶다</td><td class="hl">Gemini CLI</td><td>구글 계정만 — <strong>하루 1,000회 무료</strong></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout ok"><strong>결제 안 해도 불리하지 않습니다.</strong> 맨 윗줄과 아랫줄은 카드도 결제도 필요 없고, 배우는 단계에는 충분합니다. 그리고 어느 도구를 쓰든 <strong>다음 장의 세 가지가 똑같이 적용됩니다.</strong></div>
+<div class="callout warn"><strong>없어도 됩니다.</strong> AI 도구가 없어서 못 만드는 팀은 없습니다. 도구는 <em>내가 할 줄 아는 일을 빠르게</em> 해줄 뿐, <strong>모르는 일을 대신해주지 않습니다.</strong></div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/ai-ide"><small>← 이전</small><b>6.1 · 에디터와 에이전트 시작하기</b></a><a class="pn next" href="#/c/ai-safe"><small>다음 →</small><b>6.3 · 사고 없이 쓰기</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-ai-safe" data-crumb="AI 에이전트 기본 · 6.3 사고 없이 쓰기" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/ai-ide">06 AI 에이전트 기본</a> <span>/ 6.3</span> </p>
+    <h1>사고 없이 쓰기</h1>
+    <p class="ch-lede-l">지킬 것 세 가지와 조심할 것.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="AI 에이전트 기본 목차"><details open><summary>AI 에이전트 기본</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/ai-ide"><span>6.1</span>에디터와 에이전트 시작하기</a></li><li class=""><a class="toc-ch" href="#/c/ai-basic"><span>6.2</span>챗봇과 에이전트</a></li><li class="is-cur"><a class="toc-ch" href="#/c/ai-safe"><span>6.3</span>사고 없이 쓰기</a><ol class="toc-secs"><li><a href="#/c/ai-safe/1">일단 이것만 지키세요</a></li><li><a href="#/c/ai-safe/2">그럴듯하게 틀립니다</a></li><li><a href="#/c/ai-safe/3">잘 쓰는 법은 따로 다룹니다</a></li></ol></li><li class=""><a class="toc-ch" href="#/c/ai-wrap"><span>6.4</span>마치며</a></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="ai-safe-1" data-n="1">
+<div>
+<p class="eyebrow">기본 세 가지</p>
+<h2>일단 이것만 지키세요</h2>
+</div>
+<ol class="steps">
+<li><strong>맥락을 줍니다.</strong> “로그인 고쳐줘”가 아니라 “<em>이 파일</em>에서, <em>이런 증상</em>이 나는데, <em>이렇게</em> 동작해야 합니다”. 앞에서 본 <strong>“잘 물어보는 법”과 똑같습니다.</strong></li>
+<li><strong>작게 시킵니다.</strong> 한 번에 하나. 열 개를 한꺼번에 시키면 어디서 틀렸는지 못 찾습니다.</li>
+<li><strong>결과를 반드시 확인합니다.</strong> 실행해보고, 읽어보고, 이해가 안 되면 <em>물어봅니다.</em> 이해 못 한 코드는 팀 코드에 넣지 않습니다.</li>
+</ol>
+<div class="callout">눈치채셨겠지만 <strong>협업하는 법에서 본 원칙과 거의 같습니다.</strong> 에이전트를 잘 쓰는 건 결국 <em>일을 잘 설명하고 결과를 확인하는</em> 능력입니다 — 사람에게든 도구에게든.</div>
+</section><section class="csec" id="ai-safe-2" data-n="2">
+<div>
+<p class="eyebrow">조심할 것</p>
+<h2>그럴듯하게 틀립니다</h2>
+<p class="lead">이게 가장 위험한 특성입니다. <strong>틀릴 때도 자신 있는 말투</strong>입니다.</p>
+</div>
+<ul class="bullets">
+<li><strong>없는 함수를 만들어냅니다.</strong> 이름이 그럴듯해서 있는 줄 압니다.</li>
+<li><strong>오래된 방식을 알려줍니다.</strong> 라이브러리가 바뀌었는데 예전 사용법을 씁니다.</li>
+<li><strong>여러분 팀의 약속을 모릅니다.</strong> 팀이 정한 구조를 무시한 코드를 줄 수 있습니다.</li>
+<li><strong>비밀정보를 붙여넣지 마세요.</strong> 비밀번호, API 키, 설정 파일 내용은 안 됩니다.</li>
+</ul>
+<div class="callout warn">판단 기준 하나만 기억하세요. <strong>“이걸 왜 이렇게 했는지 내가 팀원에게 설명할 수 있나?”</strong> 설명 못 하면 아직 내 코드가 아닙니다. PR에 올리면 안 됩니다.</div>
+</section><section class="csec" id="ai-safe-3" data-n="3">
+<div>
+<p class="eyebrow">이 부분은 여기까지</p>
+<h2>잘 쓰는 법은 따로 다룹니다</h2>
+<p class="lead">여기서 다룬 건 <strong>“사고 안 나게 쓰는 최소한”</strong>입니다. 제대로 다루려면 훨씬 깊습니다.</p>
+</div>
+<div class="cards">
+<div class="card">
+<span class="tag">여기서 안 다룬 것</span>
+<p>프로젝트 규칙을 도구에 알려주는 법</p>
+<p>큰 작업을 쪼개서 맡기는 법</p>
+<p>결과를 검증하는 자동화</p>
+</div>
+<div class="card">
+<span class="tag">어떻게 할까</span>
+<p>스터디로 따로 빼거나, 팀 활동에서 멘토와 같이 써보는 쪽이 낫습니다.</p>
+</div>
+<div class="card">
+<span class="tag">그동안</span>
+<p>세 가지만 — <strong>맥락 주기 · 작게 시키기 · 결과 확인하기.</strong></p>
+</div>
+</div>
+</section><nav class="pn-row"><a class="pn prev" href="#/c/ai-basic"><small>← 이전</small><b>6.2 · 챗봇과 에이전트</b></a><a class="pn next" href="#/c/ai-wrap"><small>다음 →</small><b>6.4 · 마치며</b></a></nav></div>
+  </div>
+</article><article class="chapter lec" id="c-ai-wrap" data-crumb="AI 에이전트 기본 · 6.4 마치며" hidden>
+  <header class="ch-head">
+    <p class="ch-eyebrow"><a href="#/c/ai-ide">06 AI 에이전트 기본</a> <span>/ 6.4</span> </p>
+    <h1>마치며</h1>
+    <p class="ch-lede-l">처음부터 끝까지를 몇 문장으로.</p>
+  </header>
+  <div class="ch-body">
+    <nav class="ch-toc" aria-label="AI 에이전트 기본 목차"><details open><summary>AI 에이전트 기본</summary><ol class="toc-chs"><li class=""><a class="toc-ch" href="#/c/ai-ide"><span>6.1</span>에디터와 에이전트 시작하기</a></li><li class=""><a class="toc-ch" href="#/c/ai-basic"><span>6.2</span>챗봇과 에이전트</a></li><li class=""><a class="toc-ch" href="#/c/ai-safe"><span>6.3</span>사고 없이 쓰기</a></li><li class="is-cur"><a class="toc-ch" href="#/c/ai-wrap"><span>6.4</span>마치며</a><ol class="toc-secs"><li><a href="#/c/ai-wrap/1">세 문장으로 남기면</a></li><li><a href="#/c/ai-wrap/2">로그인, 세 문장으로</a></li><li><a href="#/c/ai-wrap/3">도구는 바뀌어도 이건 안 바뀝니다</a></li><li><a href="#/c/ai-wrap/4">이제 팀에서 만들 차례입니다</a></li></ol></li></ol></details></nav>
+    <div class="ch-content"><section class="csec" id="ai-wrap-1" data-n="1">
+<div>
+<p class="eyebrow">처음 세 문장</p>
+<h2>세 문장으로 남기면</h2>
+</div>
+<ol class="steps">
+<li><strong>개발자는 주어진 시간과 예산 안에서 문제를 소프트웨어로 해결하는 사람입니다.</strong> 그래서 “제일 좋은 기술”이 아니라 “이 제약에 맞는 선택”을 합니다.</li>
+<li><strong>개발자는 언어를 아는 사람이 아니라 시스템을 설계할 수 있는 사람입니다.</strong> 무엇을 만들고 <em>무엇을 안 만들지</em> 정하는 일이 설계입니다.</li>
+<li><strong>서비스는 화면 · 판단 · 기억으로 나뉘고</strong>, 그 사이를 API라는 약속이 잇습니다. 그 덕에 팀이 나눠 일할 수 있습니다.</li>
+</ol>
+<div class="callout">팀에 배정되면 <strong>첫 주에 코딩부터 시작하지 마세요.</strong> 이 순서대로 — 문제를 정하고, 안 만들 것을 정하고, 데이터를 그려보고, 그다음에 시작하세요.</div>
+</section><section class="csec" id="ai-wrap-2" data-n="2">
+<div>
+<p class="eyebrow">로그인 정리</p>
+<h2>로그인, 세 문장으로</h2>
+</div>
+<ol class="steps">
+<li><strong>인증은 “누구냐”, 인가는 “해도 되냐”</strong>입니다. 순서가 있고, 실패했을 때 나오는 번호도 다릅니다(401 / 403).</li>
+<li><strong>원리는 알되, 직접 만들지는 마세요.</strong> 두 달짜리 팀에게 로그인은 빌려 쓰는 게 거의 항상 맞습니다.</li>
+<li><strong>화면에서 숨기는 것은 보안이 아닙니다.</strong> 막는 일은 언제나 서버에서 합니다.</li>
+</ol>
+</section><section class="csec" id="ai-wrap-3" data-n="3">
+<div>
+<p class="eyebrow">마치며</p>
+<h2>도구는 바뀌어도 이건 안 바뀝니다</h2>
+</div>
+<p class="creed">개발자는 <span class="mark">주어진 시간과 예산 안에서</span> 문제를 소프트웨어로 해결하는 사람이고,<br/>언어를 아는 사람이 아니라 <span class="mark">시스템을 설계할 수 있는 사람</span>입니다.</p>
+<ul class="bullets">
+<li><strong>제약을 보는 눈</strong> — 어떤 기술을 배우든, 판단의 기준은 항상 “이 상황에서 맞는가”입니다</li>
+<li><strong>쪼갤 줄 아는 능력</strong> — 문제를 만들 수 있는 조각으로 나누는 일은 언어가 바뀌어도 그대로입니다</li>
+<li><strong>설명하고 읽는 능력</strong> — 혼자 만드는 서비스는 없습니다</li>
+<li><strong>확인하는 습관</strong> — 도구가 성공이라고 말할 때, 그게 무엇의 성공인지 물어보는 사람이 사고를 막습니다</li>
+</ul>
+</section><section class="csec" id="ai-wrap-4" data-n="4">
+<p class="big-num">✓</p>
+<h2>이제 팀에서 만들 차례입니다</h2>
+<p>여기서 들은 건 전부 <strong>팀 프로젝트에서 실제로 쓰게 될 것들</strong>입니다. 막히면 멘토에게 — 여기서 배운 방식으로 — 물어보세요. 자료는 링크로 남으니 언제든 다시 보시고요.</p>
+
+</section><nav class="pn-row"><a class="pn prev" href="#/c/ai-safe"><small>← 이전</small><b>6.3 · 사고 없이 쓰기</b></a><a class="pn next" href="#/"><small>처음으로 →</small><b>목차로 돌아가기</b></a></nav></div>
+  </div>
+</article>
+</main>
+</div>
+<script>
+(function () {
+  var home = document.getElementById('home');
+  var chapters = Array.prototype.slice.call(document.querySelectorAll('.chapter'));
+  var crumb = document.getElementById('crumb');
+  var menu = document.getElementById('menu');
+  var current = null, io = null;
+
+  function parse() {
+    var m = (location.hash || '').match(/^#\/c\/([\w-]+)(?:\/(\d+))?/);
+    return m ? { cid: m[1], n: m[2] ? +m[2] : 0 } : null;
+  }
+  function watch(ch) {
+    if (io) io.disconnect();
+    if (!('IntersectionObserver' in window)) return;
+    var links = ch.querySelectorAll('.toc-secs a');
+    if (!links.length) return;
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var n = e.target.getAttribute('data-n');
+        links.forEach(function (a, k) { a.classList.toggle('is-on', String(k + 1) === n); });
+      });
+    }, { rootMargin: '-80px 0px -65% 0px' });
+    ch.querySelectorAll('.csec').forEach(function (s) { io.observe(s); });
+  }
+  function render() {
+    var r = parse();
+    menu.open = false;
+    var target = r && document.getElementById('c-' + r.cid);
+    home.hidden = !!target;
+    chapters.forEach(function (c) { c.hidden = c !== target; });
+    document.querySelectorAll('.menu .m-part ol a').forEach(function (a) {
+      if (target && a.getAttribute('href') === '#/c/' + r.cid) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    if (!target) {
+      crumb.textContent = '';
+      if (current !== 'home') window.scrollTo(0, 0);
+      current = 'home';
+      return;
+    }
+    crumb.textContent = target.getAttribute('data-crumb');
+    var changed = current !== r.cid;
+    current = r.cid;
+    if (changed) { watch(target); var d = target.querySelector('.ch-toc details'); if (d) d.open = window.innerWidth > 900; }
+    if (r.n) {
+      var sec = document.getElementById(r.cid + '-' + r.n);
+      if (sec) { sec.scrollIntoView({ block: 'start' }); return; }
+    }
+    if (changed) window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#/"]');
+    if (a && a.getAttribute('href') === location.hash) { e.preventDefault(); render(); }
+    if (!e.target.closest('.menu')) menu.open = false;
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu.open = false; });
+  window.addEventListener('hashchange', render);
+  render();
+})();
+
+</script>
+
+</body>
+</html>
