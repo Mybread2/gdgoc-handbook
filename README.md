@@ -1,33 +1,63 @@
-# GDGoC INHA 팀 프로젝트 핸드북
+# GDGoC INHA · 팀 프로젝트 핸드북
 
-부원들에게 공유하는 핸드북 사이트입니다. Vercel로 자동 배포됩니다.
+https://gdgoc-handbook.vercel.app
 
-## 구조
+동아리 팀 프로젝트를 시작하는 사람들을 위한 핸드북입니다.
+인프라 · 인증/인가 · 깃허브 · 협업 하는 법 · 개발 기초 지식 · AI 에이전트 기본, 여섯 파트로 되어 있습니다.
 
-| 파일 | 내용 |
-|---|---|
-| `index.html` | 핸드북 본문 전체 (6개 파트 · 28개 장) |
-| `img/` | 본문에 들어가는 스크린샷 |
+## 구성
+
+```
+index.html   ← 핸드북 전체 (HTML + CSS + JS 한 파일)
+img/         ← 본문에 들어가는 이미지 (스크린샷, 다이어그램)
+```
+
+`index.html` 하나가 사이트 전부입니다. 브라우저로 그냥 열어도 동작합니다.
 
 ## 고치는 법
 
-1. 이 레포를 clone 하거나, GitHub 웹에서 바로 편집합니다.
-2. `index.html`을 엽니다. 한 장(chapter)은 `<article class="chapter" id="c-...">` 하나입니다.
-   - 예: 깃허브 파트의 브랜치 장은 `id="c-g-branch"`
-   - 장 안의 한 절은 `<section class="csec" id="g-branch-1">` 입니다.
-3. 고친 뒤 **새 브랜치에서 PR**을 올립니다. main에 직접 push 하지 않습니다.
-4. main에 머지되면 Vercel이 자동으로 다시 배포합니다.
+1. 이 레포를 clone 합니다.
+2. `index.html`을 열고 고칩니다.
+3. 브라우저로 `index.html`을 열어 확인합니다. (서버 필요 없음)
+4. 브랜치를 만들어 PR을 올립니다.
 
-## 스타일 규칙
+**main에 직접 push 하지 말고 PR로 올려주세요.** 머지되면 Vercel이 자동으로 배포합니다.
 
-본문에서 자주 쓰는 클래스입니다. 새 문단을 넣을 때 그대로 따라 쓰면 디자인이 유지됩니다.
+## 본문 찾는 법
 
-- `<p class="lead">` — 장 도입 문단
-- `<ul class="bullets">` — 점 목록
-- `<div class="callout">` — 강조 박스 (`callout warn` 주의, `callout ok` 권장)
-- `<div class="g-step">` — 따라 하기 단계 (번호 + 설명 + 스크린샷)
-- `<span class="ic">` — 버튼·메뉴 이름, `<code>` — 명령어·코드
+챕터마다 `<section class="view" id="v-<챕터id>">` 로 감싸여 있습니다.
+브라우저 주소의 `#/c/<챕터id>/<번호>` 가 그대로 id입니다.
+예를 들어 `#/c/g-practice/4` 는 `id="v-g-practice"` 안의 네 번째 `<section class="csec">` 입니다.
+
+파트 id 접두사는 이렇습니다.
+
+| 접두사 | 파트 |
+| --- | --- |
+| `b-` | 개발 기초 지식 |
+| `g-` | 깃허브 |
+| `c-` | 협업 하는 법 |
+| `i-` | 인프라 |
+| `a-` | 인증 / 인가 |
+| `ai-` | AI 에이전트 기본 |
+
+## 글 쓸 때 쓰는 클래스
+
+| 클래스 | 쓰임 |
+| --- | --- |
+| `.callout` | 그냥 강조 박스 |
+| `.callout.ok` | 잘 된 경우 / 안심시키는 말 |
+| `.callout.warn` | 조심할 것 |
+| `.bullets` | 점 목록 |
+| `.steps` | 번호 목록 |
+| `.g-step` + `.g-num` | 스크린샷이 붙는 따라 하기 단계 |
+| `.g-shot` | 스크린샷 (figure + img + figcaption) |
+| `.ic` | 화면에 있는 버튼 이름 |
+| `.tw` | 표를 감싸는 스크롤 박스 |
+| `details.cli` | 접어 두는 터미널 명령 설명 |
+
+색이나 여백은 `index.html` 맨 위 `<style>` 의 CSS 변수(`--ember`, `--line` 같은 것들)를 고치면 전체에 반영됩니다.
 
 ## 이미지 추가
 
-`img/` 에 넣고 `<img src="img/파일명">` 으로 참조합니다.
+`img/` 에 넣고 `<img src="img/파일이름">` 으로 씁니다.
+스크린샷은 가로 1200px 이하, JPEG 품질 85 정도면 충분합니다.
